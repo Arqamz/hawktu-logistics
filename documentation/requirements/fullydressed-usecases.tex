@@ -44,4 +44,71 @@
     {\large \textit{This document contains detailed descriptions of use cases for the HawkTU Logistics and Delivery Management System. Each use case outlines the interactions between users and the system, ensuring clarity and understanding of functional requirements.}}
 \end{titlepage}
 
+
+\newpage
+
+\centering\section*{Manage Profile Information}
+
+\renewcommand{\arraystretch}{1.5} % Row height
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\setlist[itemize]{leftmargin=*}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}m{0.25\linewidth}|m{0.75\linewidth}|}
+\hline
+\textbf{Use Case Name} & Manage Profile Information \\
+\hline
+\textbf{Scope} & HawkTU Logistics and Delivery Management System \\
+\hline
+\textbf{Level} & User Goal \\
+\hline
+\textbf{Primary Actor} & Customer/Seller \\
+\hline
+\textbf{Stakeholders and Interests} & 
+\begin{itemize}
+    \item Customer/Seller: Wants to easily manage personal details and security settings.
+    \item System Administrator: Ensures data integrity and security of personal information.
+\end{itemize} \\
+\hline
+\textbf{Preconditions} & 
+\begin{itemize}
+    \item The user is logged into the system.
+    \item The system displays the profile management interface.
+\end{itemize} \\
+\hline
+\textbf{Post-conditions} & 
+\begin{itemize}
+    \item User profile is updated with the new information.
+    \item Changes are saved securely in the database.
+\end{itemize} \\
+\hline
+\end{longtable}
+
+% Remove space between tables
+\vspace{-2.45em}
+
+\begin{longtable}{|m{0.5\linewidth}|m{0.5\linewidth}|}
+\hline
+\multicolumn{2}{|c|}{\textbf{Main Success Scenario}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+1. User navigates to the profile section. & 2. System displays the profile management interface. \\
+\hline
+3. User updates their personal details (e.g., name, address, phone number). & 4. System validates the inputs and checks for any required fields. \\
+\hline
+5. User modifies account security settings (e.g., password). & 6. System enforces password strength rules and provides feedback. \\
+\hline
+7. User submits the updated information. & 8. System saves the changes to the database and confirms the update. \\
+\hline
+\multicolumn{2}{|c|}{\textbf{Extensions}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+\textbf{3a.} If the password does not meet security standards, the user enters a stronger password. & \textbf{3a.} System prompts the user to enter a stronger password. \\
+\textbf{5a.} If the system fails to update the profile due to server issues, the user tries again later. & \textbf{5a.} System notifies the user of the failure and advises retrying. \\
+\hline
+\end{longtable}
+
+\newpage
+
 \enddocument
