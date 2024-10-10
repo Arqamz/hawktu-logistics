@@ -174,4 +174,70 @@
 
 \newpage
 
+\section*{Earn and Redeem Loyalty Points}
+
+\renewcommand{\arraystretch}{1.5} % Row height
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\setlist[itemize]{leftmargin=*}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}m{0.25\linewidth}|m{0.75\linewidth}|}
+\hline
+\textbf{Use Case Name} & Earn and Redeem Loyalty Points \\
+\hline
+\textbf{Scope} & HawkTU Logistics and Delivery Management System \\
+\hline
+\textbf{Level} & User Goal \\
+\hline
+\textbf{Primary Actor} & Customer \\
+\hline
+\textbf{Stakeholders and Interests} & 
+\begin{itemize}
+    \item Customer: Wants to earn points from purchases and redeem them for rewards or discounts on future purchases.
+    \item Seller: Encourages customer loyalty by offering points for purchases and providing incentives to redeem them.
+    \item System Administrator: Ensures the accuracy of points tracking and redemption, maintaining data integrity.
+\end{itemize} \\
+\hline
+\textbf{Preconditions} & 
+\begin{itemize}
+    \item The customer is logged into the system.
+    \item The customer has made at least one eligible purchase to earn loyalty points.
+\end{itemize} \\
+\hline
+\textbf{Postconditions} & 
+\begin{itemize}
+    \item Loyalty points are updated in the customer’s account after a purchase.
+    \item Points are redeemed for rewards or discounts, and the customer's point balance is adjusted.
+\end{itemize} \\
+\hline
+\end{longtable}
+
+\vspace{-2.45em}
+
+\begin{longtable}{|m{0.5\linewidth}|m{0.5\linewidth}|}
+\hline
+\multicolumn{2}{|c|}{\textbf{Main Success Scenario}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+1. Customer completes a purchase. & 2. System calculates and adds loyalty points to the customer’s account. \\
+\hline
+3. Customer views their loyalty points balance. & 4. System displays the current balance of earned points. \\
+\hline
+5. Customer chooses to redeem points for a reward or discount. & 6. System validates the redemption request and deducts the appropriate number of points. \\
+\hline
+\multicolumn{2}{|c|}{\textbf{Extensions}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+\textbf{3a.} If there is an error in calculating points, the customer contacts support. & \textbf{3a.} System logs the error and notifies support for correction. \\
+\hline
+\textbf{5a.} If the customer tries to redeem more points than available, they enter a valid amount. & \textbf{5a.} System prompts the customer to enter a valid redemption amount. \\
+\hline
+\textbf{6a.} Discount Application Fails and Customer retries. & \textbf{6a.} System notifies the customer of the failure and advises retrying. \\
+\hline
+\end{longtable}
+
+\newpage
+
+
 \enddocument
