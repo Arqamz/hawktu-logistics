@@ -111,4 +111,67 @@
 
 \newpage
 
+\section*{Update Product Listings}
+
+\renewcommand{\arraystretch}{1.5} % Row height
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\setlist[itemize]{leftmargin=*}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}m{0.25\linewidth}|m{0.75\linewidth}|}
+\hline
+\textbf{Use Case Name} & Update Product Listings \\
+\hline
+\textbf{Scope} & HawkTU Logistics and Delivery Management System \\
+\hline
+\textbf{Level} & User Goal \\
+\hline
+\textbf{Primary Actor} & Seller \\
+\hline
+\textbf{Stakeholders and Interests} & 
+\begin{itemize}
+    \item Seller: Wants to easily manage their product listings, adding new products, updating prices, and removing outdated or unavailable items.
+    \item Customer: Expects the catalogue to be up-to-date with accurate information.
+    \item System Administrator: Ensures data integrity and prevents errors in product listings.
+\end{itemize} \\
+\hline
+\textbf{Preconditions} & 
+\begin{itemize}
+    \item The seller is logged into the system.
+    \item The seller has access to the product management interface.
+\end{itemize} \\
+\hline
+\textbf{Postconditions} & 
+\begin{itemize}
+    \item The product listings are updated with new, modified, or removed items.
+    \item Changes are saved securely in the database and reflected in the system.
+\end{itemize} \\
+\hline
+\end{longtable}
+
+\vspace{-2.45em}
+
+\begin{longtable}{|m{0.5\linewidth}|m{0.5\linewidth}|}
+\hline
+\multicolumn{2}{|c|}{\textbf{Main Success Scenario}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+1. Seller navigates to the product management section. & 2. System displays the product listings interface and prompts for user action \\
+\hline
+3. Seller chooses desired option. (add, delete, modify listing) & 4. System prompts for product details and validates input. \\
+\hline
+5. Seller enters relevant information. & 6. System authenticates the information and updates the catalogue. \\
+\hline
+\multicolumn{2}{|c|}{\textbf{Extensions}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+\textbf{3a.} If the seller tries to add existing item. & \textbf{3a.} System prompts error. \\
+\hline
+\textbf{5a.} Seller Fails to enter all required details. & \textbf{5a.} System prompts user "Fill in Required Details" \\
+\hline
+\end{longtable}
+
+\newpage
+
 \enddocument
