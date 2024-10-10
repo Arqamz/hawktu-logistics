@@ -44,7 +44,6 @@
     {\large \textit{This document contains detailed descriptions of use cases for the HawkTU Logistics and Delivery Management System. Each use case outlines the interactions between users and the system, ensuring clarity and understanding of functional requirements.}}
 \end{titlepage}
 
-
 \newpage
 
 \centering\section*{Manage Profile Information}
@@ -239,5 +238,68 @@
 
 \newpage
 
+\section*{Submit Product and Seller Reviews}
+
+\renewcommand{\arraystretch}{1.5} % Row height
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\setlist[itemize]{leftmargin=*}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}m{0.25\linewidth}|m{0.75\linewidth}|}
+\hline
+\textbf{Use Case Name} & Submit Product and Seller Reviews \\
+\hline
+\textbf{Scope} & HawkTU Logistics and Delivery Management System \\
+\hline
+\textbf{Level} & User Goal \\
+\hline
+\textbf{Primary Actor} & Customer \\
+\hline
+\textbf{Stakeholders and Interests} & 
+\begin{itemize}
+    \item Customer: Wants to provide feedback on products and sellers to help others make informed decisions and influence the quality of service.
+    \item Seller: Wants to receive feedback to improve service quality and customer trust.
+    \item Other Customers: Rely on honest reviews to evaluate products and sellers before purchasing.
+    \item System Administrator: Ensures reviews are moderated and do not contain inappropriate content.
+\end{itemize} \\
+\hline
+\textbf{Preconditions} & 
+\begin{itemize}
+    \item The customer is logged into the system.
+    \item The customer has made a purchase or interacted with a seller.
+\end{itemize} \\
+\hline
+\textbf{Postconditions} & 
+\begin{itemize}
+    \item The review is submitted and stored in the database.
+    \item The seller may view and respond to the review.
+\end{itemize} \\
+\hline
+\end{longtable}
+
+\vspace{-2.45em}
+
+\begin{longtable}{|m{0.5\linewidth}|m{0.5\linewidth}|}
+\hline
+\multicolumn{2}{|c|}{\textbf{Main Success Scenario}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+1. Customer navigates to the product or seller review section. & 2. System displays the review submission form. \\
+\hline
+3. Customer writes feedback and provides a rating. & 4. System validates the input and ensures all required fields are completed. \\
+\hline
+5. Customer submits the review. & 6. System saves the review to the database and displays a confirmation message. \\
+\hline
+\multicolumn{2}{|c|}{\textbf{Extensions}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+\textbf{3a.} If the review contains inappropriate content, the customer revises it. & \textbf{3a.} System detects inappropriate content and prompts the customer to edit. \\
+\hline
+\textbf{5a.} If the system fails to save the review due to server issues, the customer tries again later. & \textbf{5a.} System notifies the customer of the failure and advises retrying. \\
+\hline
+\end{longtable}
+
+\newpage
 
 \enddocument
