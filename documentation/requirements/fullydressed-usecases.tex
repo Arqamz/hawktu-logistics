@@ -499,5 +499,69 @@
 
 \newpage
 
+\section*{Handle Refunds and Exchanges}
+
+\renewcommand{\arraystretch}{1.5} % Row height
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\setlist[itemize]{leftmargin=*}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}m{0.25\linewidth}|m{0.75\linewidth}|}
+\hline
+\textbf{Use Case Name} & Handle Refunds and Exchanges \\
+\hline
+\textbf{Scope} & HawkTU Logistics and Delivery Management System \\
+\hline
+\textbf{Level} & User Goal \\
+\hline
+\textbf{Primary Actor} & Customer/Seller \\
+\hline
+\textbf{Stakeholders and Interests} & 
+\begin{itemize}
+    \item Customer: Wants a simple process for returns, refunds, or exchanges.
+    \item Seller: Needs to manage returns efficiently and understand customer feedback.
+    \item System Administrator: Ensures compliance with return policies and manages records.
+\end{itemize} \\
+\hline
+\textbf{Preconditions} & 
+\begin{itemize}
+    \item The customer is logged into the system.
+    \item The order is eligible for a refund or exchange based on the policy.
+\end{itemize} \\
+\hline
+\textbf{Postconditions} & 
+\begin{itemize}
+    \item The refund or exchange is processed and recorded in the system.
+    \item Notifications are sent to the customer and seller regarding the outcome.
+\end{itemize} \\
+\hline
+\end{longtable}
+
+\vspace{-2.45em}
+
+\begin{longtable}{|m{0.5\linewidth}|m{0.5\linewidth}|}
+\hline
+\multicolumn{2}{|c|}{\textbf{Main Success Scenario}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+1. Customer requests a refund or exchange for a product. & 2. System asks for relevant information. \\
+\hline
+3. Customer provides required information (e.g., order number, reason). & 4. System processes the request and updates order status. \\
+\hline
+&5. System confirms the refund/exchange and sends notifications. \\
+\hline
+\multicolumn{2}{|c|}{\textbf{Extensions}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+\textbf{1a.} Requests cannot be made. & \textbf{1a.} System Detects there are no previous orders. \\
+\hline
+\textbf{3a.} If the required information is incomplete, the customer is prompted to provide it. & \textbf{3a.} System requests the missing information from the customer. \\
+\hline
+\textbf{4a.} If the product is not eligible for a refund/exchange, the customer is informed. & \textbf{4a.} System notifies the customer of eligibility criteria. \\
+\hline
+\end{longtable}
+
+\newpage
 
 \enddocument
