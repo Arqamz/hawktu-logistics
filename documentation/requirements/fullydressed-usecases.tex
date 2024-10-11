@@ -302,4 +302,71 @@
 
 \newpage
 
+\section*{Place Order}
+
+\renewcommand{\arraystretch}{1.5} % Row height
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\setlist[itemize]{leftmargin=*}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}m{0.25\linewidth}|m{0.75\linewidth}|}
+\hline
+\textbf{Use Case Name} & Place Order \\
+\hline
+\textbf{Scope} & HawkTU Logistics and Delivery Management System \\
+\hline
+\textbf{Level} & User Goal \\
+\hline
+\textbf{Primary Actor} & Customer \\
+\hline
+\textbf{Stakeholders and Interests} & 
+\begin{itemize}
+    \item Customer: Wants a seamless ordering process to purchase products efficiently.
+    \item Seller: Expects to receive confirmed orders for inventory management.
+    \item System Administrator: Ensures the order process is secure and efficient.
+\end{itemize} \\
+\hline
+\textbf{Preconditions} & 
+\begin{itemize}
+    \item The customer is logged into the system.
+    \item The customer has selected products to purchase.
+\end{itemize} \\
+\hline
+\textbf{Postconditions} & 
+\begin{itemize}
+    \item An order is created and stored in the database.
+    \item The customer receives an order confirmation.
+\end{itemize} \\
+\hline
+\end{longtable}
+
+\vspace{-2.45em}
+
+\begin{longtable}{|m{0.5\linewidth}|m{0.5\linewidth}|}
+\hline
+\multicolumn{2}{|c|}{\textbf{Main Success Scenario}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+1. Customer selects products and adds them to the cart. & 2. System displays the cart with selected products. \\
+\hline
+3. Customer confirms delivery details. & 4. System validates the delivery information. \\
+\hline
+5. Customer proceeds to payment. & 6. System displays payment options (e.g., cash, card). \\
+\hline
+7. Customer completes the payment process. & 8. System processes the payment and stores the order. \\
+\hline
+\multicolumn{2}{|c|}{\textbf{Extensions}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+\textbf{3a.} If delivery details are incomplete, the customer corrects them. & \textbf{3a.} System prompts the customer to complete missing information. \\
+\hline
+\textbf{7a.} If payment processing fails, the customer retries or selects a different payment method. & \textbf{7a.} System notifies the customer of the failure and provides options to retry. \\
+\hline
+\end{longtable}
+
+\newpage
+
+
+
 \enddocument
