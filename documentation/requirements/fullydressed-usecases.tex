@@ -564,4 +564,65 @@
 
 \newpage
 
+\section*{Monitor Inventory Levels}
+
+\renewcommand{\arraystretch}{1.5} % Row height
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\setlist[itemize]{leftmargin=*}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}m{0.25\linewidth}|m{0.75\linewidth}|}
+\hline
+\textbf{Use Case Name} & Monitor Inventory Levels \\
+\hline
+\textbf{Scope} & HawkTU Logistics and Delivery Management System \\
+\hline
+\textbf{Level} & System Level \\
+\hline
+\textbf{Primary Actor} & Automated Management System \\
+\hline
+\textbf{Stakeholders and Interests} & 
+\begin{itemize}
+    \item Sellers: Rely on the system to maintain optimal stock levels for customer demand.
+    \item System Administrators: Ensure the system operates effectively to manage inventory.
+\end{itemize} \\
+\hline
+\textbf{Preconditions} & 
+\begin{itemize}
+    \item The system is initialized and running.
+    \item Inventory data is current and accurately reflects stock levels.
+\end{itemize} \\
+\hline
+\textbf{Postconditions} & 
+\begin{itemize}
+    \item Inventory levels are continuously monitored and updated by the system.
+    \item Notifications are generated for items that require restocking.
+\end{itemize} \\
+\hline
+\end{longtable}
+
+\vspace{-2.45em}
+
+\begin{longtable}{|m{0.5\linewidth}|m{0.5\linewidth}|}
+\hline
+\multicolumn{2}{|c|}{\textbf{Main Success Scenario}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+1. System continuously monitors current inventory levels. & 2. System displays inventory status, including stock quantities and alerts. \\
+\hline
+3. System records updates to inventory levels based on sales or new stock. & 4. System triggers notifications for low-stock items. \\
+\hline
+\multicolumn{2}{|c|}{\textbf{Extensions}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Condition}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+\textbf{1a.} If inventory data is outdated, the system prompts for a refresh. & \textbf{1a.} System notifies stakeholders of the need to refresh data. \\
+\hline
+\textbf{3a.} If an update fails, the system logs the error. & \textbf{3a.} System alerts stakeholders about the failure and suggests retrying. \\
+\hline
+\end{longtable}
+
+\newpage
+
+
 \enddocument
