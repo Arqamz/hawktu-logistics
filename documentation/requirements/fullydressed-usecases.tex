@@ -367,6 +367,71 @@
 
 \newpage
 
+\section*{Modify or Cancel Order}
+
+\renewcommand{\arraystretch}{1.5} % Row height
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\setlist[itemize]{leftmargin=*}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}m{0.25\linewidth}|m{0.75\linewidth}|}
+\hline
+\textbf{Use Case Name} & Manage Order \\
+\hline
+\textbf{Scope} & HawkTU Logistics and Delivery Management System \\
+\hline
+\textbf{Level} & User Goal \\
+\hline
+\textbf{Primary Actor} & Customer/Seller \\
+\hline
+\textbf{Stakeholders and Interests} & 
+\begin{itemize}
+    \item Customer: Wants to easily modify or cancel orders based on changing needs.
+    \item Seller: Needs to manage inventory and understand changes to orders.
+    \item System Administrator: Ensures modifications and cancellations follow established rules.
+\end{itemize} \\
+\hline
+\textbf{Preconditions} & 
+\begin{itemize}
+    \item The customer is logged into the system.
+    \item The order is placed and can be modified or canceled based on its status.
+\end{itemize} \\
+\hline
+\textbf{Postconditions} & 
+\begin{itemize}
+    \item The order is modified or canceled in the system.
+    \item Notifications are sent to the customer and seller regarding the changes.
+\end{itemize} \\
+\hline
+\end{longtable}
+
+\vspace{-2.45em}
+
+\begin{longtable}{|m{0.5\linewidth}|m{0.5\linewidth}|}
+\hline
+\multicolumn{2}{|c|}{\textbf{Main Success Scenario}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+1. Customer views their order history. & 2. System displays current orders with options to modify or cancel. \\
+\hline
+3. Customer selects an order to modify or cancel. & 4. System validates the current status of the order. \\
+\hline
+5. Customer makes changes or confirms cancellation. & 6. System processes the request and updates the order status. \\
+\hline
+\multicolumn{2}{|c|}{\textbf{Extensions}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+\textbf{1a.} No Orders are displayed. & \textbf{1a.} System detects that no orders have been made.\\
+\hline
+\textbf{3a.} If the order cannot be modified/canceled due to status, the customer is informed. & \textbf{3a.} System notifies the customer of the order's status and restrictions. \\
+\hline
+\textbf{5a.} If modifications are invalid, the customer corrects them. & \textbf{5a.} System prompts the customer to provide valid changes. \\
+\hline
+\end{longtable}
+
+\newpage
+
 
 
 \enddocument
