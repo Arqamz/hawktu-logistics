@@ -687,5 +687,64 @@
 
 \newpage
 
+\section*{Track Orders by ID}
+
+\renewcommand{\arraystretch}{1.5} % Row height
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\setlist[itemize]{leftmargin=*}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}m{0.25\linewidth}|m{0.75\linewidth}|}
+\hline
+\textbf{Use Case Name} & Track Orders by ID \\
+\hline
+\textbf{Scope} & HawkTU Logistics and Delivery Management System \\
+\hline
+\textbf{Level} & User Goal \\
+\hline
+\textbf{Primary Actor} & Customer/Guest \\ 
+\hline
+\textbf{Stakeholders and Interests} & 
+\begin{itemize}
+    \item Customer: Wants to monitor the status and location of their order for timely updates.
+    \item Guest: Aims to check order status without needing to log in.
+    \item System Administrator: Ensures the tracking system functions correctly and securely.
+\end{itemize} \\
+\hline
+\textbf{Preconditions} & 
+\begin{itemize}
+    \item The order has been placed and assigned a unique tracking ID.
+\end{itemize} \\
+\hline
+\textbf{Postconditions} & 
+\begin{itemize}
+    \item The customer or guest can view the current status and location of the order.
+\end{itemize} \\
+\hline
+\end{longtable}
+
+\vspace{-2.45em}
+
+\begin{longtable}{|m{0.5\linewidth}|m{0.5\linewidth}|}
+\hline
+\multicolumn{2}{|c|}{\textbf{Main Success Scenario}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+1. Customer or guest enters the tracking ID on the tracking page. & 2. System retrieves the order details associated with the tracking ID. \\
+\hline
+&3. System displays the current status and location of the order.\\
+\hline 4. Customer or guest reviews the order status and estimated delivery time.& \\
+\hline
+\multicolumn{2}{|c|}{\textbf{Extensions}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+\textbf{1a.} If the tracking ID is invalid, the system notifies the user. & \textbf{1a.} System displays an error message indicating the tracking ID is not found. \\
+\hline
+\textbf{3a.} If there is a system error, the customer or guest is informed. & \textbf{3a.} System alerts the user of any issues retrieving order details. \\
+\hline
+\end{longtable}
+
+\newpage
 
 \enddocument
