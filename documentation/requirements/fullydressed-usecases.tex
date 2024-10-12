@@ -624,5 +624,68 @@
 
 \newpage
 
+\section*{Oversee Fleet Operations}
+
+\renewcommand{\arraystretch}{1.5} % Row height
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\setlist[itemize]{leftmargin=*}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}m{0.25\linewidth}|m{0.75\linewidth}|}
+\hline
+\textbf{Use Case Name} & Oversee Fleet Operations \\
+\hline
+\textbf{Scope} & HawkTU Logistics and Delivery Management System \\
+\hline
+\textbf{Level} & User Goal \\
+\hline
+\textbf{Primary Actor} & Fleet Manager \\
+\hline
+\textbf{Stakeholders and Interests} & 
+\begin{itemize}
+    \item Fleet Manager: Wants to ensure efficient allocation of resources and timely deliveries.
+    \item Driver: Needs to be informed of assignments and routes.
+    \item System Administrator: Ensures the fleet management system is functional and secure.
+\end{itemize} \\
+\hline
+\textbf{Preconditions} & 
+\begin{itemize}
+    \item The fleet manager is logged into the system.
+    \item The fleet data is available and up-to-date.
+\end{itemize} \\
+\hline
+\textbf{Postconditions} & 
+\begin{itemize}
+    \item Fleet operations are monitored, and vehicle locations are tracked.
+    \item Updates on resource allocation are available to the fleet manager.
+\end{itemize} \\
+\hline
+\end{longtable}
+
+\vspace{-2.45em}
+
+\begin{longtable}{|m{0.5\linewidth}|m{0.5\linewidth}|}
+\hline
+\multicolumn{2}{|c|}{\textbf{Main Success Scenario}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+1. Fleet manager views the current fleet status and vehicle locations. & 2. System displays real-time vehicle locations and operational status. \\
+\hline
+3. Fleet manager assigns vehicles to deliveries based on availability. & 4. System updates the assignment and informs relevant drivers. \\
+\hline
+&5. System tracks delivery progress and notifies the manager of any delays.  \\
+\hline
+\multicolumn{2}{|c|}{\textbf{Extensions}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+\textbf{1a.} If a vehicle is unavailable, the fleet manager is notified. & \textbf{1a.} System alerts the fleet manager of vehicle status and availability. \\
+\hline
+\textbf{3a.} If an assignment fails, the fleet manager is informed. & \textbf{3a.} System notifies the fleet manager of the failure and suggests alternatives. \\
+\hline
+\end{longtable}
+
+\newpage
+
 
 \enddocument
