@@ -747,4 +747,68 @@
 
 \newpage
 
-\enddocument
+\section*{Ship Items Door-to-Door}
+
+\renewcommand{\arraystretch}{1.5} % Row height
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\setlist[itemize]{leftmargin=*}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}m{0.25\linewidth}|m{0.75\linewidth}|}
+\hline
+\textbf{Use Case Name} & Ship Items Door-to-Door \\
+\hline
+\textbf{Scope} & HawkTU Logistics and Delivery Management System \\
+\hline
+\textbf{Level} & User Goal \\
+\hline
+\textbf{Primary Actor} & Customer \\ 
+\hline
+\textbf{Stakeholders and Interests} & 
+\begin{itemize}
+    \item Customer: Wants to send items directly to others with reliable tracking.
+    \item Recipient: Expects to receive items securely and track their shipment.
+    \item System Administrator: Ensures the shipping process is efficient and secure.
+\end{itemize} \\
+\hline
+\textbf{Preconditions} & 
+\begin{itemize}
+    \item The customer is logged into the system.
+    \item The items to be shipped are prepared for shipment.
+\end{itemize} \\
+\hline
+\textbf{Postconditions} & 
+\begin{itemize}
+    \item The item is shipped, and both parties receive tracking information.
+\end{itemize} \\
+\hline
+\end{longtable}
+
+\vspace{-2.45em}
+
+\begin{longtable}{|m{0.5\linewidth}|m{0.5\linewidth}|}
+\hline
+\multicolumn{2}{|c|}{\textbf{Main Success Scenario}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+ & 1. System asks for delivery details (Drop off, Pickup Address, Item Type) \\
+\hline
+2. Customer provides relevant information.&3. System validates information and asks for a confirmation\\
+\hline
+4. Customer confirms the shipment details and chooses a payment method. & 5. System processes the payment and prepares the shipment. \\
+\hline
+&6. System generates a unique tracking number for the shipment.\\
+\hline
+& 7. System sends tracking information to both the customer and recipient. \\
+\hline
+\multicolumn{2}{|c|}{\textbf{Extensions}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+\textbf{3a.} Customer re-enters details. & \textbf{3a.} System alerts customer that details are invalid/incomplete and asks to retry. \\
+\hline
+\textbf{5a.} If payment fails, the customer is notified to retry. & \textbf{5a.} System displays an error message indicating the payment failure. \\
+\hline
+\end{longtable}
+
+\end{document}
