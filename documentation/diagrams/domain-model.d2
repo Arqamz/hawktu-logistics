@@ -1,0 +1,157 @@
+Domain Model Diagram: {
+
+    Customer: Customer {
+    shape: class
+    +id: UUID
+    +name: String
+    +email: String
+    +phone: String
+    +address: String
+    +loyaltyPoints: Integer
+    }
+
+    Product: Product {
+    shape: class
+    +id: UUID
+    +name: String
+    +description: String
+    +price: Decimal
+    +stockQuantity: Integer
+    }
+
+    Order: Order {
+    shape: class
+    +id: UUID
+    +orderDate: DateTime
+    +status: String
+    +totalAmount: Decimal
+    }
+
+    LoyaltyProgram: Loyalty Program {
+    shape: class
+    +pointsBalance: Integer
+    +earnRate: Decimal
+    +redeemRate: Decimal
+    }
+
+    Review: Review {
+    shape: class
+    +id: UUID
+    +rating: Integer
+    +comments: String
+    +timestamp: DateTime
+    }
+
+    Inventory: Inventory {
+    shape: class
+    +productId: UUID
+    +quantityAvailable: Integer
+    }
+
+    Seller: Seller {
+        shape: class
+        +id: UUID
+        +name: String
+        +email: String
+        +storeName: String
+    }
+
+    Fleet: Fleet {
+    shape: class
+    +id: UUID
+    +vehicleType: String
+    +capacity: Integer
+    +location: String
+    }
+
+    Shipment: Shipment {
+    shape: class
+    +trackingNumber: String
+    +status: String
+    +shipmentDate: DateTime
+    }
+
+    Payment: Payment {
+    shape: class
+    +paymentId: UUID
+    +amount: Decimal
+    +paymentDate: DateTime
+    +status: String
+    }
+
+    Tracking: Tracking {
+    shape: class
+    +trackingId: String
+    +orderId: UUID
+    +currentLocation: String
+    +estimatedDelivery: DateTime
+    }
+
+    FleetManager: Fleet Manager {
+    shape: class
+    +id: UUID
+    +name: String
+    }
+
+
+    Customer -> Order: places {
+    # source-arrowhead: 1
+    # target-arrowhead: *
+    }
+
+    Customer -> LoyaltyProgram: enrolled in {
+    # source-arrowhead: 1
+    # target-arrowhead: 1
+    }
+
+    Customer -> Review: writes {
+    # source-arrowhead: 1
+    # target-arrowhead: *
+    }
+
+    Seller -> Product: manages {
+    # source-arrowhead: 1
+    # target-arrowhead: *
+    }
+
+    Order -> Product: contains {
+    # source-arrowhead: 1
+    # target-arrowhead: *
+    }
+
+    Order -> Payment: processed by {
+    # source-arrowhead: 1
+    # target-arrowhead: 1
+    }
+
+    Order -> Tracking: tracked by {
+    # source-arrowhead: 1
+    # target-arrowhead: 1
+    }
+
+    Review -> Product: reviews {
+    # source-arrowhead: *
+    # target-arrowhead: 1
+    }
+
+    Inventory -> Product: stocks {
+    # source-arrowhead: *
+    # target-arrowhead: 1
+    }
+
+    Fleet -> Shipment: transports {
+    # source-arrowhead: *
+    # target-arrowhead: 1
+    }
+
+    FleetManager -> Fleet: oversees {
+    # source-arrowhead: 1
+    # target-arrowhead: *
+    }
+
+    Shipment -> Tracking: tracked by {
+    # source-arrowhead: 1
+    # target-arrowhead: 1
+    }
+
+}
