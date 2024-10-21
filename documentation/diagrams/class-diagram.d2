@@ -1,0 +1,289 @@
+Customer: {
+  shape: class
+  +customerId: UUID
+  +name: String
+  +email: String
+  +phoneNumber: String
+
+  +register()
+  +updateProfile()
+}
+
+Account: {
+  shape: class
+  +username: String
+  +password: String
+  +status: AccountStatus
+
+  +login()
+  +logout()
+  +resetPassword()
+}
+
+CustomerProfile: {
+  shape: class
+  +address: String
+  +paymentInfo: PaymentInfo
+
+  +updateAddress()
+  +updatePaymentInfo()
+}
+
+PaymentInfo: {
+  shape: class
+  +paymentMethod: String
+  +cardNumber: String
+  +expiryDate: Date
+
+  +validatePaymentMethod()
+}
+
+Order: {
+  shape: class
+  +orderId: UUID
+  +orderDate: Date
+  +status: OrderStatus
+  +totalAmount: double
+
+  +placeOrder()
+  +calculateTotal()
+}
+
+OrderItem: {
+  shape: class
+  +itemId: UUID
+  +productName: String
+  +quantity: int
+  +price: double
+
+  +calculateItemCost()
+}
+
+Shipment: {
+  shape: class
+  +shipmentId: UUID
+  +shipmentDate: Date
+  +trackingNumber: String
+  +status: ShipmentStatus
+
+  +trackShipment()
+  +updateShipmentStatus()
+}
+
+ShippingAddress: {
+  shape: class
+  +addressLine1: String
+  +addressLine2: String
+  +city: String
+  +zipCode: String
+
+  +validateAddress()
+}
+
+Delivery: {
+  shape: class
+  +deliveryId: UUID
+  +deliveryDate: Date
+  +status: DeliveryStatus
+
+  +scheduleDelivery()
+  +updateDeliveryStatus()
+}
+
+TrackingInfo: {
+  shape: class
+  +trackingNumber: String
+  +status: TrackingStatus
+  +estimatedDelivery: Date
+
+  +getTrackingDetails()
+}
+
+DeliveryRoute: {
+  shape: class
+  +routeId: UUID
+  +startLocation: String
+  +endLocation: String
+
+  +calculateRoute()
+}
+
+Inventory: {
+  shape: class
+  +inventoryId: UUID
+  +location: String
+  +quantity: int
+
+  +checkAvailability()
+  +updateStock()
+}
+
+Product: {
+  shape: class
+  +productId: UUID
+  +name: String
+  +description: String
+  +price: double
+
+  +getDetails()
+}
+
+ProductCategory: {
+  shape: class
+  +categoryId: UUID
+  +name: String
+  +description: String
+
+  +addProduct()
+  +removeProduct()
+}
+
+Fleet: {
+  shape: class
+  +fleetId: UUID
+  +fleetName: String
+
+  +manageFleet()
+}
+
+Vehicle: {
+  shape: class
+  +vehicleId: UUID
+  +type: String
+  +licensePlate: String
+  +status: VehicleStatus
+
+  +assignVehicle()
+  +updateVehicleStatus()
+}
+
+OrderController: {
+  shape: class
+  +createOrder()
+  +cancelOrder()
+  +viewOrderDetails()
+}
+
+ShipmentController: {
+  shape: class
+  +scheduleShipment()
+  +cancelShipment()
+  +trackShipment()
+}
+
+DeliveryController: {
+  shape: class
+  +arrangeDelivery()
+  +rescheduleDelivery()
+  +viewDeliveryStatus()
+}
+
+Customer -- Account: owns {
+  source-arrowhead: 1..*
+  target-arrowhead: 1
+}
+
+Customer -- CustomerProfile: has {
+  source-arrowhead: 1
+  target-arrowhead: 1
+}
+
+CustomerProfile -- PaymentInfo: contains {
+  source-arrowhead: 1
+  target-arrowhead: 1
+}
+
+Order -- OrderItem: contains {
+  source-arrowhead: 1
+  target-arrowhead: *
+}
+
+Order -- Customer: placedBy {
+  source-arrowhead: 1
+  target-arrowhead: *
+}
+
+Order -- Shipment: includes {
+  source-arrowhead: 1
+  target-arrowhead: *
+}
+
+OrderItem -- Product: references {
+  source-arrowhead: *
+  target-arrowhead: 1
+}
+
+Shipment -- ShippingAddress: shipsTo {
+  source-arrowhead: *
+  target-arrowhead: 1
+}
+
+Shipment -- TrackingInfo: trackedBy {
+  source-arrowhead: 1
+  target-arrowhead: 1
+}
+
+Delivery -- DeliveryRoute: follows {
+  source-arrowhead: 1
+  target-arrowhead: 1
+}
+
+Delivery -- Shipment: fulfills {
+  source-arrowhead: 1
+  target-arrowhead: 1
+}
+
+Fleet -- Vehicle: manages {
+  source-arrowhead: 1
+  target-arrowhead: *
+}
+
+Inventory -- Product: stocks {
+  source-arrowhead: 1
+  target-arrowhead: *
+}
+
+Product -- ProductCategory: belongsTo {
+  source-arrowhead: *
+  target-arrowhead: 1
+}
+
+Order -- Inventory: checksAvailability {
+  source-arrowhead: 1
+  target-arrowhead: *
+}
+
+OrderController -> Order: manages {
+  source-arrowhead: 1
+  target-arrowhead: *
+}
+
+OrderController -> Customer: accesses {
+  source-arrowhead: 1
+  target-arrowhead: *
+}
+
+ShipmentController -> Shipment: manages {
+  source-arrowhead: 1
+  target-arrowhead: *
+}
+
+ShipmentController -> Delivery: arranges {
+  source-arrowhead: 1
+  target-arrowhead: *
+}
+
+DeliveryController -> Delivery: manages {
+  source-arrowhead: 1
+  target-arrowhead: *
+}
+
+DeliveryController -> Vehicle: assigns {
+  source-arrowhead: 1
+  target-arrowhead: *
+}
+
+Order -- DeliveryController: schedules {
+  source-arrowhead: 1
+  target-arrowhead: 1
+}
