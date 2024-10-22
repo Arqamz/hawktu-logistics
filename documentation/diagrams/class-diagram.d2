@@ -1,289 +1,295 @@
-Customer: {
-  shape: class
-  +customerId: UUID
-  +name: String
-  +email: String
-  +phoneNumber: String
+Class Diagram: {
 
-  +register()
-  +updateProfile()
-}
+  label: "Class Diagram"
 
-Account: {
-  shape: class
-  +username: String
-  +password: String
-  +status: AccountStatus
+  Customer: {
+    shape: class
+    +customerId: UUID
+    +name: String
+    +email: String
+    +phoneNumber: String
 
-  +login()
-  +logout()
-  +resetPassword()
-}
+    +register()
+    +updateProfile()
+  }
 
-CustomerProfile: {
-  shape: class
-  +address: String
-  +paymentInfo: PaymentInfo
+  Account: {
+    shape: class
+    +username: String
+    +password: String
+    +status: AccountStatus
 
-  +updateAddress()
-  +updatePaymentInfo()
-}
+    +login()
+    +logout()
+    +resetPassword()
+  }
 
-PaymentInfo: {
-  shape: class
-  +paymentMethod: String
-  +cardNumber: String
-  +expiryDate: Date
+  CustomerProfile: {
+    shape: class
+    +address: String
+    +paymentInfo: PaymentInfo
 
-  +validatePaymentMethod()
-}
+    +updateAddress()
+    +updatePaymentInfo()
+  }
 
-Order: {
-  shape: class
-  +orderId: UUID
-  +orderDate: Date
-  +status: OrderStatus
-  +totalAmount: double
+  PaymentInfo: {
+    shape: class
+    +paymentMethod: String
+    +cardNumber: String
+    +expiryDate: Date
 
-  +placeOrder()
-  +calculateTotal()
-}
+    +validatePaymentMethod()
+  }
 
-OrderItem: {
-  shape: class
-  +itemId: UUID
-  +productName: String
-  +quantity: int
-  +price: double
+  Order: {
+    shape: class
+    +orderId: UUID
+    +orderDate: Date
+    +status: OrderStatus
+    +totalAmount: double
 
-  +calculateItemCost()
-}
+    +placeOrder()
+    +calculateTotal()
+  }
 
-Shipment: {
-  shape: class
-  +shipmentId: UUID
-  +shipmentDate: Date
-  +trackingNumber: String
-  +status: ShipmentStatus
+  OrderItem: {
+    shape: class
+    +itemId: UUID
+    +productName: String
+    +quantity: int
+    +price: double
 
-  +trackShipment()
-  +updateShipmentStatus()
-}
+    +calculateItemCost()
+  }
 
-ShippingAddress: {
-  shape: class
-  +addressLine1: String
-  +addressLine2: String
-  +city: String
-  +zipCode: String
+  Shipment: {
+    shape: class
+    +shipmentId: UUID
+    +shipmentDate: Date
+    +trackingNumber: String
+    +status: ShipmentStatus
 
-  +validateAddress()
-}
+    +trackShipment()
+    +updateShipmentStatus()
+  }
 
-Delivery: {
-  shape: class
-  +deliveryId: UUID
-  +deliveryDate: Date
-  +status: DeliveryStatus
+  ShippingAddress: {
+    shape: class
+    +addressLine1: String
+    +addressLine2: String
+    +city: String
+    +zipCode: String
 
-  +scheduleDelivery()
-  +updateDeliveryStatus()
-}
+    +validateAddress()
+  }
 
-TrackingInfo: {
-  shape: class
-  +trackingNumber: String
-  +status: TrackingStatus
-  +estimatedDelivery: Date
+  Delivery: {
+    shape: class
+    +deliveryId: UUID
+    +deliveryDate: Date
+    +status: DeliveryStatus
 
-  +getTrackingDetails()
-}
+    +scheduleDelivery()
+    +updateDeliveryStatus()
+  }
 
-DeliveryRoute: {
-  shape: class
-  +routeId: UUID
-  +startLocation: String
-  +endLocation: String
+  TrackingInfo: {
+    shape: class
+    +trackingNumber: String
+    +status: TrackingStatus
+    +estimatedDelivery: Date
 
-  +calculateRoute()
-}
+    +getTrackingDetails()
+  }
 
-Inventory: {
-  shape: class
-  +inventoryId: UUID
-  +location: String
-  +quantity: int
+  DeliveryRoute: {
+    shape: class
+    +routeId: UUID
+    +startLocation: String
+    +endLocation: String
 
-  +checkAvailability()
-  +updateStock()
-}
+    +calculateRoute()
+  }
 
-Product: {
-  shape: class
-  +productId: UUID
-  +name: String
-  +description: String
-  +price: double
+  Inventory: {
+    shape: class
+    +inventoryId: UUID
+    +location: String
+    +quantity: int
 
-  +getDetails()
-}
+    +checkAvailability()
+    +updateStock()
+  }
 
-ProductCategory: {
-  shape: class
-  +categoryId: UUID
-  +name: String
-  +description: String
+  Product: {
+    shape: class
+    +productId: UUID
+    +name: String
+    +description: String
+    +price: double
 
-  +addProduct()
-  +removeProduct()
-}
+    +getDetails()
+  }
 
-Fleet: {
-  shape: class
-  +fleetId: UUID
-  +fleetName: String
+  ProductCategory: {
+    shape: class
+    +categoryId: UUID
+    +name: String
+    +description: String
 
-  +manageFleet()
-}
+    +addProduct()
+    +removeProduct()
+  }
 
-Vehicle: {
-  shape: class
-  +vehicleId: UUID
-  +type: String
-  +licensePlate: String
-  +status: VehicleStatus
+  Fleet: {
+    shape: class
+    +fleetId: UUID
+    +fleetName: String
 
-  +assignVehicle()
-  +updateVehicleStatus()
-}
+    +manageFleet()
+  }
 
-OrderController: {
-  shape: class
-  +createOrder()
-  +cancelOrder()
-  +viewOrderDetails()
-}
+  Vehicle: {
+    shape: class
+    +vehicleId: UUID
+    +type: String
+    +licensePlate: String
+    +status: VehicleStatus
 
-ShipmentController: {
-  shape: class
-  +scheduleShipment()
-  +cancelShipment()
-  +trackShipment()
-}
+    +assignVehicle()
+    +updateVehicleStatus()
+  }
 
-DeliveryController: {
-  shape: class
-  +arrangeDelivery()
-  +rescheduleDelivery()
-  +viewDeliveryStatus()
-}
+  OrderController: {
+    shape: class
+    +createOrder()
+    +cancelOrder()
+    +viewOrderDetails()
+  }
 
-Customer -- Account: owns {
-  source-arrowhead: 1..*
-  target-arrowhead: 1
-}
+  ShipmentController: {
+    shape: class
+    +scheduleShipment()
+    +cancelShipment()
+    +trackShipment()
+  }
 
-Customer -- CustomerProfile: has {
-  source-arrowhead: 1
-  target-arrowhead: 1
-}
+  DeliveryController: {
+    shape: class
+    +arrangeDelivery()
+    +rescheduleDelivery()
+    +viewDeliveryStatus()
+  }
 
-CustomerProfile -- PaymentInfo: contains {
-  source-arrowhead: 1
-  target-arrowhead: 1
-}
+  Customer -- Account: owns {
+    source-arrowhead: 1..*
+    target-arrowhead: 1
+  }
 
-Order -- OrderItem: contains {
-  source-arrowhead: 1
-  target-arrowhead: *
-}
+  Customer -- CustomerProfile: has {
+    source-arrowhead: 1
+    target-arrowhead: 1
+  }
 
-Order -- Customer: placedBy {
-  source-arrowhead: 1
-  target-arrowhead: *
-}
+  CustomerProfile -- PaymentInfo: contains {
+    source-arrowhead: 1
+    target-arrowhead: 1
+  }
 
-Order -- Shipment: includes {
-  source-arrowhead: 1
-  target-arrowhead: *
-}
+  Order -- OrderItem: contains {
+    source-arrowhead: 1
+    target-arrowhead: *
+  }
 
-OrderItem -- Product: references {
-  source-arrowhead: *
-  target-arrowhead: 1
-}
+  Order -- Customer: placedBy {
+    source-arrowhead: 1
+    target-arrowhead: *
+  }
 
-Shipment -- ShippingAddress: shipsTo {
-  source-arrowhead: *
-  target-arrowhead: 1
-}
+  Order -- Shipment: includes {
+    source-arrowhead: 1
+    target-arrowhead: *
+  }
 
-Shipment -- TrackingInfo: trackedBy {
-  source-arrowhead: 1
-  target-arrowhead: 1
-}
+  OrderItem -- Product: references {
+    source-arrowhead: *
+    target-arrowhead: 1
+  }
 
-Delivery -- DeliveryRoute: follows {
-  source-arrowhead: 1
-  target-arrowhead: 1
-}
+  Shipment -- ShippingAddress: shipsTo {
+    source-arrowhead: *
+    target-arrowhead: 1
+  }
 
-Delivery -- Shipment: fulfills {
-  source-arrowhead: 1
-  target-arrowhead: 1
-}
+  Shipment -- TrackingInfo: trackedBy {
+    source-arrowhead: 1
+    target-arrowhead: 1
+  }
 
-Fleet -- Vehicle: manages {
-  source-arrowhead: 1
-  target-arrowhead: *
-}
+  Delivery -- DeliveryRoute: follows {
+    source-arrowhead: 1
+    target-arrowhead: 1
+  }
 
-Inventory -- Product: stocks {
-  source-arrowhead: 1
-  target-arrowhead: *
-}
+  Delivery -- Shipment: fulfills {
+    source-arrowhead: 1
+    target-arrowhead: 1
+  }
 
-Product -- ProductCategory: belongsTo {
-  source-arrowhead: *
-  target-arrowhead: 1
-}
+  Fleet -- Vehicle: manages {
+    source-arrowhead: 1
+    target-arrowhead: *
+  }
 
-Order -- Inventory: checksAvailability {
-  source-arrowhead: 1
-  target-arrowhead: *
-}
+  Inventory -- Product: stocks {
+    source-arrowhead: 1
+    target-arrowhead: *
+  }
 
-OrderController -> Order: manages {
-  source-arrowhead: 1
-  target-arrowhead: *
-}
+  Product -- ProductCategory: belongsTo {
+    source-arrowhead: *
+    target-arrowhead: 1
+  }
 
-OrderController -> Customer: accesses {
-  source-arrowhead: 1
-  target-arrowhead: *
-}
+  Order -- Inventory: checksAvailability {
+    source-arrowhead: 1
+    target-arrowhead: *
+  }
 
-ShipmentController -> Shipment: manages {
-  source-arrowhead: 1
-  target-arrowhead: *
-}
+  OrderController -> Order: manages {
+    source-arrowhead: 1
+    target-arrowhead: *
+  }
 
-ShipmentController -> Delivery: arranges {
-  source-arrowhead: 1
-  target-arrowhead: *
-}
+  OrderController -> Customer: accesses {
+    source-arrowhead: 1
+    target-arrowhead: *
+  }
 
-DeliveryController -> Delivery: manages {
-  source-arrowhead: 1
-  target-arrowhead: *
-}
+  ShipmentController -> Shipment: manages {
+    source-arrowhead: 1
+    target-arrowhead: *
+  }
 
-DeliveryController -> Vehicle: assigns {
-  source-arrowhead: 1
-  target-arrowhead: *
-}
+  ShipmentController -> Delivery: arranges {
+    source-arrowhead: 1
+    target-arrowhead: *
+  }
 
-Order -- DeliveryController: schedules {
-  source-arrowhead: 1
-  target-arrowhead: 1
+  DeliveryController -> Delivery: manages {
+    source-arrowhead: 1
+    target-arrowhead: *
+  }
+
+  DeliveryController -> Vehicle: assigns {
+    source-arrowhead: 1
+    target-arrowhead: *
+  }
+
+  Order -- DeliveryController: schedules {
+    source-arrowhead: 1
+    target-arrowhead: 1
+  }
+
 }
