@@ -42,4 +42,4 @@ The `diagrams` folder contains all D2-based diagrams created to visualize differ
 ---
 
 For more detailed instructions on generating diagrams or to get started with the use case documentation, please refer to the relevant subfolder’s `README.md` file.
-``` 
+```
