@@ -38,7 +38,8 @@ To run:
 ```bash
 d2 --layout elk diagrams/system-sequence.d2 -w --dark-theme 7
 ```
- 
+   
+   d
 **Output**:
 ![System Sequence Diagram](system-sequence.svg)
 
