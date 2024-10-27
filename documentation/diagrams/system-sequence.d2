@@ -12,9 +12,9 @@ Place Order: {
   Customer -> OrderSystem: "Confirm delivery details"
   OrderSystem -> OrderSystem: "Validate delivery information"
 
-  "Extensions_Delivery_Info": {
+  "Extensions Delivery": {
     shape: rectangle
-    style.fill: RED
+    style.fill: Grey
     Customer -> OrderSystem: "Correct delivery information if incomplete"
     OrderSystem -> Customer: "Prompt for missing information"
   }
@@ -30,9 +30,9 @@ Place Order: {
   
   Payment -> OrderSystem: "Process payment"
 
-  "Extensions_Payment": {
+  "Extensions Payment": {
     shape: rectangle
-    style.fill: RED
+    style.fill: Grey
     Customer -> OrderSystem: "Retry or change payment if processing fails"
     OrderSystem -> Customer: "Notify payment failure and offer retry options"
   }
