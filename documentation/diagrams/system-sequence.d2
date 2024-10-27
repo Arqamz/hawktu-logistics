@@ -1,7 +1,7 @@
 shape: sequence_diagram
 
 Customer: Customer {shape:person}
-System: System
+System: HawkTU 
 
 loop {
     Customer -> System: "login()"
@@ -110,4 +110,9 @@ else label:"Payment Succeeds"{
 style:{
     stroke-width:4
 }
+}
+System -> Customer: "Redirect to Product Catalog" {
+  style: {
+      stroke-dash:4
+  }
 }
