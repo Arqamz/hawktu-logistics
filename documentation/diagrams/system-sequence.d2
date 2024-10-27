@@ -1,4 +1,4 @@
-Place_Order: {
+Place Order: {
   shape: sequence_diagram
 
   Customer: "Customer"
@@ -6,32 +6,37 @@ Place_Order: {
   Inventory: "Inventory System"
   Payment: "Payment Processor"
 
-  Main_Success_Scenario: {
-    Customer -> OrderSystem: "Select products and add to cart"
-    OrderSystem -> Customer: "Display cart with selected products"
+  Customer -> OrderSystem: "Select products and add to cart"
+  OrderSystem -> Customer: "Display cart with selected products"
 
-    Customer -> OrderSystem: "Confirm delivery details"
-    OrderSystem -> OrderSystem: "Validate delivery information"
+  Customer -> OrderSystem: "Confirm delivery details"
+  OrderSystem -> OrderSystem: "Validate delivery information"
 
-    OrderSystem -> Inventory: "Check inventory availability"
-    Inventory -> OrderSystem: "Confirm inventory availability"
-
-    OrderSystem -> Customer: "Display total price"
-    Customer -> OrderSystem: "Proceed to payment"
-
-    OrderSystem -> Payment: "Display payment options"
-    Customer -> Payment: "Select payment method and confirm"
-    Payment -> OrderSystem: "Process payment"
-
-    OrderSystem -> OrderSystem: "Store order and payment status"
-    OrderSystem -> Customer: "Provide order confirmation"
-  }
-
-  Extensions: {
+  "Extensions_Delivery_Info": {
+    shape: rectangle
+    style.fill: RED
     Customer -> OrderSystem: "Correct delivery information if incomplete"
     OrderSystem -> Customer: "Prompt for missing information"
+  }
 
+  OrderSystem -> Inventory: "Check inventory availability"
+  Inventory -> OrderSystem: "Confirm inventory availability"
+
+  OrderSystem -> Customer: "Display total price"
+  Customer -> OrderSystem: "Proceed to payment"
+
+  OrderSystem -> Payment: "Display payment options"
+  Customer -> Payment: "Select payment method and confirm"
+  
+  Payment -> OrderSystem: "Process payment"
+
+  "Extensions_Payment": {
+    shape: rectangle
+    style.fill: RED
     Customer -> OrderSystem: "Retry or change payment if processing fails"
     OrderSystem -> Customer: "Notify payment failure and offer retry options"
   }
+
+  OrderSystem -> OrderSystem: "Store order and payment status"
+  OrderSystem -> Customer: "Provide order confirmation"
 }
