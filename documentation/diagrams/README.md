@@ -31,7 +31,6 @@ d2 --layout elk -w --dark-theme 8 diagrams/domain-model.d2 diagrams/svgs/domain-
 **Output**:
 ![Domain Model](svgs/domain-model.svg)
 
-<!--
 
 #### 2. System Sequence Diagram
 Illustrates the high-level interactions between the primary actors and the system for main scenarios.
@@ -43,6 +42,7 @@ d2 --layout elk -w --dark-theme 8 diagrams/system-sequence.d2 diagrams/svgs/syst
 **Output**:
 ![System Sequence Diagram](svgs/system-sequence.svg)
 
+<!--
 #### 3. Use Case Action Sequences 
 Each use case has its own sequence diagram to detail the actions and system responses in key scenarios.
 
