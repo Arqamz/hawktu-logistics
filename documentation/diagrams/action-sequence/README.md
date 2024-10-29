@@ -22,7 +22,7 @@ This folder contains action sequence diagrams for various use cases within our s
 
 5. **Ship Items Door-to-Door**
    - **Description**: This diagram illustrates the **Ship Items Door-to-Door** use case, covering address validation, payment processing, and shipment tracking generation. Alternate flows handle address validation failures, payment issues, and successful confirmation of shipping details.
-   - ![Ship Items Door-to-Door](../svgs/action-sequence-diagrams/ship-items.svg)
+   - ![Ship Items Door-to-Door](../svgs/action-sequence/ship-items.svg)
 
 ## How to Use
 
