@@ -65,6 +65,3 @@ d2 --layout elk diagrams/class-diagram.d2 -w --dark-theme 7
 
 **Output**:
 ![Class Diagram](svgs/class-diagram.svg)
-
-
-
