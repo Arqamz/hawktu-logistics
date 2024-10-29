@@ -66,9 +66,5 @@ d2 --layout elk diagrams/class-diagram.d2 -w --dark-theme 7
 **Output**:
 ![Class Diagram](svgs/class-diagram.svg)
 
----
 
-## Additional Documentation
-
-For more details on each action sequence diagram, please refer to the [Action Sequence Diagrams README](action-sequence/README.md).
 
