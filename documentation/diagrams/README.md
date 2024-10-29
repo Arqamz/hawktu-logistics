@@ -13,12 +13,15 @@ To get started, you need to install the D2 diagramming tool. You can find the in
 To render a diagram, use the following command:
 
 ```bash
-d2 --layout elk diagrams/domain-model.d2 -w
+d2 --layout elk -w --dark-theme 8 filename.d2 svgs/filename.svg 
 ```
 
 - **Explanation**:
-  - `--layout elk`: Uses the `elk` layout for clean, hierarchical structuring.
+  - `--layout elk`: Uses the `elk` layout for clean, hierarchical structuring. View options [here](https://d2lang.com/tour/layouts)
   - `-w`: Watches for changes and automatically updates the render.
+  - `--dark-theme 8`: The theme of the generated diagram. You can view all options [here](https://d2lang.com/tour/themes)
+  - `filename.d2`: Name of the file to generate the diagram for
+  - `svgs/filename.svg`: Location to save the generated svg
 
 ### Diagrams in This Folder
 
@@ -26,39 +29,18 @@ d2 --layout elk diagrams/domain-model.d2 -w
 
 This diagram represents the main entities and their relationships in the system.
 
-To run:
-
-```bash
-d2 --layout elk -w --dark-theme 8 diagrams/domain-model.d2 diagrams/svgs/domain-model.svg
-```
-
-**Output**:
 ![Domain Model](svgs/domain-model.svg)
 
 #### 2. System Sequence Diagram
 
 Illustrates the high-level interactions between the primary actors and the system for main scenarios.
 
-To run:
-
-```bash
-d2 --layout elk -w --dark-theme 8 diagrams/system-sequence.d2 diagrams/svgs/system-sequence.svg
-```
-
-**Output**:
 ![System Sequence Diagram](svgs/system-sequence.svg)
 
 #### 3. Complete Class Diagram
 
 The class diagram provides an in-depth view of the system's static structure, showing classes, attributes, and their relationships.
 
-To run:
-
-```bash
-d2 --layout elk diagrams/class-diagram.d2 -w --dark-theme 7
-```
-
-**Output**:
 ![Class Diagram](svgs/class-diagram.svg)
 
 ### 4. Action Sequence Diagrams
