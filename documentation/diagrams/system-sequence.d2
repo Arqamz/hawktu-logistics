@@ -1,0 +1,118 @@
+shape: sequence_diagram
+
+Customer: Customer {shape:person}
+System: HawkTU 
+
+loop {
+    Customer -> System: "login()"
+    System -> Customer: "authenticate(fail)" {
+        style: {
+            stroke-dash:4
+        }
+    }
+    style: {
+        stroke-width: 3
+    }
+}
+System -> Customer: "authenticate(success)" {
+    style: {
+        stroke-dash: 4
+    }
+}
+System -> Customer: "Display Item Catalog" {
+    style: {
+        stroke-dash: 4
+    }
+}
+Customer -> System: "Add Item to Cart"
+
+alt1 label: "alt-Availability Conflict"{
+    style:{
+        stroke-width:4
+    }
+    System -> System: "Confirm Availability"
+    if label: "Item Available"{
+        System -> System: "Item Quantity Decreased"
+        System -> Customer: "Item Added to Cart " {
+        style: {
+            stroke-dash: 4
+        }
+    }
+    }
+    else label: "Item Unavailable"{
+        System -> Customer: "Customer Notified and item not added to cart" {
+            style: {
+                stroke-dash: 4
+            }
+        }
+    }
+}
+System -> Customer: "Display Cart" {
+    style: {
+        stroke-dash:4
+    }
+}
+Customer -> System: "Proceed to Checkout"
+
+System -> Customer: "Prompt for Delivery Details" {
+    style: {
+        stroke-dash:4
+    }
+}
+Customer -> System: "Enter Details"
+alt label:"alt-Delivery Details"{
+    System -> System: "Validating"
+    if label:"Invalid Details"{
+        System -> Customer: "Again Prompt for Details" {
+            style: {
+                stroke-dash:4
+            }
+    }
+    Customer -> System: "User Re-Enters Details"  
+}
+else label:"Correct Details"{
+    System -> Customer: "Show Total" {
+        style: {
+            stroke-dash:4
+        }
+}
+}
+style:{
+    stroke-width:4
+}
+}
+Customer -> System :"Proceed to Payment"
+System -> Customer: "Display Payment Options" {
+    style: {
+        stroke-dash:4
+    }
+}
+Customer -> System :"Select Payment Method and Confirm"
+
+alt2 label:"alt-Payment Processing"{
+    System -> System: "Processing Payment"
+    if label:"Payment Fails"{
+        System -> Customer: "Notify Payment Failure and offer Retry Option" {
+            style: {
+                stroke-dash:4
+            }
+    }
+    Customer -> System: "Retry or Change Payment Method"  
+}
+else label:"Payment Succeeds"{
+    System -> System :"Store Order Information"
+    System -> Customer: "Send Order Confirmaton Email" {
+        style: {
+            stroke-dash:4
+        }
+}
+}
+style:{
+    stroke-width:4
+}
+}
+System -> Customer: "Redirect to Product Catalog" {
+  style: {
+      stroke-dash:4
+  }
+}

@@ -25,33 +25,35 @@ This diagram represents the main entities and their relationships in the system.
 
 To run:
 ```bash
-d2 --layout elk diagrams/domain-model.d2 -w --dark-theme 7
+d2 --layout elk -w --dark-theme 8 diagrams/domain-model.d2 diagrams/svgs/domain-model.svg
 ```
 
 **Output**:
-![Domain Model](domain-model.svg)
+![Domain Model](svgs/domain-model.svg)
 
-<!-- #### 2. System Sequence Diagram
+
+#### 2. System Sequence Diagram
 Illustrates the high-level interactions between the primary actors and the system for main scenarios.
 
 To run:
 ```bash
-d2 --layout elk diagrams/system-sequence-diagram.d2 -w --dark-theme 7
+d2 --layout elk -w --dark-theme 8 diagrams/system-sequence.d2 diagrams/svgs/system-sequence.svg
 ```
-
 **Output**:
-![System Sequence Diagram](system-sequence-diagram.svg)
+![System Sequence Diagram](svgs/system-sequence.svg)
 
-#### 3. Use Case Action Sequences
+<!--
+#### 3. Use Case Action Sequences 
 Each use case has its own sequence diagram to detail the actions and system responses in key scenarios.
 
 To run:
 ```bash
 d2 --layout elk diagrams/use-case-sequences/manage-profile-sequence.d2 -w --dark-theme 7
 ```
-
+ 
 **Output**:
 ![Manage Profile Sequence](use-case-sequences/manage-profile-sequence.svg)
+ -->
 
 #### 4. Complete Class Diagram
 The class diagram provides an in-depth view of the system's static structure, showing classes, attributes, and their relationships.
@@ -62,4 +64,4 @@ d2 --layout elk diagrams/class-diagram.d2 -w --dark-theme 7
 ```
 
 **Output**:
-![Class Diagram](class-diagram.svg) -->
+![Class Diagram](svgs/class-diagram.svg)
