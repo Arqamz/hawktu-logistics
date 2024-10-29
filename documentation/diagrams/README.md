@@ -55,7 +55,7 @@ d2 --layout elk diagrams/use-case-sequences/manage-profile-sequence.d2 -w --dark
 ![Manage Profile Sequence](use-case-sequences/manage-profile-sequence.svg)
  -->
 
-#### 4. Complete Class Diagram
+#### 3. Complete Class Diagram
 The class diagram provides an in-depth view of the system's static structure, showing classes, attributes, and their relationships.
 
 To run:
@@ -65,3 +65,10 @@ d2 --layout elk diagrams/class-diagram.d2 -w --dark-theme 7
 
 **Output**:
 ![Class Diagram](svgs/class-diagram.svg)
+
+---
+
+### 4. Action Sequence Diagrams
+
+For more details on each action sequence diagram, please refer to the [Action Sequence Diagrams README](action-sequence/README.md).
+
