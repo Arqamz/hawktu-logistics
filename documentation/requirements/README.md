@@ -1,6 +1,6 @@
 # Fully Dressed Use Cases
 
-Below are the fully dressed use cases for the project. Each page from the pdf is presented as an SVG for better readability and accessibility through this file.
+Below are the fully dressed use cases for the project. Each page from the [pdf](fullydressed-usecases.pdf) is presented as an SVG for better readability and accessibility through this file.
 
 ---
 
@@ -17,3 +17,7 @@ Below are the fully dressed use cases for the project. Each page from the pdf is
 ![Use Case 11](assets/pdf-svgs/fullydressed-usecases-11.svg)
 ![Use Case 12](assets/pdf-svgs/fullydressed-usecases-12.svg)
 ![Use Case 13](assets/pdf-svgs/fullydressed-usecases-13.svg)
+
+---
+
+The actual [pdf](fullydressed-usecases.pdf) is generated through LaTex and uses the Computer Modern font family which hasnt been implemented in the svg.

@@ -1,42 +1,49 @@
-shape: sequence_diagram
+Inventory Levels: {
+    
+  label: "Inventory Levels"
 
-InventoryManager.t1: actor
-Product.t1: actor
-Database.t1: actor
-InventoryNotification.t1: actor
+  "" : {
 
-InventoryManager.t1 -> Database.t1: monitorInventoryLevels()
-Database.t1 <- Product.t1: checkStockLevels(productId) 
-Product.t1 <- Database.t1: stockDataFetched {
-  style.stroke-dash: 5
-}
-InventoryManager.t1 <- Product.t1: displayStockStatus(stockData) {
-  style.stroke-dash: 5
-}
+    shape: sequence_diagram
 
-alt label: "Stock Level Check" {
-  style.stroke-width: 5
+    InventoryManager.t1: actor
+    Product.t1: actor
+    Database.t1: actor
+    InventoryNotification.t1: actor
 
-  if label: "Low Stock" {
-    style.fill: firebrick
-    Product.t1 -> InventoryNotification.t1: notifyLowStock("Stock level below threshold") 
-  }
-  else label: "Sufficient Stock" {
-    style.fill: green
-    InventoryNotification.t1 <- Product.t1: confirmStockSufficient() {
+    InventoryManager.t1 -> Database.t1: monitorInventoryLevels()
+    Database.t1 <- Product.t1: checkStockLevels(productId) 
+    Product.t1 <- Database.t1: stockDataFetched {
+      style.stroke-dash: 5
+    }
+    InventoryManager.t1 <- Product.t1: displayStockStatus(stockData) {
+      style.stroke-dash: 5
+    }
+
+    alt label: "Stock Level Check" {
+      style.stroke-width: 5
+
+      if label: "Low Stock" {
+        style.fill: firebrick
+        Product.t1 -> InventoryNotification.t1: notifyLowStock("Stock level below threshold") 
+      }
+      else label: "Sufficient Stock" {
+        style.fill: green
+        InventoryNotification.t1 <- Product.t1: confirmStockSufficient() {
+          style.stroke-dash: 5
+        }
+      }
+    }
+
+    InventoryManager.t1 -> Product.t2: requestStockAdjustment(productId, adjustmentAmount)
+    Product.t2 -> Database.t2: updateInventory(productId, newQuantity) {
+      style.stroke-dash: 5
+    }
+    Product.t2 <- Database.t2: confirmInventoryUpdate {
+      style.stroke-dash: 5
+    }
+    InventoryManager.t1 <- Product.t2: displayInventoryUpdateConfirmation() {
       style.stroke-dash: 5
     }
   }
 }
-
-InventoryManager.t1 -> Product.t2: requestStockAdjustment(productId, adjustmentAmount)
-Product.t2 -> Database.t2: updateInventory(productId, newQuantity) {
-  style.stroke-dash: 5
-}
-Product.t2 <- Database.t2: confirmInventoryUpdate {
-  style.stroke-dash: 5
-}
-InventoryManager.t1 <- Product.t2: displayInventoryUpdateConfirmation() {
-  style.stroke-dash: 5
-}
-

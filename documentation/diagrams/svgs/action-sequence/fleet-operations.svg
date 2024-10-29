@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" d2Version="v0.6.7" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1145 1774"><svg id="d2-svg" class="d2-577462769" width="1145" height="1774" viewBox="-89 -49 1145 1774"><rect x="-89.000000" y="-49.000000" width="1145.000000" height="1774.000000" rx="0.000000" class=" fill-N7" stroke-width="0" /><style type="text/css"><![CDATA[
-.d2-577462769 .text {
-	font-family: "d2-577462769-font-regular";
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" d2Version="v0.6.5" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1209 1656"><svg id="d2-svg" class="d2-3163970953" width="1209" height="1656" viewBox="-89 -89 1209 1656"><rect x="-89.000000" y="-89.000000" width="1209.000000" height="1656.000000" rx="0.000000" class=" fill-N7" stroke-width="0" /><style type="text/css"><![CDATA[
+.d2-3163970953 .text {
+	font-family: "d2-3163970953-font-regular";
 }
 @font-face {
-	font-family: d2-577462769-font-regular;
+	font-family: d2-3163970953-font-regular;
 	src: url("data:application/font-woff;base64,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");
 }
-.d2-577462769 .text-italic {
-	font-family: "d2-577462769-font-italic";
+.d2-3163970953 .text-italic {
+	font-family: "d2-3163970953-font-italic";
 }
 @font-face {
-	font-family: d2-577462769-font-italic;
+	font-family: d2-3163970953-font-italic;
 	src: url("data:application/font-woff;base64,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");
 }]]></style><style type="text/css"><![CDATA[.shape {
   shape-rendering: geometricPrecision;
@@ -25,173 +25,174 @@
   opacity: 0.5;
 }
 
-		.d2-577462769 .fill-N1{fill:#0A0F25;}
-		.d2-577462769 .fill-N2{fill:#676C7E;}
-		.d2-577462769 .fill-N3{fill:#9499AB;}
-		.d2-577462769 .fill-N4{fill:#CFD2DD;}
-		.d2-577462769 .fill-N5{fill:#DEE1EB;}
-		.d2-577462769 .fill-N6{fill:#EEF1F8;}
-		.d2-577462769 .fill-N7{fill:#FFFFFF;}
-		.d2-577462769 .fill-B1{fill:#0D32B2;}
-		.d2-577462769 .fill-B2{fill:#0D32B2;}
-		.d2-577462769 .fill-B3{fill:#E3E9FD;}
-		.d2-577462769 .fill-B4{fill:#E3E9FD;}
-		.d2-577462769 .fill-B5{fill:#EDF0FD;}
-		.d2-577462769 .fill-B6{fill:#F7F8FE;}
-		.d2-577462769 .fill-AA2{fill:#4A6FF3;}
-		.d2-577462769 .fill-AA4{fill:#EDF0FD;}
-		.d2-577462769 .fill-AA5{fill:#F7F8FE;}
-		.d2-577462769 .fill-AB4{fill:#EDF0FD;}
-		.d2-577462769 .fill-AB5{fill:#F7F8FE;}
-		.d2-577462769 .stroke-N1{stroke:#0A0F25;}
-		.d2-577462769 .stroke-N2{stroke:#676C7E;}
-		.d2-577462769 .stroke-N3{stroke:#9499AB;}
-		.d2-577462769 .stroke-N4{stroke:#CFD2DD;}
-		.d2-577462769 .stroke-N5{stroke:#DEE1EB;}
-		.d2-577462769 .stroke-N6{stroke:#EEF1F8;}
-		.d2-577462769 .stroke-N7{stroke:#FFFFFF;}
-		.d2-577462769 .stroke-B1{stroke:#0D32B2;}
-		.d2-577462769 .stroke-B2{stroke:#0D32B2;}
-		.d2-577462769 .stroke-B3{stroke:#E3E9FD;}
-		.d2-577462769 .stroke-B4{stroke:#E3E9FD;}
-		.d2-577462769 .stroke-B5{stroke:#EDF0FD;}
-		.d2-577462769 .stroke-B6{stroke:#F7F8FE;}
-		.d2-577462769 .stroke-AA2{stroke:#4A6FF3;}
-		.d2-577462769 .stroke-AA4{stroke:#EDF0FD;}
-		.d2-577462769 .stroke-AA5{stroke:#F7F8FE;}
-		.d2-577462769 .stroke-AB4{stroke:#EDF0FD;}
-		.d2-577462769 .stroke-AB5{stroke:#F7F8FE;}
-		.d2-577462769 .background-color-N1{background-color:#0A0F25;}
-		.d2-577462769 .background-color-N2{background-color:#676C7E;}
-		.d2-577462769 .background-color-N3{background-color:#9499AB;}
-		.d2-577462769 .background-color-N4{background-color:#CFD2DD;}
-		.d2-577462769 .background-color-N5{background-color:#DEE1EB;}
-		.d2-577462769 .background-color-N6{background-color:#EEF1F8;}
-		.d2-577462769 .background-color-N7{background-color:#FFFFFF;}
-		.d2-577462769 .background-color-B1{background-color:#0D32B2;}
-		.d2-577462769 .background-color-B2{background-color:#0D32B2;}
-		.d2-577462769 .background-color-B3{background-color:#E3E9FD;}
-		.d2-577462769 .background-color-B4{background-color:#E3E9FD;}
-		.d2-577462769 .background-color-B5{background-color:#EDF0FD;}
-		.d2-577462769 .background-color-B6{background-color:#F7F8FE;}
-		.d2-577462769 .background-color-AA2{background-color:#4A6FF3;}
-		.d2-577462769 .background-color-AA4{background-color:#EDF0FD;}
-		.d2-577462769 .background-color-AA5{background-color:#F7F8FE;}
-		.d2-577462769 .background-color-AB4{background-color:#EDF0FD;}
-		.d2-577462769 .background-color-AB5{background-color:#F7F8FE;}
-		.d2-577462769 .color-N1{color:#0A0F25;}
-		.d2-577462769 .color-N2{color:#676C7E;}
-		.d2-577462769 .color-N3{color:#9499AB;}
-		.d2-577462769 .color-N4{color:#CFD2DD;}
-		.d2-577462769 .color-N5{color:#DEE1EB;}
-		.d2-577462769 .color-N6{color:#EEF1F8;}
-		.d2-577462769 .color-N7{color:#FFFFFF;}
-		.d2-577462769 .color-B1{color:#0D32B2;}
-		.d2-577462769 .color-B2{color:#0D32B2;}
-		.d2-577462769 .color-B3{color:#E3E9FD;}
-		.d2-577462769 .color-B4{color:#E3E9FD;}
-		.d2-577462769 .color-B5{color:#EDF0FD;}
-		.d2-577462769 .color-B6{color:#F7F8FE;}
-		.d2-577462769 .color-AA2{color:#4A6FF3;}
-		.d2-577462769 .color-AA4{color:#EDF0FD;}
-		.d2-577462769 .color-AA5{color:#F7F8FE;}
-		.d2-577462769 .color-AB4{color:#EDF0FD;}
-		.d2-577462769 .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}@media screen and (prefers-color-scheme:dark){
-		.d2-577462769 .fill-N1{fill:#0A0F25;}
-		.d2-577462769 .fill-N2{fill:#676C7E;}
-		.d2-577462769 .fill-N3{fill:#9499AB;}
-		.d2-577462769 .fill-N4{fill:#CFD2DD;}
-		.d2-577462769 .fill-N5{fill:#DEE1EB;}
-		.d2-577462769 .fill-N6{fill:#EEF1F8;}
-		.d2-577462769 .fill-N7{fill:#FFFFFF;}
-		.d2-577462769 .fill-B1{fill:#010E31;}
-		.d2-577462769 .fill-B2{fill:#173688;}
-		.d2-577462769 .fill-B3{fill:#5679D4;}
-		.d2-577462769 .fill-B4{fill:#84A1EC;}
-		.d2-577462769 .fill-B5{fill:#C8D6F9;}
-		.d2-577462769 .fill-B6{fill:#E5EDFF;}
-		.d2-577462769 .fill-AA2{fill:#048E63;}
-		.d2-577462769 .fill-AA4{fill:#A6E2D0;}
-		.d2-577462769 .fill-AA5{fill:#CAF2E6;}
-		.d2-577462769 .fill-AB4{fill:#FFDA90;}
-		.d2-577462769 .fill-AB5{fill:#FFF0D1;}
-		.d2-577462769 .stroke-N1{stroke:#0A0F25;}
-		.d2-577462769 .stroke-N2{stroke:#676C7E;}
-		.d2-577462769 .stroke-N3{stroke:#9499AB;}
-		.d2-577462769 .stroke-N4{stroke:#CFD2DD;}
-		.d2-577462769 .stroke-N5{stroke:#DEE1EB;}
-		.d2-577462769 .stroke-N6{stroke:#EEF1F8;}
-		.d2-577462769 .stroke-N7{stroke:#FFFFFF;}
-		.d2-577462769 .stroke-B1{stroke:#010E31;}
-		.d2-577462769 .stroke-B2{stroke:#173688;}
-		.d2-577462769 .stroke-B3{stroke:#5679D4;}
-		.d2-577462769 .stroke-B4{stroke:#84A1EC;}
-		.d2-577462769 .stroke-B5{stroke:#C8D6F9;}
-		.d2-577462769 .stroke-B6{stroke:#E5EDFF;}
-		.d2-577462769 .stroke-AA2{stroke:#048E63;}
-		.d2-577462769 .stroke-AA4{stroke:#A6E2D0;}
-		.d2-577462769 .stroke-AA5{stroke:#CAF2E6;}
-		.d2-577462769 .stroke-AB4{stroke:#FFDA90;}
-		.d2-577462769 .stroke-AB5{stroke:#FFF0D1;}
-		.d2-577462769 .background-color-N1{background-color:#0A0F25;}
-		.d2-577462769 .background-color-N2{background-color:#676C7E;}
-		.d2-577462769 .background-color-N3{background-color:#9499AB;}
-		.d2-577462769 .background-color-N4{background-color:#CFD2DD;}
-		.d2-577462769 .background-color-N5{background-color:#DEE1EB;}
-		.d2-577462769 .background-color-N6{background-color:#EEF1F8;}
-		.d2-577462769 .background-color-N7{background-color:#FFFFFF;}
-		.d2-577462769 .background-color-B1{background-color:#010E31;}
-		.d2-577462769 .background-color-B2{background-color:#173688;}
-		.d2-577462769 .background-color-B3{background-color:#5679D4;}
-		.d2-577462769 .background-color-B4{background-color:#84A1EC;}
-		.d2-577462769 .background-color-B5{background-color:#C8D6F9;}
-		.d2-577462769 .background-color-B6{background-color:#E5EDFF;}
-		.d2-577462769 .background-color-AA2{background-color:#048E63;}
-		.d2-577462769 .background-color-AA4{background-color:#A6E2D0;}
-		.d2-577462769 .background-color-AA5{background-color:#CAF2E6;}
-		.d2-577462769 .background-color-AB4{background-color:#FFDA90;}
-		.d2-577462769 .background-color-AB5{background-color:#FFF0D1;}
-		.d2-577462769 .color-N1{color:#0A0F25;}
-		.d2-577462769 .color-N2{color:#676C7E;}
-		.d2-577462769 .color-N3{color:#9499AB;}
-		.d2-577462769 .color-N4{color:#CFD2DD;}
-		.d2-577462769 .color-N5{color:#DEE1EB;}
-		.d2-577462769 .color-N6{color:#EEF1F8;}
-		.d2-577462769 .color-N7{color:#FFFFFF;}
-		.d2-577462769 .color-B1{color:#010E31;}
-		.d2-577462769 .color-B2{color:#173688;}
-		.d2-577462769 .color-B3{color:#5679D4;}
-		.d2-577462769 .color-B4{color:#84A1EC;}
-		.d2-577462769 .color-B5{color:#C8D6F9;}
-		.d2-577462769 .color-B6{color:#E5EDFF;}
-		.d2-577462769 .color-AA2{color:#048E63;}
-		.d2-577462769 .color-AA4{color:#A6E2D0;}
-		.d2-577462769 .color-AA5{color:#CAF2E6;}
-		.d2-577462769 .color-AB4{color:#FFDA90;}
-		.d2-577462769 .color-AB5{color:#FFF0D1;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#010E31;--color-border-muted:#173688;--color-neutral-muted:#EEF1F8;--color-accent-fg:#173688;--color-accent-emphasis:#173688;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-B4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-B5{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-B6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-AA5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-AB5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}}]]></style><g id="FleetManager"><g class="shape" ><rect x="12.000000" y="52.000000" width="136.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="80.000000" y="90.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">FleetManager</text></g><g id="Vehicle"><g class="shape" ><rect x="370.000000" y="52.000000" width="100.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="420.000000" y="90.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Vehicle</text></g><g id="DeliveryRoute"><g class="shape" ><rect x="592.000000" y="52.000000" width="139.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="661.500000" y="90.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">DeliveryRoute</text></g><g id="Database"><g class="shape" ><rect x="848.000000" y="52.000000" width="107.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="901.500000" y="90.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Database</text></g><g id="(FleetManager -- )[0]"><path d="M 80.000000 120.000000 L 80.000000 1623.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-577462769)" /></g><g id="(Vehicle -- )[0]"><path d="M 420.000000 120.000000 L 420.000000 1623.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-577462769)" /></g><g id="(DeliveryRoute -- )[0]"><path d="M 661.500000 120.000000 L 661.500000 1623.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-577462769)" /></g><g id="(Database -- )[0]"><path d="M 901.500000 120.000000 L 901.500000 1623.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-577462769)" /></g><g id="FleetManager.t1"><g class="shape" ><rect x="74.000000" y="188.000000" width="12.000000" height="1376.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="Vehicle.t1"><g class="shape" ><rect x="414.000000" y="278.000000" width="12.000000" height="380.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="DeliveryRoute.t1"><g class="shape" ><rect x="655.000000" y="368.000000" width="12.000000" height="380.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="Database.t1"><g class="shape" ><rect x="895.000000" y="188.000000" width="12.000000" height="380.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="Vehicle.t2"><g class="shape" ><rect x="414.000000" y="880.000000" width="12.000000" height="684.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="DeliveryRoute.t2"><g class="shape" ><rect x="655.000000" y="1091.000000" width="12.000000" height="383.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="alt label"><g class="shape blend" ><rect x="34.000000" y="793.000000" width="432.000000" height="252.000000" class=" stroke-B1 fill-N5" style="stroke-width:5;" /></g><rect x="39.000000" y="798.000000" width="182.000000" height="21.000000" class=" fill-N5" /><text x="130.000000" y="814.000000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Vehicle Availability Conflict</text></g><g id="alt1 label"><g class="shape blend" ><rect x="34.000000" y="1156.000000" width="673.000000" height="432.000000" class=" stroke-B1 fill-N5" style="stroke-width:5;" /></g><rect x="39.000000" y="1161.000000" width="186.000000" height="21.000000" class=" fill-N5" /><text x="132.000000" y="1177.000000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Vehicle Assignment Conflict</text></g><g id="alt label.if label"><g class="shape blend" ><rect x="46.000000" y="836.000000" width="408.000000" height="76.000000" fill="firebrick" class=" stroke-B1" style="stroke-width:0;" /></g><rect x="51.000000" y="841.000000" width="131.000000" height="21.000000" fill="firebrick" /><text x="116.500000" y="857.000000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Vehicle Unavailable</text></g><g id="alt label.else label"><g class="shape blend" ><rect x="46.000000" y="957.000000" width="408.000000" height="76.000000" fill="green" class=" stroke-B1" style="stroke-width:0;" /></g><rect x="51.000000" y="962.000000" width="113.000000" height="21.000000" fill="green" /><text x="107.500000" y="978.000000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Vehicle Available</text></g><g id="alt1 label.if label"><g class="shape blend" ><rect x="46.000000" y="1199.000000" width="649.000000" height="166.000000" fill="firebrick" class=" stroke-B1" style="stroke-width:0;" /></g><rect x="51.000000" y="1204.000000" width="128.000000" height="21.000000" fill="firebrick" /><text x="115.000000" y="1220.000000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Assignment Failure</text></g><g id="alt1 label.else label"><g class="shape blend" ><rect x="46.000000" y="1410.000000" width="649.000000" height="166.000000" fill="green" class=" stroke-B1" style="stroke-width:0;" /></g><rect x="51.000000" y="1415.000000" width="135.000000" height="21.000000" fill="green" /><text x="118.500000" y="1431.000000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Assignment Success</text></g><g id="(FleetManager.t1 -&gt; Database.t1)[0]"><marker id="mk-3488378134" markerWidth="10.000000" markerHeight="12.000000" refX="7.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" class="connection fill-B1" stroke-width="2" /> </marker><path d="M 88.000000 198.000000 L 891.500000 198.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-577462769)" /><text x="490.500000" y="204.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">viewFleetStatus()</text></g><g id="(Database.t1 -&gt; Vehicle.t1)[0]"><marker id="mk-2177206569" markerWidth="10.000000" markerHeight="12.000000" refX="7.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" class="connection fill-B2" stroke-width="2" /> </marker><path d="M 893.500000 288.000000 L 430.000000 288.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-end="url(#mk-2177206569)" mask="url(#d2-577462769)" /><text x="661.000000" y="294.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">retrieveVehicleStatus()</text></g><g id="(Database.t1 -&gt; DeliveryRoute.t1)[0]"><path d="M 893.500000 378.000000 L 671.500000 378.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-end="url(#mk-2177206569)" mask="url(#d2-577462769)" /><text x="782.000000" y="384.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">retrieveRouteAssignments()</text></g><g id="(Vehicle.t1 &lt;- Database.t1)[0]"><marker id="mk-2864536236" markerWidth="10.000000" markerHeight="12.000000" refX="3.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="10.000000,0.000000 0.000000,6.000000 10.000000,12.000000" class="connection fill-B2" stroke-width="2" /> </marker><path d="M 430.000000 468.000000 L 893.500000 468.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-start="url(#mk-2864536236)" mask="url(#d2-577462769)" /><text x="660.500000" y="474.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">vehicleStatusDataFetched</text></g><g id="(DeliveryRoute.t1 &lt;- Database.t1)[0]"><path d="M 671.500000 558.000000 L 893.500000 558.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-start="url(#mk-2864536236)" mask="url(#d2-577462769)" /><text x="782.000000" y="564.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">routeDataFetched</text></g><g id="(FleetManager.t1 &lt;- Vehicle.t1)[0]"><path d="M 90.000000 648.000000 L 412.000000 648.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-start="url(#mk-2864536236)" mask="url(#d2-577462769)" /><text x="250.000000" y="654.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">displayFleetOverview(vehicleStatusData)</text></g><g id="(FleetManager.t1 &lt;- DeliveryRoute.t1)[0]"><path d="M 90.000000 738.000000 L 653.500000 738.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-start="url(#mk-2864536236)" mask="url(#d2-577462769)" /><text x="371.000000" y="744.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">displayRouteOverview(routeData)</text></g><g id="(Vehicle.t2 -&gt; FleetManager.t1)[0]"><path d="M 412.000000 890.000000 L 90.000000 890.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-end="url(#mk-2177206569)" mask="url(#d2-577462769)" /><text x="250.000000" y="896.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">notifyUnavailable(&#34;Vehicle is unavailable&#34;)</text></g><g id="(FleetManager.t1 -&gt; Vehicle.t2)[0]"><path d="M 88.000000 1011.000000 L 410.000000 1011.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-577462769)" /><text x="250.500000" y="1017.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">assignVehicle(vehicleId, routeId)</text></g><g id="(Vehicle.t2 -&gt; DeliveryRoute.t2)[0]"><path d="M 428.000000 1101.000000 L 651.500000 1101.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-577462769)" /><text x="540.500000" y="1107.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">setRoute(vehicleId, routeId)</text></g><g id="(DeliveryRoute.t2 -&gt; FleetManager.t1)[0]"><path d="M 653.500000 1253.000000 L 90.000000 1253.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-end="url(#mk-2177206569)" mask="url(#d2-577462769)" /><text x="370.500000" y="1259.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">notifyAssignmentFailure(&#34;Route assignment failed&#34;)</text></g><g id="(FleetManager.t1 -&gt; Vehicle.t2)[1]"><path d="M 88.000000 1343.000000 L 410.000000 1343.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-577462769)" /><text x="250.000000" y="1349.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">retryAssignment()</text></g><g id="(Vehicle.t2 &lt;- DeliveryRoute.t2)[0]"><path d="M 430.000000 1464.000000 L 653.500000 1464.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-start="url(#mk-2864536236)" mask="url(#d2-577462769)" /><text x="540.500000" y="1470.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">confirmAssignment</text></g><g id="(FleetManager.t1 &lt;- Vehicle.t2)[0]"><path d="M 90.000000 1554.000000 L 412.000000 1554.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-start="url(#mk-2864536236)" mask="url(#d2-577462769)" /><text x="250.000000" y="1560.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">displayAssignmentConfirmation()</text></g><mask id="d2-577462769" maskUnits="userSpaceOnUse" x="-89" y="-49" width="1145" height="1774">
-<rect x="-89" y="-49" width="1145" height="1774" fill="white"></rect>
-<rect x="34.500000" y="74.500000" width="91" height="21" fill="rgba(0,0,0,0.75)"></rect>
-<rect x="395.500000" y="74.500000" width="49" height="21" fill="rgba(0,0,0,0.75)"></rect>
-<rect x="614.500000" y="74.500000" width="94" height="21" fill="rgba(0,0,0,0.75)"></rect>
-<rect x="870.500000" y="74.500000" width="62" height="21" fill="rgba(0,0,0,0.75)"></rect>
-<rect x="39.000000" y="798.000000" width="182" height="16" fill="black"></rect>
-<rect x="39.000000" y="1161.000000" width="186" height="16" fill="black"></rect>
-<rect x="51.000000" y="841.000000" width="131" height="16" fill="black"></rect>
-<rect x="51.000000" y="962.000000" width="113" height="16" fill="black"></rect>
-<rect x="51.000000" y="1204.000000" width="128" height="16" fill="black"></rect>
-<rect x="51.000000" y="1415.000000" width="135" height="16" fill="black"></rect>
-<rect x="434.000000" y="188.000000" width="113" height="21" fill="black"></rect>
-<rect x="587.000000" y="278.000000" width="148" height="21" fill="black"></rect>
-<rect x="692.000000" y="368.000000" width="180" height="21" fill="black"></rect>
-<rect x="574.000000" y="458.000000" width="173" height="21" fill="black"></rect>
-<rect x="722.000000" y="548.000000" width="120" height="21" fill="black"></rect>
-<rect x="116.000000" y="638.000000" width="268" height="21" fill="black"></rect>
-<rect x="260.000000" y="728.000000" width="222" height="21" fill="black"></rect>
-<rect x="110.000000" y="880.000000" width="280" height="21" fill="black"></rect>
-<rect x="145.000000" y="1001.000000" width="211" height="21" fill="black"></rect>
-<rect x="450.000000" y="1091.000000" width="181" height="21" fill="black"></rect>
-<rect x="201.000000" y="1243.000000" width="339" height="21" fill="black"></rect>
-<rect x="192.000000" y="1333.000000" width="116" height="21" fill="black"></rect>
-<rect x="477.000000" y="1454.000000" width="127" height="21" fill="black"></rect>
-<rect x="141.000000" y="1544.000000" width="218" height="21" fill="black"></rect>
+		.d2-3163970953 .fill-N1{fill:#0A0F25;}
+		.d2-3163970953 .fill-N2{fill:#676C7E;}
+		.d2-3163970953 .fill-N3{fill:#9499AB;}
+		.d2-3163970953 .fill-N4{fill:#CFD2DD;}
+		.d2-3163970953 .fill-N5{fill:#DEE1EB;}
+		.d2-3163970953 .fill-N6{fill:#EEF1F8;}
+		.d2-3163970953 .fill-N7{fill:#FFFFFF;}
+		.d2-3163970953 .fill-B1{fill:#0D32B2;}
+		.d2-3163970953 .fill-B2{fill:#0D32B2;}
+		.d2-3163970953 .fill-B3{fill:#E3E9FD;}
+		.d2-3163970953 .fill-B4{fill:#E3E9FD;}
+		.d2-3163970953 .fill-B5{fill:#EDF0FD;}
+		.d2-3163970953 .fill-B6{fill:#F7F8FE;}
+		.d2-3163970953 .fill-AA2{fill:#4A6FF3;}
+		.d2-3163970953 .fill-AA4{fill:#EDF0FD;}
+		.d2-3163970953 .fill-AA5{fill:#F7F8FE;}
+		.d2-3163970953 .fill-AB4{fill:#EDF0FD;}
+		.d2-3163970953 .fill-AB5{fill:#F7F8FE;}
+		.d2-3163970953 .stroke-N1{stroke:#0A0F25;}
+		.d2-3163970953 .stroke-N2{stroke:#676C7E;}
+		.d2-3163970953 .stroke-N3{stroke:#9499AB;}
+		.d2-3163970953 .stroke-N4{stroke:#CFD2DD;}
+		.d2-3163970953 .stroke-N5{stroke:#DEE1EB;}
+		.d2-3163970953 .stroke-N6{stroke:#EEF1F8;}
+		.d2-3163970953 .stroke-N7{stroke:#FFFFFF;}
+		.d2-3163970953 .stroke-B1{stroke:#0D32B2;}
+		.d2-3163970953 .stroke-B2{stroke:#0D32B2;}
+		.d2-3163970953 .stroke-B3{stroke:#E3E9FD;}
+		.d2-3163970953 .stroke-B4{stroke:#E3E9FD;}
+		.d2-3163970953 .stroke-B5{stroke:#EDF0FD;}
+		.d2-3163970953 .stroke-B6{stroke:#F7F8FE;}
+		.d2-3163970953 .stroke-AA2{stroke:#4A6FF3;}
+		.d2-3163970953 .stroke-AA4{stroke:#EDF0FD;}
+		.d2-3163970953 .stroke-AA5{stroke:#F7F8FE;}
+		.d2-3163970953 .stroke-AB4{stroke:#EDF0FD;}
+		.d2-3163970953 .stroke-AB5{stroke:#F7F8FE;}
+		.d2-3163970953 .background-color-N1{background-color:#0A0F25;}
+		.d2-3163970953 .background-color-N2{background-color:#676C7E;}
+		.d2-3163970953 .background-color-N3{background-color:#9499AB;}
+		.d2-3163970953 .background-color-N4{background-color:#CFD2DD;}
+		.d2-3163970953 .background-color-N5{background-color:#DEE1EB;}
+		.d2-3163970953 .background-color-N6{background-color:#EEF1F8;}
+		.d2-3163970953 .background-color-N7{background-color:#FFFFFF;}
+		.d2-3163970953 .background-color-B1{background-color:#0D32B2;}
+		.d2-3163970953 .background-color-B2{background-color:#0D32B2;}
+		.d2-3163970953 .background-color-B3{background-color:#E3E9FD;}
+		.d2-3163970953 .background-color-B4{background-color:#E3E9FD;}
+		.d2-3163970953 .background-color-B5{background-color:#EDF0FD;}
+		.d2-3163970953 .background-color-B6{background-color:#F7F8FE;}
+		.d2-3163970953 .background-color-AA2{background-color:#4A6FF3;}
+		.d2-3163970953 .background-color-AA4{background-color:#EDF0FD;}
+		.d2-3163970953 .background-color-AA5{background-color:#F7F8FE;}
+		.d2-3163970953 .background-color-AB4{background-color:#EDF0FD;}
+		.d2-3163970953 .background-color-AB5{background-color:#F7F8FE;}
+		.d2-3163970953 .color-N1{color:#0A0F25;}
+		.d2-3163970953 .color-N2{color:#676C7E;}
+		.d2-3163970953 .color-N3{color:#9499AB;}
+		.d2-3163970953 .color-N4{color:#CFD2DD;}
+		.d2-3163970953 .color-N5{color:#DEE1EB;}
+		.d2-3163970953 .color-N6{color:#EEF1F8;}
+		.d2-3163970953 .color-N7{color:#FFFFFF;}
+		.d2-3163970953 .color-B1{color:#0D32B2;}
+		.d2-3163970953 .color-B2{color:#0D32B2;}
+		.d2-3163970953 .color-B3{color:#E3E9FD;}
+		.d2-3163970953 .color-B4{color:#E3E9FD;}
+		.d2-3163970953 .color-B5{color:#EDF0FD;}
+		.d2-3163970953 .color-B6{color:#F7F8FE;}
+		.d2-3163970953 .color-AA2{color:#4A6FF3;}
+		.d2-3163970953 .color-AA4{color:#EDF0FD;}
+		.d2-3163970953 .color-AA5{color:#F7F8FE;}
+		.d2-3163970953 .color-AB4{color:#EDF0FD;}
+		.d2-3163970953 .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}@media screen and (prefers-color-scheme:dark){
+		.d2-3163970953 .fill-N1{fill:#0A0F25;}
+		.d2-3163970953 .fill-N2{fill:#676C7E;}
+		.d2-3163970953 .fill-N3{fill:#9499AB;}
+		.d2-3163970953 .fill-N4{fill:#CFD2DD;}
+		.d2-3163970953 .fill-N5{fill:#DEE1EB;}
+		.d2-3163970953 .fill-N6{fill:#EEF1F8;}
+		.d2-3163970953 .fill-N7{fill:#FFFFFF;}
+		.d2-3163970953 .fill-B1{fill:#010E31;}
+		.d2-3163970953 .fill-B2{fill:#173688;}
+		.d2-3163970953 .fill-B3{fill:#5679D4;}
+		.d2-3163970953 .fill-B4{fill:#84A1EC;}
+		.d2-3163970953 .fill-B5{fill:#C8D6F9;}
+		.d2-3163970953 .fill-B6{fill:#E5EDFF;}
+		.d2-3163970953 .fill-AA2{fill:#048E63;}
+		.d2-3163970953 .fill-AA4{fill:#A6E2D0;}
+		.d2-3163970953 .fill-AA5{fill:#CAF2E6;}
+		.d2-3163970953 .fill-AB4{fill:#FFDA90;}
+		.d2-3163970953 .fill-AB5{fill:#FFF0D1;}
+		.d2-3163970953 .stroke-N1{stroke:#0A0F25;}
+		.d2-3163970953 .stroke-N2{stroke:#676C7E;}
+		.d2-3163970953 .stroke-N3{stroke:#9499AB;}
+		.d2-3163970953 .stroke-N4{stroke:#CFD2DD;}
+		.d2-3163970953 .stroke-N5{stroke:#DEE1EB;}
+		.d2-3163970953 .stroke-N6{stroke:#EEF1F8;}
+		.d2-3163970953 .stroke-N7{stroke:#FFFFFF;}
+		.d2-3163970953 .stroke-B1{stroke:#010E31;}
+		.d2-3163970953 .stroke-B2{stroke:#173688;}
+		.d2-3163970953 .stroke-B3{stroke:#5679D4;}
+		.d2-3163970953 .stroke-B4{stroke:#84A1EC;}
+		.d2-3163970953 .stroke-B5{stroke:#C8D6F9;}
+		.d2-3163970953 .stroke-B6{stroke:#E5EDFF;}
+		.d2-3163970953 .stroke-AA2{stroke:#048E63;}
+		.d2-3163970953 .stroke-AA4{stroke:#A6E2D0;}
+		.d2-3163970953 .stroke-AA5{stroke:#CAF2E6;}
+		.d2-3163970953 .stroke-AB4{stroke:#FFDA90;}
+		.d2-3163970953 .stroke-AB5{stroke:#FFF0D1;}
+		.d2-3163970953 .background-color-N1{background-color:#0A0F25;}
+		.d2-3163970953 .background-color-N2{background-color:#676C7E;}
+		.d2-3163970953 .background-color-N3{background-color:#9499AB;}
+		.d2-3163970953 .background-color-N4{background-color:#CFD2DD;}
+		.d2-3163970953 .background-color-N5{background-color:#DEE1EB;}
+		.d2-3163970953 .background-color-N6{background-color:#EEF1F8;}
+		.d2-3163970953 .background-color-N7{background-color:#FFFFFF;}
+		.d2-3163970953 .background-color-B1{background-color:#010E31;}
+		.d2-3163970953 .background-color-B2{background-color:#173688;}
+		.d2-3163970953 .background-color-B3{background-color:#5679D4;}
+		.d2-3163970953 .background-color-B4{background-color:#84A1EC;}
+		.d2-3163970953 .background-color-B5{background-color:#C8D6F9;}
+		.d2-3163970953 .background-color-B6{background-color:#E5EDFF;}
+		.d2-3163970953 .background-color-AA2{background-color:#048E63;}
+		.d2-3163970953 .background-color-AA4{background-color:#A6E2D0;}
+		.d2-3163970953 .background-color-AA5{background-color:#CAF2E6;}
+		.d2-3163970953 .background-color-AB4{background-color:#FFDA90;}
+		.d2-3163970953 .background-color-AB5{background-color:#FFF0D1;}
+		.d2-3163970953 .color-N1{color:#0A0F25;}
+		.d2-3163970953 .color-N2{color:#676C7E;}
+		.d2-3163970953 .color-N3{color:#9499AB;}
+		.d2-3163970953 .color-N4{color:#CFD2DD;}
+		.d2-3163970953 .color-N5{color:#DEE1EB;}
+		.d2-3163970953 .color-N6{color:#EEF1F8;}
+		.d2-3163970953 .color-N7{color:#FFFFFF;}
+		.d2-3163970953 .color-B1{color:#010E31;}
+		.d2-3163970953 .color-B2{color:#173688;}
+		.d2-3163970953 .color-B3{color:#5679D4;}
+		.d2-3163970953 .color-B4{color:#84A1EC;}
+		.d2-3163970953 .color-B5{color:#C8D6F9;}
+		.d2-3163970953 .color-B6{color:#E5EDFF;}
+		.d2-3163970953 .color-AA2{color:#048E63;}
+		.d2-3163970953 .color-AA4{color:#A6E2D0;}
+		.d2-3163970953 .color-AA5{color:#CAF2E6;}
+		.d2-3163970953 .color-AB4{color:#FFDA90;}
+		.d2-3163970953 .color-AB5{color:#FFF0D1;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#010E31;--color-border-muted:#173688;--color-neutral-muted:#EEF1F8;--color-accent-fg:#173688;--color-accent-emphasis:#173688;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-B4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-B5{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-B6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-AA5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-AB5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}}]]></style><g id="Fleet Operations"><g class="shape" ><rect x="12.000000" y="12.000000" width="1007.000000" height="1454.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g><text x="515.500000" y="45.000000" class="text fill-N1" style="text-anchor:middle;font-size:28px">Fleet Operations</text></g><g id="Fleet Operations.&#34;&#34;"><g class="shape" ><rect x="62.000000" y="62.000000" width="907.000000" height="1354.000000" class=" stroke-B1 fill-N7" style="stroke-width:0;" /></g></g><g id="Fleet Operations.&#34;&#34;.FleetManager"><g class="shape" ><rect x="74.000000" y="114.000000" width="136.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="142.000000" y="152.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">FleetManager</text></g><g id="Fleet Operations.&#34;&#34;.Vehicle"><g class="shape" ><rect x="412.000000" y="114.000000" width="100.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="462.000000" y="152.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Vehicle</text></g><g id="Fleet Operations.&#34;&#34;.DeliveryRoute"><g class="shape" ><rect x="614.000000" y="114.000000" width="139.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="683.500000" y="152.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">DeliveryRoute</text></g><g id="Fleet Operations.&#34;&#34;.Database"><g class="shape" ><rect x="850.000000" y="114.000000" width="107.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="903.500000" y="152.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Database</text></g><g id="(Fleet Operations.&#34;&#34;.FleetManager -- )[0]"><path d="M 142.000000 182.000000 L 142.000000 1403.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-3163970953)" /></g><g id="(Fleet Operations.&#34;&#34;.Vehicle -- )[0]"><path d="M 462.000000 182.000000 L 462.000000 1403.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-3163970953)" /></g><g id="(Fleet Operations.&#34;&#34;.DeliveryRoute -- )[0]"><path d="M 683.500000 182.000000 L 683.500000 1403.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-3163970953)" /></g><g id="(Fleet Operations.&#34;&#34;.Database -- )[0]"><path d="M 903.500000 182.000000 L 903.500000 1403.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-3163970953)" /></g><g id="Fleet Operations.&#34;&#34;.FleetManager.t1"><g class="shape" ><rect x="136.000000" y="240.000000" width="12.000000" height="1104.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="Fleet Operations.&#34;&#34;.Vehicle.t1"><g class="shape" ><rect x="456.000000" y="310.000000" width="12.000000" height="300.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="Fleet Operations.&#34;&#34;.DeliveryRoute.t1"><g class="shape" ><rect x="677.000000" y="380.000000" width="12.000000" height="300.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="Fleet Operations.&#34;&#34;.Database.t1"><g class="shape" ><rect x="897.000000" y="240.000000" width="12.000000" height="300.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="Fleet Operations.&#34;&#34;.Vehicle.t2"><g class="shape" ><rect x="456.000000" y="788.000000" width="12.000000" height="556.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="Fleet Operations.&#34;&#34;.DeliveryRoute.t2"><g class="shape" ><rect x="677.000000" y="957.000000" width="12.000000" height="317.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="Fleet Operations.&#34;&#34;.alt label"><g class="shape blend" ><rect x="96.000000" y="713.000000" width="412.000000" height="211.000000" class=" stroke-B1 fill-N5" style="stroke-width:5;" /></g><rect x="101.000000" y="718.000000" width="182.000000" height="21.000000" class=" fill-N5" /><text x="192.000000" y="734.000000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Vehicle Availability Conflict</text></g><g id="Fleet Operations.&#34;&#34;.alt1 label"><g class="shape blend" ><rect x="96.000000" y="1010.000000" width="633.000000" height="351.000000" class=" stroke-B1 fill-N5" style="stroke-width:5;" /></g><rect x="101.000000" y="1015.000000" width="186.000000" height="21.000000" class=" fill-N5" /><text x="194.000000" y="1031.000000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Vehicle Assignment Conflict</text></g><g id="Fleet Operations.&#34;&#34;.alt label.if label"><g class="shape blend" ><rect x="108.000000" y="754.000000" width="388.000000" height="59.000000" fill="firebrick" class=" stroke-B1" style="stroke-width:0;" /></g><rect x="113.000000" y="759.000000" width="131.000000" height="21.000000" fill="firebrick" /><text x="178.500000" y="775.000000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Vehicle Unavailable</text></g><g id="Fleet Operations.&#34;&#34;.alt label.else label"><g class="shape blend" ><rect x="108.000000" y="853.000000" width="388.000000" height="59.000000" fill="green" class=" stroke-B1" style="stroke-width:0;" /></g><rect x="113.000000" y="858.000000" width="113.000000" height="21.000000" fill="green" /><text x="169.500000" y="874.000000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Vehicle Available</text></g><g id="Fleet Operations.&#34;&#34;.alt1 label.if label"><g class="shape blend" ><rect x="108.000000" y="1051.000000" width="609.000000" height="129.000000" fill="firebrick" class=" stroke-B1" style="stroke-width:0;" /></g><rect x="113.000000" y="1056.000000" width="128.000000" height="21.000000" fill="firebrick" /><text x="177.000000" y="1072.000000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Assignment Failure</text></g><g id="Fleet Operations.&#34;&#34;.alt1 label.else label"><g class="shape blend" ><rect x="108.000000" y="1220.000000" width="609.000000" height="129.000000" fill="green" class=" stroke-B1" style="stroke-width:0;" /></g><rect x="113.000000" y="1225.000000" width="135.000000" height="21.000000" fill="green" /><text x="180.500000" y="1241.000000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Assignment Success</text></g><g id="Fleet Operations.&#34;&#34;.(FleetManager.t1 -&gt; Database.t1)[0]"><marker id="mk-3488378134" markerWidth="10.000000" markerHeight="12.000000" refX="7.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" class="connection fill-B1" stroke-width="2" /> </marker><path d="M 150.000000 250.000000 L 893.500000 250.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3163970953)" /><text x="522.500000" y="256.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">viewFleetStatus()</text></g><g id="Fleet Operations.&#34;&#34;.(Database.t1 -&gt; Vehicle.t1)[0]"><marker id="mk-2177206569" markerWidth="10.000000" markerHeight="12.000000" refX="7.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" class="connection fill-B2" stroke-width="2" /> </marker><path d="M 895.500000 320.000000 L 472.000000 320.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-end="url(#mk-2177206569)" mask="url(#d2-3163970953)" /><text x="683.000000" y="326.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">retrieveVehicleStatus()</text></g><g id="Fleet Operations.&#34;&#34;.(Database.t1 -&gt; DeliveryRoute.t1)[0]"><path d="M 895.500000 390.000000 L 693.500000 390.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-end="url(#mk-2177206569)" mask="url(#d2-3163970953)" /><text x="794.000000" y="396.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">retrieveRouteAssignments()</text></g><g id="Fleet Operations.&#34;&#34;.(Vehicle.t1 &lt;- Database.t1)[0]"><marker id="mk-2864536236" markerWidth="10.000000" markerHeight="12.000000" refX="3.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="10.000000,0.000000 0.000000,6.000000 10.000000,12.000000" class="connection fill-B2" stroke-width="2" /> </marker><path d="M 472.000000 460.000000 L 895.500000 460.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-start="url(#mk-2864536236)" mask="url(#d2-3163970953)" /><text x="682.500000" y="466.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">vehicleStatusDataFetched</text></g><g id="Fleet Operations.&#34;&#34;.(DeliveryRoute.t1 &lt;- Database.t1)[0]"><path d="M 693.500000 530.000000 L 895.500000 530.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-start="url(#mk-2864536236)" mask="url(#d2-3163970953)" /><text x="794.000000" y="536.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">routeDataFetched</text></g><g id="Fleet Operations.&#34;&#34;.(FleetManager.t1 &lt;- Vehicle.t1)[0]"><path d="M 152.000000 600.000000 L 454.000000 600.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-start="url(#mk-2864536236)" mask="url(#d2-3163970953)" /><text x="302.000000" y="606.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">displayFleetOverview(vehicleStatusData)</text></g><g id="Fleet Operations.&#34;&#34;.(FleetManager.t1 &lt;- DeliveryRoute.t1)[0]"><path d="M 152.000000 670.000000 L 675.500000 670.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-start="url(#mk-2864536236)" mask="url(#d2-3163970953)" /><text x="413.000000" y="676.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">displayRouteOverview(routeData)</text></g><g id="Fleet Operations.&#34;&#34;.(Vehicle.t2 -&gt; FleetManager.t1)[0]"><path d="M 454.000000 798.000000 L 152.000000 798.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-end="url(#mk-2177206569)" mask="url(#d2-3163970953)" /><text x="302.000000" y="804.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">notifyUnavailable(&#34;Vehicle is unavailable&#34;)</text></g><g id="Fleet Operations.&#34;&#34;.(FleetManager.t1 -&gt; Vehicle.t2)[0]"><path d="M 150.000000 897.000000 L 452.000000 897.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3163970953)" /><text x="302.500000" y="903.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">assignVehicle(vehicleId, routeId)</text></g><g id="Fleet Operations.&#34;&#34;.(Vehicle.t2 -&gt; DeliveryRoute.t2)[0]"><path d="M 470.000000 967.000000 L 673.500000 967.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3163970953)" /><text x="572.500000" y="973.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">setRoute(vehicleId, routeId)</text></g><g id="Fleet Operations.&#34;&#34;.(DeliveryRoute.t2 -&gt; FleetManager.t1)[0]"><path d="M 675.500000 1095.000000 L 152.000000 1095.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-end="url(#mk-2177206569)" mask="url(#d2-3163970953)" /><text x="412.500000" y="1101.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">notifyAssignmentFailure(&#34;Route assignment failed&#34;)</text></g><g id="Fleet Operations.&#34;&#34;.(FleetManager.t1 -&gt; Vehicle.t2)[1]"><path d="M 150.000000 1165.000000 L 452.000000 1165.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3163970953)" /><text x="302.000000" y="1171.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">retryAssignment()</text></g><g id="Fleet Operations.&#34;&#34;.(Vehicle.t2 &lt;- DeliveryRoute.t2)[0]"><path d="M 472.000000 1264.000000 L 675.500000 1264.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-start="url(#mk-2864536236)" mask="url(#d2-3163970953)" /><text x="572.500000" y="1270.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">confirmAssignment</text></g><g id="Fleet Operations.&#34;&#34;.(FleetManager.t1 &lt;- Vehicle.t2)[0]"><path d="M 152.000000 1334.000000 L 454.000000 1334.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-start="url(#mk-2864536236)" mask="url(#d2-3163970953)" /><text x="302.000000" y="1340.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">displayAssignmentConfirmation()</text></g><mask id="d2-3163970953" maskUnits="userSpaceOnUse" x="-89" y="-89" width="1209" height="1656">
+<rect x="-89" y="-89" width="1209" height="1656" fill="white"></rect>
+<rect x="419.500000" y="17.000000" width="192" height="36" fill="rgba(0,0,0,0.75)"></rect>
+<rect x="96.500000" y="136.500000" width="91" height="21" fill="rgba(0,0,0,0.75)"></rect>
+<rect x="437.500000" y="136.500000" width="49" height="21" fill="rgba(0,0,0,0.75)"></rect>
+<rect x="636.500000" y="136.500000" width="94" height="21" fill="rgba(0,0,0,0.75)"></rect>
+<rect x="872.500000" y="136.500000" width="62" height="21" fill="rgba(0,0,0,0.75)"></rect>
+<rect x="101.000000" y="718.000000" width="182" height="16" fill="black"></rect>
+<rect x="101.000000" y="1015.000000" width="186" height="16" fill="black"></rect>
+<rect x="113.000000" y="759.000000" width="131" height="16" fill="black"></rect>
+<rect x="113.000000" y="858.000000" width="113" height="16" fill="black"></rect>
+<rect x="113.000000" y="1056.000000" width="128" height="16" fill="black"></rect>
+<rect x="113.000000" y="1225.000000" width="135" height="16" fill="black"></rect>
+<rect x="466.000000" y="240.000000" width="113" height="21" fill="black"></rect>
+<rect x="609.000000" y="310.000000" width="148" height="21" fill="black"></rect>
+<rect x="704.000000" y="380.000000" width="180" height="21" fill="black"></rect>
+<rect x="596.000000" y="450.000000" width="173" height="21" fill="black"></rect>
+<rect x="734.000000" y="520.000000" width="120" height="21" fill="black"></rect>
+<rect x="168.000000" y="590.000000" width="268" height="21" fill="black"></rect>
+<rect x="302.000000" y="660.000000" width="222" height="21" fill="black"></rect>
+<rect x="162.000000" y="788.000000" width="280" height="21" fill="black"></rect>
+<rect x="197.000000" y="887.000000" width="211" height="21" fill="black"></rect>
+<rect x="482.000000" y="957.000000" width="181" height="21" fill="black"></rect>
+<rect x="243.000000" y="1085.000000" width="339" height="21" fill="black"></rect>
+<rect x="244.000000" y="1155.000000" width="116" height="21" fill="black"></rect>
+<rect x="509.000000" y="1254.000000" width="127" height="21" fill="black"></rect>
+<rect x="193.000000" y="1324.000000" width="218" height="21" fill="black"></rect>
 </mask></svg></svg>

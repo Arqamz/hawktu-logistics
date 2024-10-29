@@ -1,49 +1,56 @@
-shape: sequence_diagram
+Modify Profile: {
+    
+  label: "Modify Profile"
 
-Customer.t1: actor
-Profile.t1: actor
-Database.t1: actor
-CustomerNotification
+  "" : {
 
-Customer.t1 -> Profile.t1: accessProfileSettings()
-Profile.t1 -> Database.t1: retrieveProfileDetails(customerId) {
-  style.stroke-dash: 5
-}
-Profile.t1 <- Database.t1: profileDetailsFetched {
-  style.stroke-dash: 5
-}
-Customer.t1 <- Profile.t1: displayProfileOptions(profileDetails)
+    shape: sequence_diagram
 
-Customer.t1 -> Profile.t2: modifyProfileInfo(newDetails)
+    Customer.t1: actor
+    Profile.t1: actor
+    Database.t1: actor
+    CustomerNotification
 
-alt label: "Profile Modification Eligibility Check" {
-  style.stroke-width: 5
-
-  if label: "Modification Not Allowed" {
-    style.fill: firebrick
-    Profile.t2 -> Customer.t1: notifyModificationDenied("Profile modification not allowed")  {
+    Customer.t1 -> Profile.t1: accessProfileSettings()
+    Profile.t1 -> Database.t1: retrieveProfileDetails(customerId) {
       style.stroke-dash: 5
     }
-  }
-  else label: "Modification Allowed" {
-    Profile.t2 -> Database.t2: updateProfileDetails(customerId, newDetails)
-    
-    alt1 label: "Profile Update Confirmation" {
+    Profile.t1 <- Database.t1: profileDetailsFetched {
+      style.stroke-dash: 5
+    }
+    Customer.t1 <- Profile.t1: displayProfileOptions(profileDetails)
+
+    Customer.t1 -> Profile.t2: modifyProfileInfo(newDetails)
+
+    alt label: "Profile Modification Eligibility Check" {
       style.stroke-width: 5
 
-      if label: "Update Failure" {
+      if label: "Modification Not Allowed" {
         style.fill: firebrick
-        Database.t2 -> Profile.t2: notifyUpdateFailure("Failed to update profile") {
+        Profile.t2 -> Customer.t1: notifyModificationDenied("Profile modification not allowed")  {
           style.stroke-dash: 5
         }
-        Profile.t2 -> CustomerNotification.t2: notifyCustomer("Unable to modify profile. Please try again.")
       }
-      else label: "Update Success" {
-        style.fill: green
-        Database.t2 <- Profile.t2: confirmUpdate 
-        CustomerNotification.t2 <- Profile.t2: notifyCustomer("Profile modified successfully") 
+      else label: "Modification Allowed" {
+        Profile.t2 -> Database.t2: updateProfileDetails(customerId, newDetails)
+        
+        alt1 label: "Profile Update Confirmation" {
+          style.stroke-width: 5
+
+          if label: "Update Failure" {
+            style.fill: firebrick
+            Database.t2 -> Profile.t2: notifyUpdateFailure("Failed to update profile") {
+              style.stroke-dash: 5
+            }
+            Profile.t2 -> CustomerNotification.t2: notifyCustomer("Unable to modify profile. Please try again.")
+          }
+          else label: "Update Success" {
+            style.fill: green
+            Database.t2 <- Profile.t2: confirmUpdate 
+            CustomerNotification.t2 <- Profile.t2: notifyCustomer("Profile modified successfully") 
+          }
+        }
       }
     }
   }
 }
-

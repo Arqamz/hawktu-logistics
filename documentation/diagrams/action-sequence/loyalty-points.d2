@@ -1,47 +1,54 @@
-shape: sequence_diagram
-
-Customer.t1: actor
-LoyaltySystem.t1: actor
-Database.t1: actor
-CustomerNotification
-
-Customer.t1 -> LoyaltySystem.t1: completePurchase()
-LoyaltySystem.t1 -> Database.t1: calculateAndAddPoints(customerId, purchaseAmount) {
-  style.stroke-dash: 5
-}
-LoyaltySystem.t1 <- Database.t1: pointsAdded {
-  style.stroke-dash: 5
-}
-Customer.t1 <- LoyaltySystem.t1: displayPointsBalance()
-
-Customer.t1 -> LoyaltySystem.t2: requestRedeemPoints(points)
-
-alt label: "Redeem Points Eligibility Check" {
-  style.stroke-width: 5
-
-  if label: "Insufficient Points" {
-    style.fill: firebrick
-    LoyaltySystem.t2 -> Customer.t1: notifyInsufficientPoints("Not enough points to redeem") 
-  }
-  else label: "Sufficient Points" {
-    LoyaltySystem.t2 -> Database.t2: deductPoints(customerId, points)
+Loyalty Points: {
     
-    alt1 label: "Points Deduction Confirmation" {
+  label: "Loyalty Points"
+
+  "" : {
+
+    shape: sequence_diagram
+
+    Customer.t1: actor
+    LoyaltySystem.t1: actor
+    Database.t1: actor
+    CustomerNotification
+
+    Customer.t1 -> LoyaltySystem.t1: completePurchase()
+    LoyaltySystem.t1 -> Database.t1: calculateAndAddPoints(customerId, purchaseAmount) {
+      style.stroke-dash: 5
+    }
+    LoyaltySystem.t1 <- Database.t1: pointsAdded {
+      style.stroke-dash: 5
+    }
+    Customer.t1 <- LoyaltySystem.t1: displayPointsBalance()
+
+    Customer.t1 -> LoyaltySystem.t2: requestRedeemPoints(points)
+
+    alt label: "Redeem Points Eligibility Check" {
       style.stroke-width: 5
 
-      if label: "Deduction Failure" {
+      if label: "Insufficient Points" {
         style.fill: firebrick
-        Database.t2 -> LoyaltySystem.t2: notifyDeductionFailure("Failed to redeem points")
-        LoyaltySystem.t2 -> CustomerNotification.t2: notifyCustomer("Redemption unsuccessful, please try again.")
+        LoyaltySystem.t2 -> Customer.t1: notifyInsufficientPoints("Not enough points to redeem") 
       }
-      else label: "Deduction Success" {
-        style.fill: green
-        Database.t2 <- LoyaltySystem.t2: confirmPointsDeduction
-        CustomerNotification.t2 -> LoyaltySystem.t2: notifyCustomer("Points redeemed successfully") {
-          style.stroke-dash: 5
+      else label: "Sufficient Points" {
+        LoyaltySystem.t2 -> Database.t2: deductPoints(customerId, points)
+        
+        alt1 label: "Points Deduction Confirmation" {
+          style.stroke-width: 5
+
+          if label: "Deduction Failure" {
+            style.fill: firebrick
+            Database.t2 -> LoyaltySystem.t2: notifyDeductionFailure("Failed to redeem points")
+            LoyaltySystem.t2 -> CustomerNotification.t2: notifyCustomer("Redemption unsuccessful, please try again.")
+          }
+          else label: "Deduction Success" {
+            style.fill: green
+            Database.t2 <- LoyaltySystem.t2: confirmPointsDeduction
+            CustomerNotification.t2 -> LoyaltySystem.t2: notifyCustomer("Points redeemed successfully") {
+              style.stroke-dash: 5
+            }
+          }
         }
       }
     }
   }
 }
-
