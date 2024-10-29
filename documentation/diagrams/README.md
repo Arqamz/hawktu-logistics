@@ -42,20 +42,7 @@ d2 --layout elk -w --dark-theme 8 diagrams/system-sequence.d2 diagrams/svgs/syst
 **Output**:
 ![System Sequence Diagram](svgs/system-sequence.svg)
 
-<!--
-#### 3. Use Case Action Sequences 
-Each use case has its own sequence diagram to detail the actions and system responses in key scenarios.
-
-To run:
-```bash
-d2 --layout elk diagrams/use-case-sequences/manage-profile-sequence.d2 -w --dark-theme 7
-```
- 
-**Output**:
-![Manage Profile Sequence](use-case-sequences/manage-profile-sequence.svg)
- -->
-
-#### 4. Complete Class Diagram
+#### 3. Complete Class Diagram
 The class diagram provides an in-depth view of the system's static structure, showing classes, attributes, and their relationships.
 
 To run:
@@ -65,3 +52,8 @@ d2 --layout elk diagrams/class-diagram.d2 -w --dark-theme 7
 
 **Output**:
 ![Class Diagram](svgs/class-diagram.svg)
+
+### 4. Action Sequence Diagrams
+
+For details on the action sequence diagram for each of the use-cases, please refer to the [Action Sequence Diagrams README](action-sequence/README.md).
+
