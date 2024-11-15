@@ -11,6 +11,8 @@ import SellerRegistration from "./pages/SellerRegistration";
 import Landing from "./pages/LandingPage";
 import CustomerDashboard from "./pages/CustomerDashboard";
 import Registration from "./pages/RegisterLanding";
+import Shopping from "./pages/e-commerce-page";
+
 export const router = createBrowserRouter(
   [
     {
@@ -57,6 +59,10 @@ export const router = createBrowserRouter(
       {
         path: "*",
         element: <NoMatch />,
+      },
+      {
+        path: "/shop",
+        element: <Shopping />,
       },
   ],
   {

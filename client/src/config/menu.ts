@@ -60,6 +60,10 @@ export const mainMenu: NavItemWithChildren[] = [
         title: 'Customer Dashboard',
         to: '/customerDashboard',
     },
+    {
+        title:'E-commerce',
+        to:'/shop',
+    },
 ]
 
 export const sideMenu: NavItemWithChildren[] = []
