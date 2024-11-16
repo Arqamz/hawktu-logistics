@@ -21,7 +21,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Select, SelectItem, SelectTrigger, SelectContent, SelectValue } from '@/components/ui/select'; // Added SelectContent import
 
 // Define validation schema using Zod
 const formSchema = z
@@ -34,12 +33,12 @@ const formSchema = z
       .min(2, { message: 'Name must be at least 2 characters long' }),
     email: z.string().email({ message: 'Invalid email address' }),
     phone: z.string().min(10, { message: 'Phone number must be valid' }),
+    address: z.string().min(5, { message: 'Address must be at least 5 characters long' }),
     password: z
       .string()
       .min(6, { message: 'Password must be at least 6 characters long' })
       .regex(/[a-zA-Z0-9]/, { message: 'Password must be alphanumeric' }),
     confirmPassword: z.string(),
-    productCategory: z.string().min(1, { message: 'Please select a product category' }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],
@@ -54,9 +53,9 @@ export default function SellerRegisterPreview() {
       name: '',
       email: '',
       phone: '',
+      address: '',
       password: '',
       confirmPassword: '',
-      productCategory: '',
     },
   });
 
@@ -167,27 +166,15 @@ export default function SellerRegisterPreview() {
                   )}
                 />
 
-                {/* Product Category Field */}
+                {/* Address Field */}
                 <FormField
                   control={form.control}
-                  name="productCategory"
+                  name="address"
                   render={({ field }) => (
                     <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="productCategory">Product Category</FormLabel>
+                      <FormLabel htmlFor="address">Address</FormLabel>
                       <FormControl>
-                        <Select {...field}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Category" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="electronics">Electronics</SelectItem>
-                            <SelectItem value="clothing">Clothing</SelectItem>
-                            <SelectItem value="home_appliances">Home Appliances</SelectItem>
-                            <SelectItem value="books">Books</SelectItem>
-                            <SelectItem value="toys">Toys</SelectItem>
-                            {/* Add more categories as needed */}
-                          </SelectContent>
-                        </Select>
+                        <Input id="address" placeholder="Your Address" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

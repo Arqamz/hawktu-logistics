@@ -57,12 +57,16 @@ export const mainMenu: NavItemWithChildren[] = [
         to: '/Landing',
     },
     {
-        title: 'Customer Dashboard',
-        to: '/customerDashboard',
+        title: 'Customer Info',
+        to: '/customer-info',
     },
     {
         title:'E-commerce',
         to:'/shop',
+    },
+    {
+        title: 'CustomerDashboard',
+        to: '/customer-dashboard',
     },
 ]
 

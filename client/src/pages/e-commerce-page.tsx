@@ -1,17 +1,18 @@
+'use client'
+
 import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Slider } from "@/components/ui/slider"
-import { Star, ShoppingCart, User, ChevronLeft, ChevronRight } from 'lucide-react'
+import { X, Star, ShoppingCart, User, ChevronLeft, ChevronRight, Plus, Minus } from 'lucide-react'
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { Badge } from "@/components/ui/badge"
 
-// Mock data
+// Mock data (unchanged)
 const categories = ["All", "Electronics", "Clothing", "Books", "Home & Garden"]
 const mockItems = Array.from({ length: 100 }, (_, i) => ({
   id: i + 1,
@@ -81,15 +82,54 @@ export default function AppComponent() {
     setFilteredItems(result)
   }, [items, selectedCategory, sortBy, searchTerm, priceRange, ratingRange])
 
-  const addToCart = (item) => {
-    setCartItems([...cartItems, item])
+  const navigate = useNavigate()
+
+  const addToCart = (item, quantity = 1) => {
+    setCartItems(prevItems => {
+      const existingItem = prevItems.find(cartItem => cartItem.id === item.id)
+      if (existingItem) {
+        return prevItems.map(cartItem =>
+          cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + quantity } : cartItem
+        )
+      } else {
+        return [...prevItems, { ...item, quantity }]
+      }
+    })
+  }
+
+  const removeFromCart = (item) => {
+    setCartItems(prevItems => {
+      const existingItem = prevItems.find(cartItem => cartItem.id === item.id)
+      if (existingItem && existingItem.quantity > 1) {
+        return prevItems.map(cartItem =>
+          cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity - 1 } : cartItem
+        )
+      } else {
+        return prevItems.filter(cartItem => cartItem.id !== item.id)
+      }
+    })
+  }
+
+  const updateCartItemQuantity = (item, newQuantity) => {
+    if (newQuantity === 0) {
+      setCartItems(prevItems => prevItems.filter(cartItem => cartItem.id !== item.id))
+    } else {
+      setCartItems(prevItems =>
+        prevItems.map(cartItem =>
+          cartItem.id === item.id ? { ...cartItem, quantity: newQuantity } : cartItem
+        )
+      )
+    }
+  }
+
+  const handleCheckout = () => {
+    navigate('/checkout', { state: { cartItems } })
   }
 
   const paginatedItems = filteredItems.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
-      {/* Logo and Nav Bar */}
       <header className="flex justify-center items-center p-4 border-b">
         <img src="/placeholder.svg" alt="Logo" className="w-24 h-12" />
         <nav className="ml-8">
@@ -101,11 +141,9 @@ export default function AppComponent() {
       </header>
 
       <div className="flex flex-1">
-        {/* Sidebar */}
         <div className="w-64 p-4 border-r">
           <h2 className="text-lg font-semibold mb-4">Filter</h2>
           <div className="space-y-4">
-            {/* Categories Filter */}
             <div>
               <h3 className="font-medium mb-2">Categories</h3>
               {categories.map(category => (
@@ -120,7 +158,6 @@ export default function AppComponent() {
               ))}
             </div>
 
-            {/* Price Range Inputs (without Slider) */}
             <div>
               <h3 className="font-medium mb-2">Price Range</h3>
               <div className="flex justify-between mt-2">
@@ -141,7 +178,6 @@ export default function AppComponent() {
               </div>
             </div>
 
-            {/* Rating Range Inputs (without Slider) */}
             <div>
               <h3 className="font-medium mb-2">Rating</h3>
               <div className="flex justify-between mt-2">
@@ -164,7 +200,6 @@ export default function AppComponent() {
               </div>
             </div>
 
-            {/* Sort By */}
             <div>
               <h3 className="font-medium mb-2">Sort By</h3>
               <Select onValueChange={setSortBy}>
@@ -182,10 +217,9 @@ export default function AppComponent() {
           </div>
         </div>
 
-        {/* Main Content */}
         <div className="flex-1 p-4">
           <div className="flex justify-between items-center mb-6">
-            <div className="relative w-64">
+            <div className="relative w-64 flex flex-grow mr-4">
               <Input
                 type="text"
                 placeholder="Search items..."
@@ -198,7 +232,7 @@ export default function AppComponent() {
                 <PopoverTrigger asChild>
                   <Button variant="outline">
                     <ShoppingCart className="mr-2 h-4 w-4" />
-                    Cart ({cartItems.length})
+                    Cart ({cartItems.reduce((sum, item) => sum + item.quantity, 0)})
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-[80vw] max-w-[800px]">
@@ -209,17 +243,14 @@ export default function AppComponent() {
                           <tr className="h-12 uppercase">
                             <th className="hidden md:table-cell" />
                             <th className="text-left">Product</th>
-                            <th className="lg:text-right text-left pl-5 lg:pl-0">
-                              <span className="lg:hidden" title="Quantity">Qtd</span>
-                              <span className="hidden lg:inline">Quantity</span>
-                            </th>
+                            <th className="text-center">Quantity</th>
                             <th className="hidden text-right md:table-cell">Unit price</th>
                             <th className="text-right">Total price</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {cartItems.map((item, index) => (
-                            <tr key={index} className="border-b hover:bg-gray-100">
+                          {cartItems.map((item) => (
+                            <tr key={item.id} className="border-b hover:bg-gray-100">
                               <td className="hidden pb-4 md:table-cell">
                                 <img
                                   src="/placeholder.svg"
@@ -228,29 +259,36 @@ export default function AppComponent() {
                                 />
                               </td>
                               <td>
-                                <div className="flex justify-between">
-                                  <p className="mb-2 md:ml-4">{item.name}</p>
-                                  <Badge variant="secondary" className="text-xs md:text-base mt-2 md:mt-0 md:ml-4">
-                                    In stock
-                                  </Badge>
-                                </div>
+                                <p className="mb-2 md:ml-4">{item.name}</p>
                               </td>
-                              <td className="justify-center md:justify-end md:flex mt-6">
-                                <div className="w-20 h-10">
-                                  <div className="relative flex flex-row w-full h-8">
-                                    <input
-                                      type="number"
-                                      defaultValue="1"
-                                      className="w-full font-semibold text-center text-gray-700 bg-gray-200 outline-none focus:outline-none hover:text-black focus:text-black"
-                                    />
-                                  </div>
+                              <td className="text-center">
+                                <div className="flex items-center justify-center">
+                                  <Button
+                                    variant="outline"
+                                    size="icon"
+                                    onClick={() => updateCartItemQuantity(item, item.quantity - 1)}
+                                  >
+                                    <Minus className="h-4 w-4" />
+                                  </Button>
+                                  <span className="mx-2">{item.quantity}</span>
+                                  <Button
+                                    variant="outline"
+                                    size="icon"
+                                    onClick={() => updateCartItemQuantity(item, item.quantity + 1)}
+                                  >
+                                    <Plus className="h-4 w-4" />
+                                  </Button>
                                 </div>
                               </td>
                               <td className="hidden text-right md:table-cell">
-                                <span className="text-sm lg:text-base font-medium">${item.price.toFixed(2)}</span>
+                                <span className="text-sm lg:text-base font-medium">
+                                  ${item.price.toFixed(2)}
+                                </span>
                               </td>
                               <td className="text-right">
-                                <span className="text-sm lg:text-base font-medium">${item.price.toFixed(2)}</span>
+                                <span className="text-sm lg:text-base font-medium">
+                                  ${(item.price * item.quantity).toFixed(2)}
+                                </span>
                               </td>
                             </tr>
                           ))}
@@ -285,7 +323,7 @@ export default function AppComponent() {
                           </div>
                           <div className="p-4">
                             <p className="mb-4 italic">
-                              You've earned {Math.floor(cartItems.reduce((sum, item) => sum + item.price, 0) * 10)} loyalty points from this order!
+                              You've earned {Math.floor(cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0) * 10)} loyalty points from this order!
                             </p>
                           </div>
                         </div>
@@ -300,7 +338,7 @@ export default function AppComponent() {
                                 Subtotal
                               </div>
                               <div className="lg:px-4 lg:py-2 m-2 lg:text-lg font-bold text-center text-gray-900">
-                                ${cartItems.reduce((sum, item) => sum + item.price, 0).toFixed(2)}
+                                ${cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)}
                               </div>
                             </div>
                             <div className="flex justify-between pt-4 border-b">
@@ -308,7 +346,7 @@ export default function AppComponent() {
                                 Tax
                               </div>
                               <div className="lg:px-4 lg:py-2 m-2 lg:text-lg font-bold text-center text-gray-900">
-                                ${(cartItems.reduce((sum, item) => sum + item.price, 0) * 0.1).toFixed(2)}
+                                ${(cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0) * 0.1).toFixed(2)}
                               </div>
                             </div>
                             <div className="flex justify-between pt-4 border-b">
@@ -316,17 +354,11 @@ export default function AppComponent() {
                                 Total
                               </div>
                               <div className="lg:px-4 lg:py-2 m-2 lg:text-lg font-bold text-center text-gray-900">
-                                ${(cartItems.reduce((sum, item) => sum + item.price, 0) * 1.1).toFixed(2)}
+                                ${(cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0) * 1.1).toFixed(2)}
                               </div>
                             </div>
-                            <Button className="flex justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-gray-800 rounded-full shadow item-center hover:bg-gray-700 focus:shadow-outline focus:outline-none">
-                              <svg aria-hidden="true" data-prefix="far" data-icon="credit-card" className="w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                                <path
-                                  fill="currentColor"
-                                  d="M527.9 32H48.1C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48.1 48h479.8c26.6 0 48.1-21.5 48.1-48V80c0-26.5-21.5-48-48.1-48zM54.1 80h467.8c3.3 0 6 2.7 6 6v42H48.1V86c0-3.3 2.7-6 6-6zm467.8 352H54.1c-3.3 0-6-2.7-6-6V256h479.8v170c0 3.3-2.7 6-6 6zM192 332v40c0 6.6-5.4 12-12 12h-72c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h72c6.6 0 12 5.4 12 12zm192 0v40c0 6.6-5.4 12-12 12H236c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h136c6.6 0 12 5.4 12 12z"
-                                />
-                              </svg>
-                              <span className="ml-2 mt-5px">Procceed to checkout</span>
+                            <Button className="w-full mt-4" onClick={handleCheckout}>
+                              Proceed to Checkout
                             </Button>
                           </div>
                         </div>
@@ -342,7 +374,6 @@ export default function AppComponent() {
             </div>
           </div>
 
-          {/* Item Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {paginatedItems.map((item) => (
               <Card key={item.id} className="overflow-hidden">
@@ -368,102 +399,133 @@ export default function AppComponent() {
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button onClick={() => setSelectedItem(item)}>View Details</Button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-3xl">
-                      <DialogHeader>
-                        <DialogTitle>{item.name}</DialogTitle>
-                        <DialogDescription>By {item.sellerName}</DialogDescription>
-                      </DialogHeader>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="relative h-64">
-                          <img
-                            src={`/placeholder.svg?height=300&width=400`}
-                            alt={item.name}
-                            className="w-full h-full object-cover"
-                          />
-                          <Button className="absolute top-1/2 left-2 transform -translate-y-1/2">
-                            <ChevronLeft className="h-6 w-6" />
-                          </Button>
-                          <Button className="absolute top-1/2 right-2 transform -translate-y-1/2">
-                            <ChevronRight className="h-6 w-6" />
-                          </Button>
-                        </div>
-                        <div>
-                          <p className="text-lg mb-2">{item.description}</p>
-                          <p className="text-2xl font-bold mb-2">${item.price}</p>
-                          <div className="flex items-center mb-4">
-                            {Array.from({ length: 5 }).map((_, index) => (
-                              <Star
-                                key={index}
-                                className={`h-5 w-5 ${index < item.rating ? "text-yellow-400 fill-current" : "text-gray-300"
-                                  }`}
-                              />
-                            ))}
-                            <span className="ml-2 text-sm text-gray-600">({item.reviews.length} reviews)</span>
-                          </div>
-                          <div className="mb-4">
-                            <Label htmlFor="quantity">Quantity</Label>
-                            <Select defaultValue="1">
-                              <SelectTrigger id="quantity">
-                                <SelectValue placeholder="Select quantity" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {[1, 2, 3, 4, 5].map(num => (
-                                  <SelectItem key={num} value={num.toString()}>{num}</SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </div>
-                          <Button onClick={() => addToCart(item)}>Add to Cart</Button>
+                <Dialog>
+        <DialogTrigger asChild>
+          <Button onClick={() => setSelectedItem(item)}>View Details</Button>
+        </DialogTrigger>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>{selectedItem?.name}</DialogTitle>
+            <DialogDescription>By {selectedItem?.sellerName}</DialogDescription>
+          </DialogHeader>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="relative h-64">
+              <img
+                src={`/placeholder.svg?height=300&width=400`}
+                alt={selectedItem?.name}
+                className="w-full h-full object-cover"
+              />
+              <Button className="absolute top-1/2 left-2 transform -translate-y-1/2">
+                <ChevronLeft className="h-6 w-6" />
+              </Button>
+              <Button className="absolute top-1/2 right-2 transform -translate-y-1/2">
+                <ChevronRight className="h-6 w-6" />
+              </Button>
+            </div>
+            <div>
+              <p className="text-lg mb-2">{selectedItem?.description}</p>
+              <p className="text-2xl font-bold mb-2">${selectedItem?.price}</p>
+              <div className="flex items-center mb-4">
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <Star
+                    key={index}
+                    className={`h-5 w-5 ${index < selectedItem?.rating ? "text-yellow-400 fill-current" : "text-gray-300"}`}
+                  />
+                ))}
+                <span className="ml-2 text-sm text-gray-600">({selectedItem?.reviews.length} reviews)</span>
+              </div>
+              <div className="mb-4">
+                {cartItems.find(cartItem => cartItem.id === selectedItem?.id) ? (
+                  <div className="flex items-center">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => updateCartItemQuantity(selectedItem, Math.max(0, cartItems.find(cartItem => cartItem.id === selectedItem.id).quantity - 1))}
+                    >
+                      <Minus className="h-4 w-4" />
+                    </Button>
+                    <span className="mx-2">
+                      {cartItems.find(cartItem => cartItem.id === selectedItem.id).quantity}
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => updateCartItemQuantity(selectedItem, cartItems.find(cartItem => cartItem.id === selectedItem.id).quantity + 1)}
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ) : (
+                  <Button onClick={() => addToCart(selectedItem)}>Add to Cart</Button>
+                )}
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline">View All Reviews</Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[400px] sm:w-[540px]">
+                <SheetHeader>
+                  <SheetTitle>Customer Reviews for {selectedItem?.name}</SheetTitle>
+                  <SheetDescription>
+                    {selectedItem?.reviews.length} reviews in total
+                  </SheetDescription>
+                </SheetHeader>
+                <div className="mt-4 space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
+                  {selectedItem?.reviews.map((review) => (
+                    <div key={review.id} className="border-b pb-4">
+                      <div className="flex items-center mb-2">
+                        <span className="font-bold mr-2">{review.user}</span>
+                        <div className="flex">
+                          {Array.from({ length: 5 }).map((_, index) => (
+                            <Star
+                              key={index}
+                              className={`h-4 w-4 ${index < review.rating ? "text-yellow-400 fill-current" : "text-gray-300"}`}
+                            />
+                          ))}
                         </div>
                       </div>
-                      <DialogFooter>
-                        <Sheet>
-                          <SheetTrigger asChild>
-                            <Button variant="outline">View All Reviews</Button>
-                          </SheetTrigger>
-                          <SheetContent side="right" className="w-[400px] sm:w-[540px]">
-                            <SheetHeader>
-                              <SheetTitle>Customer Reviews for {item.name}</SheetTitle>
-                              <SheetDescription>
-                                {item.reviews.length} reviews in total
-                              </SheetDescription>
-                            </SheetHeader>
-                            <div className="mt-4 space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
-                              {item.reviews.map((review) => (
-                                <div key={review.id} className="border-b pb-4">
-                                  <div className="flex items-center mb-2">
-                                    <span className="font-bold mr-2">{review.user}</span>
-                                    <div className="flex">
-                                      {Array.from({ length: 5 }).map((_, index) => (
-                                        <Star
-                                          key={index}
-                                          className={`h-4 w-4 ${index < review.rating ? "text-yellow-400 fill-current" : "text-gray-300"
-                                            }`}
-                                        />
-                                      ))}
-                                    </div>
-                                  </div>
-                                  <p>{review.comment}</p>
-                                </div>
-                              ))}
-                            </div>
-                          </SheetContent>
-                        </Sheet>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
+                      <p>{review.comment}</p>
+                    </div>
+                  ))}
+                </div>
+              </SheetContent>
+            </Sheet>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+                  {cartItems.find(cartItem => cartItem.id === item.id) ? (
+                    <div className="flex items-center">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => removeFromCart(item)}
+                      >
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                      <span className="mx-2">
+                        {cartItems.find(cartItem => cartItem.id === item.id).quantity}
+                      </span>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => addToCart(item)}
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button onClick={() => addToCart(item)}>Add to Cart</Button>
+                  )}
                 </CardFooter>
               </Card>
             ))}
           </div>
-          {/* Pagination */}
           <div className="flex justify-center mt-8">
             <Button
-              onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
+              onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
               disabled={currentPage === 1}
             >
               Previous
@@ -472,7 +534,7 @@ export default function AppComponent() {
               Page {currentPage} of {Math.ceil(filteredItems.length / itemsPerPage)}
             </span>
             <Button
-              onClick={() => handlePageChange(Math.min(currentPage + 1, Math.ceil(filteredItems.length / itemsPerPage)))}
+              onClick={() => setCurrentPage(Math.min(currentPage + 1, Math.ceil(filteredItems.length / itemsPerPage)))}
               disabled={currentPage === Math.ceil(filteredItems.length / itemsPerPage)}
             >
               Next

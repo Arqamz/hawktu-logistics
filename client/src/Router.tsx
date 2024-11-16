@@ -9,10 +9,11 @@ import Login from "./pages/Login";
 import ClientRegistration from "./pages/ClientRegistration";
 import SellerRegistration from "./pages/SellerRegistration";
 import Landing from "./pages/LandingPage";
-import CustomerDashboard from "./pages/CustomerDashboard";
+import CustomerInfo from "./pages/CustomerInfo";
 import Registration from "./pages/RegisterLanding";
 import Shopping from "./pages/e-commerce-page";
-
+import CustomerDashboard from "./pages/customer-dashboard";
+import Checkout from "./pages/checkout";
 export const router = createBrowserRouter(
   [
     {
@@ -53,8 +54,8 @@ export const router = createBrowserRouter(
         element: <Landing />,
       },
       {
-        path: "/customerDashboard",
-        element: <CustomerDashboard />,
+        path: "/customer-info",
+        element: <CustomerInfo />,
       },
       {
         path: "*",
@@ -63,6 +64,14 @@ export const router = createBrowserRouter(
       {
         path: "/shop",
         element: <Shopping />,
+      },
+      {
+        path: "/customer-dashboard",
+        element: <CustomerDashboard />,
+      },
+      {
+        path: "/checkout",
+        element: <Checkout />,
       },
   ],
   {
