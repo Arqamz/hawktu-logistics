@@ -5,7 +5,7 @@ export default function Empty() {
     return (
         <>
             <PageHeader>
-                <PageHeaderHeading>Empty Page</PageHeaderHeading>
+                <PageHeaderHeading>Empty  Page</PageHeaderHeading>
             </PageHeader>
             <Card>
                 <CardHeader>
