@@ -1,29 +1,38 @@
 "use client"
 
-import React, { useState } from 'react'
-import {
-  Bell,
-  Globe,
-  HelpCircle,
-  User,
-} from "lucide-react"
+import React, { useState, useEffect } from 'react'
+import { Bell, Globe, HelpCircle, User } from 'lucide-react'
 import { Toaster, toast } from 'sonner'
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-} from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
+
+// Error Boundary Component
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { hasError: false }
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true }
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.log('Error:', error, errorInfo)
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h1>Something went wrong. Please try refreshing the page.</h1>
+    }
+
+    return this.props.children
+  }
+}
 
 const navItems = [
   { name: "Edit Profile", icon: User },
@@ -34,6 +43,10 @@ const navItems = [
 
 export default function UserDashboard() {
   const [activePage, setActivePage] = useState("Edit Profile")
+
+  useEffect(() => {
+    console.log('UserDashboard mounted')
+  }, [])
 
   const renderPageContent = () => {
     switch (activePage) {
@@ -51,39 +64,29 @@ export default function UserDashboard() {
   }
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <Toaster />
-      <SidebarProvider>
-        <Sidebar className="w-64 bg-white">
-          <SidebarContent>
-            <SidebarGroup>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {navItems.map((item) => (
-                    <SidebarMenuItem key={item.name}>
-                      <SidebarMenuButton
-                        asChild
-                        isActive={item.name === activePage}
-                        onClick={() => setActivePage(item.name)}
-                      >
-                        <button className="flex items-center gap-2 w-full px-4 py-2">
-                          <item.icon className="h-5 w-5" />
-                          <span>{item.name}</span>
-                        </button>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          </SidebarContent>
-        </Sidebar>
-        <main className="flex-1 overflow-y-auto p-8">
+    <ErrorBoundary>
+      <div className="flex h-screen bg-background">
+        <Toaster />
+        <nav className="w-64 bg-aliceblue p-4 dark:bg-sidebar-background">
+          {navItems.map((item) => (
+            <button
+              key={item.name}
+              className={`flex items-center gap-2 w-full px-4 py-2 mb-2 rounded-lg ${
+                activePage === item.name ? 'bg-blue-100 text-blue-600 dark:bg-sidebar-primary dark:text-sidebar-primary-foreground' : 'hover:bg-gray-100 dark:hover:bg-sidebar-accent'
+              }`}
+              onClick={() => setActivePage(item.name)}
+            >
+              <item.icon className="h-5 w-5" />
+              <span>{item.name}</span>
+            </button>
+          ))}
+        </nav>
+        <main className="flex-1 overflow-y-auto p-8 bg-card text-card-foreground">
           <h1 className="text-2xl font-bold mb-6">{activePage}</h1>
           {renderPageContent()}
         </main>
-      </SidebarProvider>
-    </div>
+      </div>
+    </ErrorBoundary>
   )
 }
 
@@ -94,6 +97,7 @@ function EditProfilePage() {
     email: "john.doe@example.com",
     phone: "+1 (555) 123-4567"
   })
+  const [errors, setErrors] = useState({})
 
   const handleEdit = () => {
     setIsEditing(true)
@@ -101,11 +105,28 @@ function EditProfilePage() {
 
   const handleSave = (e) => {
     e.preventDefault()
-    setIsEditing(false)
+    const newErrors = {}
+    if (user.name.trim().length < 2) {
+      newErrors.name = "Name must be at least 2 characters long"
+    }
+    if (!/^\S+@\S+\.\S+$/.test(user.email)) {
+      newErrors.email = "Invalid email format"
+    }
+    if (!/^\+?[1-9]\d{1,14}$/.test(user.phone)) {
+      newErrors.phone = "Invalid phone number format"
+    }
+
+    if (Object.keys(newErrors).length === 0) {
+      setIsEditing(false)
+      toast.success("Profile updated successfully")
+    } else {
+      setErrors(newErrors)
+    }
   }
 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value })
+    setErrors({ ...errors, [e.target.name]: '' })
   }
 
   return (
@@ -128,7 +149,9 @@ function EditProfilePage() {
                 name="name"
                 value={user.name}
                 onChange={handleChange}
+                className="border-input"
               />
+              {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -138,7 +161,9 @@ function EditProfilePage() {
                 type="email"
                 value={user.email}
                 onChange={handleChange}
+                className="border-input"
               />
+              {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor="phone">Phone</Label>
@@ -147,7 +172,9 @@ function EditProfilePage() {
                 name="phone"
                 value={user.phone}
                 onChange={handleChange}
+                className="border-input"
               />
+              {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
             </div>
             <Button type="submit">Save Changes</Button>
           </form>
@@ -158,35 +185,88 @@ function EditProfilePage() {
 
       <div>
         <h2 className="text-xl font-semibold mb-4">Change Password</h2>
-        <form className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="current-password">Current Password</Label>
-            <Input
-              id="current-password"
-              type="password"
-              placeholder="Enter current password"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="new-password">New Password</Label>
-            <Input
-              id="new-password"
-              type="password"
-              placeholder="Enter new password"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="confirm-password">Confirm New Password</Label>
-            <Input
-              id="confirm-password"
-              type="password"
-              placeholder="Confirm new password"
-            />
-          </div>
-          <Button type="submit">Change Password</Button>
-        </form>
+        <ChangePasswordForm />
       </div>
     </div>
+  )
+}
+
+function ChangePasswordForm() {
+  const [passwords, setPasswords] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  })
+  const [errors, setErrors] = useState({})
+
+  const handleChange = (e) => {
+    setPasswords({ ...passwords, [e.target.name]: e.target.value })
+    setErrors({ ...errors, [e.target.name]: '' })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const newErrors = {}
+
+    if (passwords.currentPassword.length < 8) {
+      newErrors.currentPassword = "Password must be at least 8 characters long"
+    }
+    if (passwords.newPassword.length < 8) {
+      newErrors.newPassword = "New password must be at least 8 characters long"
+    }
+    if (passwords.newPassword !== passwords.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match"
+    }
+
+    if (Object.keys(newErrors).length === 0) {
+      // Here you would typically send a request to your backend to change the password
+      toast.success("Password changed successfully")
+      setPasswords({ currentPassword: '', newPassword: '', confirmPassword: '' })
+    } else {
+      setErrors(newErrors)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="current-password">Current Password</Label>
+        <Input
+          id="current-password"
+          name="currentPassword"
+          type="password"
+          value={passwords.currentPassword}
+          onChange={handleChange}
+          className="border-input"
+        />
+        {errors.currentPassword && <p className="text-red-500 text-sm">{errors.currentPassword}</p>}
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="new-password">New Password</Label>
+        <Input
+          id="new-password"
+          name="newPassword"
+          type="password"
+          value={passwords.newPassword}
+          onChange={handleChange}
+          className="border-input"
+        />
+        {errors.newPassword && <p className="text-red-500 text-sm">{errors.newPassword}</p>}
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="confirm-password">Confirm New Password</Label>
+        <Input
+          id="confirm-password"
+          name="confirmPassword"
+          type="password"
+          value={passwords.confirmPassword}
+          onChange={handleChange}
+          className="border-input"
+        />
+        {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
+      </div>
+      <Button type="submit">Change Password</Button>
+    </form>
   )
 }
 
@@ -239,7 +319,7 @@ function LanguageRegionPage() {
       <div className="grid gap-4">
         <div className="space-y-2">
           <Label htmlFor="language">Language</Label>
-          <Select>
+          <Select onValueChange={(value) => toast.success(`Language changed to ${value}`)}>
             <SelectTrigger id="language">
               <SelectValue placeholder="Select a language" />
             </SelectTrigger>
@@ -254,7 +334,7 @@ function LanguageRegionPage() {
         </div>
         <div className="space-y-2">
           <Label htmlFor="region">Region</Label>
-          <Select>
+          <Select onValueChange={(value) => toast.success(`Region changed to ${value}`)}>
             <SelectTrigger id="region">
               <SelectValue placeholder="Select a region" />
             </SelectTrigger>
@@ -268,7 +348,7 @@ function LanguageRegionPage() {
           </Select>
         </div>
       </div>
-      <Button>Save Preferences</Button>
+      <Button onClick={() => toast.success('Preferences saved')}>Save Preferences</Button>
     </div>
   )
 }

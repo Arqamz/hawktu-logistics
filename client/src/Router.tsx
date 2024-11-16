@@ -9,7 +9,7 @@ import Login from "./pages/Login";
 import ClientRegistration from "./pages/ClientRegistration";
 import SellerRegistration from "./pages/SellerRegistration";
 import Landing from "./pages/LandingPage";
-import CustomerInfo from "./pages/CustomerInfo";
+import CustomerInformation from "./pages/customer-info";
 import Registration from "./pages/RegisterLanding";
 import Shopping from "./pages/e-commerce-page";
 import CustomerDashboard from "./pages/customer-dashboard";
@@ -55,7 +55,7 @@ export const router = createBrowserRouter(
       },
       {
         path: "/customer-info",
-        element: <CustomerInfo />,
+        element: <CustomerInformation />,
       },
       {
         path: "*",
