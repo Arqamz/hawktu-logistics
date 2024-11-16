@@ -8,7 +8,7 @@ export default function Component() {
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <header className="w-full px-4 lg:px-6 h-20 flex items-center border-b border-border">
         <div className="container mx-auto flex justify-center items-center">
-          <Link to="/Landing" className="flex items-center space-x-2">
+          <Link to="/landing" className="flex items-center space-x-2">
             <span className="text-2xl font-bold">HawkTU</span>
           </Link>
         </div>
@@ -26,10 +26,10 @@ export default function Component() {
                 </p>
               </div>
               <div className="space-x-4">
-                <Link to="/clientRegistration">
+                <Link to="/client-registration">
                   <Button>Register as a Customer</Button>
                 </Link>
-                <Link to="/sellerRegistration">
+                <Link to="/seller-registration">
                   <Button variant="outline">Register as a Seller</Button>
                 </Link>
               </div>

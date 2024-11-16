@@ -9,11 +9,11 @@ import Login from "./pages/Login";
 import ClientRegistration from "./pages/ClientRegistration";
 import SellerRegistration from "./pages/SellerRegistration";
 import Landing from "./pages/LandingPage";
-import CustomerInformation from "./pages/customer-info";
+import CustomerInformation from "./pages/CustomerInfo";
 import Registration from "./pages/RegisterLanding";
-import Shopping from "./pages/e-commerce-page";
-import CustomerDashboard from "./pages/customer-dashboard";
-import Checkout from "./pages/checkout";
+import Shopping from "./pages/Shop";
+import CustomerDashboard from "./pages/CustomerDashboard";
+import Checkout from "./pages/Checkout";
 export const router = createBrowserRouter(
   [
     {
@@ -21,7 +21,7 @@ export const router = createBrowserRouter(
       element: <Applayout />,
       children: [
         {
-          path: "",
+          path: "/dddashboard",
           element: <Dashboard />,
         },
         {
@@ -39,18 +39,18 @@ export const router = createBrowserRouter(
       element: <Login />,
     },
     {
-        path: "/ClientRegistration",
+        path: "/client-registration",
         element: <ClientRegistration />,
       },{
-        path: "/SellerRegistration",
+        path: "/seller-registration",
         element: <SellerRegistration />,
       },
       {
-        path: "/Registration",
+        path: "/registration",
         element: <Registration />,
       },
       {
-        path: "/Landing",
+        path: "",
         element: <Landing />,
       },
       {

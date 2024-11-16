@@ -77,7 +77,7 @@ export default function SellerRegisterPreview() {
     <div className="flex flex-col min-h-screen items-center justify-center px-4">
       <header className="w-full px-4 lg:px-6 h-20 flex items-center justify-between border-b border-border bg-background">
         <div className="container mx-auto flex items-center space-x-4">
-          <Link to="/Landing" className="flex items-center space-x-2">
+          <Link to="/landing" className="flex items-center space-x-2">
             <span className="text-3xl font-extrabold text-primary dark:text-primary-dark">
               HawkTU
             </span>

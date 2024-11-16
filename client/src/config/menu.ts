@@ -38,23 +38,23 @@ export const mainMenu: NavItemWithChildren[] = [
     },
     {
         title: 'Login',
-        to: '/Login',
+        to: '/login',
     },
     {
         title: 'Client Registration',
-        to: '/clientRegistration',
+        to: '/client-registration',
     },
     {
         title: 'Seller Registration',
-        to: '/sellerRegistration',
+        to: '/seller-registration',
     },
     {
         title: 'Register Landing',
-        to: '/Registration',
+        to: '/registration',
     },
     {
         title: 'Landing Page',
-        to: '/Landing',
+        to: '/landing',
     },
     {
         title: 'Customer Info',

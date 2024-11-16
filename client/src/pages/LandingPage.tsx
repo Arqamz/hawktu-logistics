@@ -5,7 +5,7 @@ export default function Component(): JSX.Element {
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <div className="w-full px-4 py-6 flex items-center justify-between">
-          <Link to="/Landing" className="flex items-center space-x-2">
+          <Link to="/landing" className="flex items-center space-x-2">
             <span className="text-2xl font-bold">HawkTU</span>
           </Link>
         </div>
@@ -29,7 +29,7 @@ export default function Component(): JSX.Element {
                   Login
                 </Link>
                 <Link
-                  to="/Registration"
+                  to="/registration"
                   className="inline-flex h-10 items-center justify-center rounded-md border border-border bg-background px-8 text-sm font-medium shadow-sm transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-border disabled:pointer-events-none disabled:opacity-50"
                 >
                   Register
