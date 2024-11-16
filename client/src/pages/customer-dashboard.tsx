@@ -287,7 +287,7 @@ function LoyaltyPointsPage({ loyaltyPoints, setLoyaltyPoints }) {
             ))}
           </div>
           {redeemCode && (
-            <div className="mt-6 p-4 bg-green-100 rounded">
+            <div className="mt-6 p-4 bg-rgb(31 41 55 / 0.4)-100 rounded border-2">
               <p className="font-bold">Your coupon code:</p>
               <p className="text-2xl font-mono">{redeemCode}</p>
             </div>
