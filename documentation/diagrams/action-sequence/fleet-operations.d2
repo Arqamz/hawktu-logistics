@@ -1,0 +1,72 @@
+Fleet Operations: {
+    
+  label: "Fleet Operations"
+
+  "" : {
+
+    shape: sequence_diagram
+
+    FleetManager.t1: actor
+    Vehicle.t1: actor
+    DeliveryRoute.t1: actor
+    Database.t1: actor
+
+    FleetManager.t1 -> Database.t1: viewFleetStatus()
+    Database.t1 -> Vehicle.t1: retrieveVehicleStatus() {
+      style.stroke-dash: 5
+    }
+    Database.t1 -> DeliveryRoute.t1: retrieveRouteAssignments() {
+      style.stroke-dash: 5
+    }
+    Vehicle.t1 <- Database.t1: vehicleStatusDataFetched {
+      style.stroke-dash: 5
+    }
+    DeliveryRoute.t1 <- Database.t1: routeDataFetched {
+      style.stroke-dash: 5
+    }
+    FleetManager.t1 <- Vehicle.t1: displayFleetOverview(vehicleStatusData) {
+      style.stroke-dash: 5
+    }
+    FleetManager.t1 <- DeliveryRoute.t1: displayRouteOverview(routeData) {
+      style.stroke-dash: 5
+    }
+
+    alt label: "Vehicle Availability Conflict" {
+      style.stroke-width: 5
+      
+      if label: "Vehicle Unavailable" {
+        style.fill: firebrick
+        Vehicle.t2 -> FleetManager.t1: notifyUnavailable("Vehicle is unavailable") {
+          style.stroke-dash: 5
+        }
+      }
+      else label: "Vehicle Available" {
+        style.fill: green
+        FleetManager.t1 -> Vehicle.t2: assignVehicle(vehicleId, routeId)
+      }
+    }
+
+    Vehicle.t2 -> DeliveryRoute.t2: setRoute(vehicleId, routeId)
+
+    alt1 label: "Vehicle Assignment Conflict" {
+      style.stroke-width: 5
+
+      if label: "Assignment Failure" {
+        style.fill: firebrick
+        DeliveryRoute.t2 -> FleetManager.t1: notifyAssignmentFailure("Route assignment failed") {
+          style.stroke-dash: 5
+        }
+        FleetManager.t1 -> Vehicle.t2: retryAssignment()
+      }
+      else label: "Assignment Success" {
+        style.fill: green
+        Vehicle.t2 <- DeliveryRoute.t2: confirmAssignment {
+          style.stroke-dash: 5
+        }
+        FleetManager.t1 <- Vehicle.t2: displayAssignmentConfirmation() {
+          style.stroke-dash: 5
+        }
+      }
+    }
+  }
+}
