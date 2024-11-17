@@ -1,70 +1,77 @@
-# Getting Started with Create React App
+# React Shadcn Starter
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+React + Vite + TypeScript template for building apps with shadcn/ui.
 
-## Available Scripts
+## Getting Started
 
-In the project directory, you can run:
+```
+git clone https://github.com/hayyi2/react-shadcn-starter.git new-project
+cd new-project
+npm install
+npm run dev
+```
 
-### `npm start`
+## Getting Done
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- [x] Single page app with navigation and responsif layout
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- [x] Customable configuration `/config`
 
-### `npm test`
+- [x] Simple starting page/feature `/pages`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- [x] Github action deploy github pages
 
-### `npm run build`
+## Deploy `gh-pages`
+- change `basenameProd` in `/vite.config.ts`
+- create deploy key `GITHUB_TOKEN` in github `/settings/keys`
+- commit and push changes code
+- setup gihub pages to branch `gh-pages`
+- run action `Build & Deploy`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Auto Deploy
+- change file `.github/workflows/build-and-deploy.yml`
+- Comment on `workflow_dispatch`
+- Uncomment on `push`
+```yaml
+# on:
+#   workflow_dispatch:
+on:
+  push:
+    branches: ["main"]
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Features
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- React + Vite + TypeScript
+- Tailwind CSS
+- [react-router-dom](https://www.npmjs.com/package/react-router-dom)
+- [shadcn-ui](https://github.com/shadcn-ui/ui/)
+- [radix-ui/icons](https://www.radix-ui.com/icons)
 
-### `npm run eject`
+## Project Structure
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```
+react-shadcn-starter/
+├── public/            # Public assets
+├── src/               # Application source code
+│   ├── components/    # React components
+│   │   └── ui/        # shadc/ui components
+│   │   └── layouts/   # layouts components
+│   ├── context/       # contexts components
+│   ├── config/        # Config data
+│   ├── hook/          # Custom hooks
+│   ├── lib/           # Utility functions
+│   ├── pages/         # pages/features components
+│   ├── App.tsx        # Application entry point
+│   ├── index.tsx      # Main rendering file
+│   └── Router.tsx     # Routes component
+├── index.html         # HTML entry point
+├── postcss.config.js  # PostCSS configuration
+├── tailwind.config.js # Tailwind CSS configuration
+├── tsconfig.json      # TypeScript configuration
+└── vite.config.ts     # Vite configuration
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## License
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/hayyi2/react-shadcn-starter/blob/main/LICENSE) file for details. 
