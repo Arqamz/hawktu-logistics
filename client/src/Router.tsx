@@ -11,6 +11,7 @@ import CustomerInformation from "./pages/CustomerInfo";
 import Landing from "./pages/Landing";
 import Shopping from "./pages/Shop";
 import CustomerDashboard from "./pages/CustomerDashboard";
+import SellerDashboard from "./pages/SellerDashboard"
 import Checkout from "./pages/Checkout";
 export const router = createBrowserRouter(
   [
@@ -59,6 +60,10 @@ export const router = createBrowserRouter(
       {
         path: "/customer-dashboard",
         element: <CustomerDashboard />,
+      },
+      {
+        path: "/seller-dashboard",
+        element:<SellerDashboard/>,
       },
       {
         path: "/checkout",
