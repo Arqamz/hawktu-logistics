@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { BarChart, Users, Package, DollarSign } from 'lucide-react'
+import { BarChart, Users, Package, DollarSign, ImageIcon } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
@@ -48,9 +48,10 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
-import { toast } from 'sonner'
+import { Toaster, toast } from 'sonner'
+import { cn } from '@/lib/utils'
 
-// Mock data for recent orders
+// Mock data (unchanged)
 const recentOrders = [
   { id: '001', amount: 120.50, customerName: 'John Doe' },
   { id: '002', amount: 85.75, customerName: 'Jane Smith' },
@@ -59,7 +60,6 @@ const recentOrders = [
   { id: '005', amount: 95.00, customerName: 'Charlie Davis' },
 ]
 
-// Mock data for order details
 const orderDetails = {
   products: ['Product A', 'Product B'],
   orderValue: 120.50,
@@ -68,7 +68,6 @@ const orderDetails = {
   customerName: 'John Doe',
 }
 
-// Mock data for product reviews
 const mockReviews = Array.from({ length: 50 }, (_, i) => ({
   id: `ORD${String(i + 1).padStart(3, '0')}`,
   productName: `Product ${i + 1}`,
@@ -76,7 +75,6 @@ const mockReviews = Array.from({ length: 50 }, (_, i) => ({
   review: `This is a review for Product ${i + 1}. It's a ${['great', 'good', 'average', 'poor'][Math.floor(Math.random() * 4)]} product.`,
 }))
 
-// Mock data for refund/exchange requests
 const mockRequests = [
   { id: 'REQ001', orderId: 'ORD001', productName: 'Product A', status: 'Pending', reason: 'Item not as described' },
   { id: 'REQ002', orderId: 'ORD002', productName: 'Product B', status: 'Approved', reason: 'Defective product' },
@@ -85,7 +83,6 @@ const mockRequests = [
   { id: 'REQ005', orderId: 'ORD005', productName: 'Product E', status: 'Pending', reason: 'Late delivery' },
 ]
 
-// Mock data for orders
 const mockOrders = Array.from({ length: 20 }, (_, i) => ({
   id: `ORD${String(i + 1).padStart(3, '0')}`,
   value: Math.floor(Math.random() * 1000) + 50,
@@ -96,15 +93,17 @@ const mockOrders = Array.from({ length: 20 }, (_, i) => ({
   address: '123 Main St, City, Country',
 }))
 
-// Mock data for products
 const mockProducts = Array.from({ length: 20 }, (_, i) => ({
   id: `PROD${String(i + 1).padStart(3, '0')}`,
   name: `Product ${i + 1}`,
   price: Math.floor(Math.random() * 1000) + 50,
   stock: Math.floor(Math.random() * 100),
-  category: ['Electronics', 'Clothing', 'Books', 'Home & Garden'][Math.floor(Math.random() * 4)],
+  category: ['Electronics', 'Clothing', 'Books', 'Home Appliances'][Math.floor(Math.random() * 4)],
+  image: `/placeholder.svg?height=100&width=100`,
+  description: `This is description for PROD ${i + 1}`,
 }))
 
+// Schemas (unchanged)
 const userInfoSchema = z.object({
   username: z.string().min(3, { message: 'Username must be at least 3 characters' }),
   email: z.string().email({ message: 'Invalid email address' }),
@@ -129,13 +128,31 @@ const productSchema = z.object({
   price: z.number().min(0.01, { message: 'Price must be greater than 0' }),
   stock: z.number().int().min(0, { message: 'Stock cannot be negative' }),
   category: z.string().min(1, { message: 'Category is required' }),
+  image: z.instanceof(File).optional().refine((file) => {
+    if (file) {
+      return file.size <= 5 * 1024 * 1024; // 5MB limit
+    }
+    return true;
+  }, 'Image must be 5MB or less'),
+  description: z.string().min(1, { message: 'Product description can not be empty' }),
 })
 
 export default function SellerDashboard() {
   const [activeTab, setActiveTab] = useState('Overview')
-
-  // Personal Information Page state
   const [isEditing, setIsEditing] = useState(false)
+  const [currentReviewPage, setCurrentReviewPage] = useState(1)
+  const [refundFilter, setRefundFilter] = useState('All')
+  const [requests, setRequests] = useState(mockRequests)
+  const [sortBy, setSortBy] = useState('date')
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
+  const [products, setProducts] = useState(mockProducts)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [editingProduct, setEditingProduct] = useState<typeof mockProducts[0] | null>(null)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [selectedRequest, setSelectedRequest] = useState<typeof mockRequests[0] | null>(null)
+
+  const reviewsPerPage = 10
+
   const userInfoForm = useForm<z.infer<typeof userInfoSchema>>({
     resolver: zodResolver(userInfoSchema),
     defaultValues: {
@@ -145,6 +162,7 @@ export default function SellerDashboard() {
       address: '123 Main St, City, Country',
     },
   })
+
   const passwordForm = useForm<z.infer<typeof passwordSchema>>({
     resolver: zodResolver(passwordSchema),
     defaultValues: {
@@ -154,22 +172,6 @@ export default function SellerDashboard() {
     },
   })
 
-  // Product Reviews Page state
-  const [currentReviewPage, setCurrentReviewPage] = useState(1)
-  const reviewsPerPage = 10
-
-  // Order Refund & Exchange Page state
-  const [refundFilter, setRefundFilter] = useState('All')
-  const [requests, setRequests] = useState(mockRequests)
-
-  // Order History Page state
-  const [sortBy, setSortBy] = useState('date')
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
-
-  // Product Listing Page state
-  const [products, setProducts] = useState(mockProducts)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [editingProduct, setEditingProduct] = useState<typeof mockProducts[0] | null>(null)
   const productForm = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
     defaultValues: {
@@ -177,6 +179,7 @@ export default function SellerDashboard() {
       price: 0,
       stock: 0,
       category: '',
+      description: '',
     },
   })
 
@@ -195,12 +198,14 @@ export default function SellerDashboard() {
   const filteredRequests = refundFilter === 'All' ? requests : requests.filter(req => req.status === refundFilter)
 
   const handleRefundAction = (id: string, action: 'Approve' | 'Reject') => {
-    setRequests(prevRequests => 
-      prevRequests.map(req => 
+    setRequests(prevRequests =>
+      prevRequests.map(req =>
         req.id === id ? { ...req, status: action === 'Approve' ? 'Approved' : 'Rejected' } : req
       )
     )
-    toast.success(`Request ${action.toLowerCase()}d`)
+    toast.success(`Request ${action}${action.endsWith('e') ? 'd' : 'ed'}`);
+    setIsDialogOpen(false)
+    setSelectedRequest(null)
   }
 
   const sortedOrders = [...mockOrders].sort((a, b) => {
@@ -230,37 +235,46 @@ export default function SellerDashboard() {
   function onProductSubmit(values: z.infer<typeof productSchema>) {
     if (editingProduct) {
       setProducts(prevProducts =>
-        prevProducts.map(p => p.id === editingProduct.id ? { ...p, ...values } : p)
+        prevProducts.map(p => p.id === editingProduct.id ? { ...p, ...values, image: values.image ? URL.createObjectURL(values.image) : p.image } : p)
       )
-      toast.success('Product updated successfully')
+      toast.success('Product Updated successfully')
     } else {
       const newProduct = {
         id: `PROD${String(products.length + 1).padStart(3, '0')}`,
         ...values,
+        image: values.image ? URL.createObjectURL(values.image) : '/placeholder.svg?height=100&width=100',
       }
       setProducts(prevProducts => [...prevProducts, newProduct])
-      toast.success('Product added successfully')
+      toast.success('Product Added successfully')
     }
     setEditingProduct(null)
     productForm.reset()
+    setIsDialogOpen(false)
   }
 
   const handleEditProduct = (product: typeof mockProducts[0]) => {
     setEditingProduct(product)
-    productForm.reset(product)
+    productForm.reset({
+      name: product.name,
+      price: product.price,
+      stock: product.stock,
+      category: product.category,
+      description: product.description,
+    })
+    setIsDialogOpen(true)
   }
 
   const handleDeleteProduct = (id: string) => {
     setProducts(prevProducts => prevProducts.filter(p => p.id !== id))
-    toast.success('Product deleted successfully')
+    toast.success('Product Deleted successfully')
   }
 
   const renderContent = () => {
     switch (activeTab) {
       case 'Personal Information':
         return (
-          <div className="space-y-8">
-            <div>
+          <div className="space-y-8 max-w-2xl mx-auto">
+            <div className="shadow-md rounded-lg p-6">
               <h2 className="text-2xl font-bold mb-4">Personal Information</h2>
               <Form {...userInfoForm}>
                 <form onSubmit={userInfoForm.handleSubmit(onUserInfoSubmit)} className="space-y-4">
@@ -317,15 +331,33 @@ export default function SellerDashboard() {
                     )}
                   />
                   {isEditing ? (
-                    <Button type="submit">Save Changes</Button>
+                    <div className="flex space-x-4">
+                      <Button type="submit" className="w-full">
+                        Save Changes
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setIsEditing(false)}
+                        className="w-full"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
                   ) : (
-                    <Button type="button" onClick={() => setIsEditing(true)}>Edit</Button>
+                    <Button
+                      type="button"
+                      className="w-full"
+                      onClick={() => setIsEditing(true)}
+                    >
+                      Edit
+                    </Button>
                   )}
                 </form>
               </Form>
             </div>
 
-            <div>
+            <div className="shadow-md rounded-lg p-6">
               <h2 className="text-2xl font-bold mb-4">Change Password</h2>
               <Form {...passwordForm}>
                 <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-4">
@@ -336,7 +368,7 @@ export default function SellerDashboard() {
                       <FormItem>
                         <FormLabel>Current Password</FormLabel>
                         <FormControl>
-                          <Input {...field} type="password" />
+                          <Input {...field} type="password" className="" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -349,7 +381,7 @@ export default function SellerDashboard() {
                       <FormItem>
                         <FormLabel>New Password</FormLabel>
                         <FormControl>
-                          <Input {...field} type="password" />
+                          <Input {...field} type="password" className="" />
                         </FormControl>
                         <FormDescription>
                           Password must be at least 8 characters and include uppercase, lowercase, number, and special character.
@@ -365,13 +397,13 @@ export default function SellerDashboard() {
                       <FormItem>
                         <FormLabel>Confirm New Password</FormLabel>
                         <FormControl>
-                          <Input {...field} type="password" />
+                          <Input {...field} type="password" className="" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  <Button type="submit">Update Password</Button>
+                  <Button type="submit" className="w-full">Update Password</Button>
                 </form>
               </Form>
             </div>
@@ -379,42 +411,44 @@ export default function SellerDashboard() {
         )
       case 'Product Reviews & Ratings':
         return (
-          <div>
+          <div className="shadow-md rounded-lg p-6">
             <h2 className="text-2xl font-bold mb-4">Product Reviews & Ratings</h2>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Order ID</TableHead>
-                  <TableHead>Product Name</TableHead>
-                  <TableHead>Rating</TableHead>
-                  <TableHead>Review</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {mockReviews.slice(
-                  (currentReviewPage - 1) * reviewsPerPage,
-                  currentReviewPage * reviewsPerPage
-                ).map((review) => (
-                  <TableRow key={review.id}>
-                    <TableCell>{review.id}</TableCell>
-                    <TableCell>{review.productName}</TableCell>
-                    <TableCell>{review.rating} / 5</TableCell>
-                    <TableCell>{review.review}</TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Order ID</TableHead>
+                    <TableHead>Product Name</TableHead>
+                    <TableHead>Rating</TableHead>
+                    <TableHead>Review</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {mockReviews.slice(
+                    (currentReviewPage - 1) * reviewsPerPage,
+                    currentReviewPage * reviewsPerPage
+                  ).map((review) => (
+                    <TableRow key={review.id}>
+                      <TableCell>{review.id}</TableCell>
+                      <TableCell>{review.productName}</TableCell>
+                      <TableCell>{review.rating} / 5</TableCell>
+                      <TableCell>{review.review}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
             <Pagination className="mt-4">
               <PaginationContent>
                 <PaginationItem>
-                  <PaginationPrevious 
+                  <PaginationPrevious
                     onClick={() => setCurrentReviewPage(prev => Math.max(prev - 1, 1))}
                     disabled={currentReviewPage === 1}
                   />
                 </PaginationItem>
                 {[...Array(Math.ceil(mockReviews.length / reviewsPerPage))].map((_, i) => (
                   <PaginationItem key={i}>
-                    <PaginationLink 
+                    <PaginationLink
                       onClick={() => setCurrentReviewPage(i + 1)}
                       isActive={currentReviewPage === i + 1}
                     >
@@ -423,7 +457,7 @@ export default function SellerDashboard() {
                   </PaginationItem>
                 ))}
                 <PaginationItem>
-                  <PaginationNext 
+                  <PaginationNext
                     onClick={() => setCurrentReviewPage(prev => Math.min(prev + 1, Math.ceil(mockReviews.length / reviewsPerPage)))}
                     disabled={currentReviewPage === Math.ceil(mockReviews.length / reviewsPerPage)}
                   />
@@ -434,7 +468,7 @@ export default function SellerDashboard() {
         )
       case 'Order Refund & Exchange':
         return (
-          <div>
+          <div className="shadow-md rounded-lg p-6">
             <h2 className="text-2xl font-bold mb-4">Order Refund & Exchange</h2>
             <Select onValueChange={setRefundFilter} defaultValue={refundFilter}>
               <SelectTrigger className="w-[180px] mb-4">
@@ -447,63 +481,68 @@ export default function SellerDashboard() {
                 <SelectItem value="Rejected">Rejected</SelectItem>
               </SelectContent>
             </Select>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Order ID</TableHead>
-                  <TableHead>Product Name</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredRequests.map((request) => (
-                  <TableRow key={request.id}>
-                    <TableCell>{request.orderId}</TableCell>
-                    <TableCell>{request.productName}</TableCell>
-                    <TableCell>{request.status}</TableCell>
-                    <TableCell>
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button variant="outline">Review</Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Request Details</DialogTitle>
-                          </DialogHeader>
-                          <div className="mt-4">
-                            <p><strong>Order ID:</strong> {request.orderId}</p>
-                            <p><strong>Product:</strong> {request.productName}</p>
-                            <p><strong>Status:</strong> {request.status}</p>
-                            <p><strong>Reason:</strong> {request.reason}</p>
-                          </div>
-                          <div className="flex justify-end gap-2 mt-4">
-                            <Button 
-                              onClick={() => handleRefundAction(request.id, 'Approve')}
-                              disabled={request.status !== 'Pending'}
-                            >
-                              Approve
-                            </Button>
-                            <Button 
-                              onClick={() => handleRefundAction(request.id, 'Reject')}
-                              disabled={request.status !== 'Pending'}
-                              variant="destructive"
-                            >
-                              Reject
-                            </Button>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                    </TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Order ID</TableHead>
+                    <TableHead>Product Name</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {filteredRequests.map((request) => (
+                    <TableRow key={request.id}>
+                      <TableCell>{request.orderId}</TableCell>
+                      <TableCell>{request.productName}</TableCell>
+                      <TableCell>{request.status}</TableCell>
+                      <TableCell>
+                        <Dialog open={isDialogOpen && selectedRequest?.id === request.id} onOpenChange={(open) => {
+                          setIsDialogOpen(open)
+                          if (!open) setSelectedRequest(null)
+                        }}>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" onClick={() => setSelectedRequest(request)}>Review</Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Request Details</DialogTitle>
+                            </DialogHeader>
+                            <div className="mt-4">
+                              <p><strong>Order ID:</strong> {request.orderId}</p>
+                              <p><strong>Product:</strong> {request.productName}</p>
+                              <p><strong>Status:</strong> {request.status}</p>
+                              <p><strong>Reason:</strong> {request.reason}</p>
+                            </div>
+                            <div className="flex justify-end gap-2 mt-4">
+                              <Button
+                                onClick={() => handleRefundAction(request.id, 'Approve')}
+                                disabled={request.status !== 'Pending'}
+                              >
+                                Approve
+                              </Button>
+                              <Button
+                                onClick={() => handleRefundAction(request.id, 'Reject')}
+                                disabled={request.status !== 'Pending'}
+                                variant="destructive"
+                              >
+                                Reject
+                              </Button>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </div>
         )
       case 'Order History':
         return (
-          <div>
+          <div className="shadow-md rounded-lg p-6">
             <h2 className="text-2xl font-bold mb-4">Order History</h2>
             <div className="mb-4">
               <Select onValueChange={handleSort} defaultValue={sortBy}>
@@ -516,55 +555,57 @@ export default function SellerDashboard() {
                 </SelectContent>
               </Select>
             </div>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Order ID</TableHead>
-                  <TableHead>Order Value</TableHead>
-                  <TableHead>Customer Name</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {sortedOrders.map((order) => (
-                  <TableRow key={order.id}>
-                    <TableCell>{order.id}</TableCell>
-                    <TableCell>${order.value.toFixed(2)}</TableCell>
-                    <TableCell>{order.customerName}</TableCell>
-                    <TableCell>{order.status}</TableCell>
-                    <TableCell>{order.date}</TableCell>
-                    <TableCell>
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button variant="outline">Details</Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Order Details</DialogTitle>
-                          </DialogHeader>
-                          <div className="mt-4">
-                            <p><strong>Order ID:</strong> {order.id}</p>
-                            <p><strong>Customer:</strong> {order.customerName}</p>
-                            <p><strong>Products:</strong> {order.products.join(', ')}</p>
-                            <p><strong>Order Value:</strong> ${order.value.toFixed(2)}</p>
-                            <p><strong>Status:</strong> {order.status}</p>
-                            <p><strong>Date:</strong> {order.date}</p>
-                            <p><strong>Address:</strong> {order.address}</p>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                    </TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Order ID</TableHead>
+                    <TableHead>Order Value</TableHead>
+                    <TableHead>Customer Name</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {sortedOrders.map((order) => (
+                    <TableRow key={order.id}>
+                      <TableCell>{order.id}</TableCell>
+                      <TableCell>${order.value.toFixed(2)}</TableCell>
+                      <TableCell>{order.customerName}</TableCell>
+                      <TableCell>{order.status}</TableCell>
+                      <TableCell>{order.date}</TableCell>
+                      <TableCell>
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="outline">Details</Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Order Details</DialogTitle>
+                            </DialogHeader>
+                            <div className="mt-4">
+                              <p><strong>Order ID:</strong> {order.id}</p>
+                              <p><strong>Customer:</strong> {order.customerName}</p>
+                              <p><strong>Products:</strong> {order.products.join(', ')}</p>
+                              <p><strong>Order Value:</strong> ${order.value.toFixed(2)}</p>
+                              <p><strong>Status:</strong> {order.status}</p>
+                              <p><strong>Date:</strong> {order.date}</p>
+                              <p><strong>Address:</strong> {order.address}</p>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </div>
         )
       case 'Product Listing':
         return (
-          <div>
+          <div className="shadow-md rounded-lg p-6">
             <h2 className="text-2xl font-bold mb-4">Product Listing</h2>
             <div className="flex justify-between mb-4">
               <Input
@@ -573,7 +614,7 @@ export default function SellerDashboard() {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="max-w-sm"
               />
-              <Dialog>
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
                   <Button onClick={() => {
                     setEditingProduct(null)
@@ -582,6 +623,7 @@ export default function SellerDashboard() {
                       price: 0,
                       stock: 0,
                       category: '',
+                      description: '',
                     })
                   }}>
                     Add New Product
@@ -639,7 +681,45 @@ export default function SellerDashboard() {
                           <FormItem>
                             <FormLabel>Category</FormLabel>
                             <FormControl>
+                              <Select onValueChange={field.onChange} value={field.value}>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select a category" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="Electronics">Electronics</SelectItem>
+                                  <SelectItem value="Home Appliances">Home Appliances</SelectItem>
+                                  <SelectItem value="Sports">Sports</SelectItem>
+                                  <SelectItem value="Toys">Toys</SelectItem>
+                                  <SelectItem value="Books">Books</SelectItem>
+                                  <SelectItem value="Clothing">Clothing</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={productForm.control}
+                        name="description"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Product Description</FormLabel>
+                            <FormControl>
                               <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={productForm.control}
+                        name="image"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Product Image</FormLabel>
+                            <FormControl>
+                              <Input type="file" accept="image/*" onChange={(e) => field.onChange(e.target.files?.[0])} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -651,101 +731,41 @@ export default function SellerDashboard() {
                 </DialogContent>
               </Dialog>
             </div>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>ID</TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Stock</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredProducts.map((product) => (
-                  <TableRow key={product.id}>
-                    <TableCell>{product.id}</TableCell>
-                    <TableCell>{product.name}</TableCell>
-                    <TableCell>${product.price.toFixed(2)}</TableCell>
-                    <TableCell>{product.stock}</TableCell>
-                    <TableCell>{product.category}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-2">
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button variant="outline" onClick={() => handleEditProduct(product)}>Edit</Button>
-                          </DialogTrigger>
-                          <DialogContent>
-                            <DialogHeader>
-                              <DialogTitle>Edit Product</DialogTitle>
-                            </DialogHeader>
-                            <Form {...productForm}>
-                              <form onSubmit={productForm.handleSubmit(onProductSubmit)} className="space-y-8">
-                                <FormField
-                                  control={productForm.control}
-                                  name="name"
-                                  render={({ field }) => (
-                                    <FormItem>
-                                      <FormLabel>Product Name</FormLabel>
-                                      <FormControl>
-                                        <Input {...field} />
-                                      </FormControl>
-                                      <FormMessage />
-                                    </FormItem>
-                                  )}
-                                />
-                                <FormField
-                                  control={productForm.control}
-                                  name="price"
-                                  render={({ field }) => (
-                                    <FormItem>
-                                      <FormLabel>Price</FormLabel>
-                                      <FormControl>
-                                        <Input type="number" {...field} onChange={e => field.onChange(parseFloat(e.target.value))} />
-                                      </FormControl>
-                                      <FormMessage />
-                                    </FormItem>
-                                  )}
-                                />
-                                <FormField
-                                  control={productForm.control}
-                                  name="stock"
-                                  render={({ field }) => (
-                                    <FormItem>
-                                      <FormLabel>Stock</FormLabel>
-                                      <FormControl>
-                                        <Input type="number" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))} />
-                                      </FormControl>
-                                      <FormMessage />
-                                    </FormItem>
-                                  )}
-                                />
-                                <FormField
-                                  control={productForm.control}
-                                  name="category"
-                                  render={({ field }) => (
-                                    <FormItem>
-                                      <FormLabel>Category</FormLabel>
-                                      <FormControl>
-                                        <Input {...field} />
-                                      </FormControl>
-                                      <FormMessage />
-                                    </FormItem>
-                                  )}
-                                />
-                                <Button type="submit">Update Product</Button>
-                              </form>
-                            </Form>
-                          </DialogContent>
-                        </Dialog>
-                        <Button variant="destructive" onClick={() => handleDeleteProduct(product.id)}>Delete</Button>
-                      </div>
-                    </TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>ID</TableHead>
+                    <TableHead>Image</TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Price</TableHead>
+                    <TableHead>Stock</TableHead>
+                    <TableHead>Category</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {filteredProducts.map((product) => (
+                    <TableRow key={product.id}>
+                      <TableCell>{product.id}</TableCell>
+                      <TableCell>
+                        <img src={product.image} alt={product.name} className="w-16 h-16 object-cover rounded" />
+                      </TableCell>
+                      <TableCell>{product.name}</TableCell>
+                      <TableCell>${product.price.toFixed(2)}</TableCell>
+                      <TableCell>{product.stock}</TableCell>
+                      <TableCell>{product.category}</TableCell>
+                      <TableCell>
+                        <div className="flex gap-2">
+                          <Button variant="outline" onClick={() => handleEditProduct(product)}>Edit</Button>
+                          <Button variant="destructive" onClick={() => handleDeleteProduct(product.id)}>Delete</Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </div>
         )
       default:
@@ -797,44 +817,46 @@ export default function SellerDashboard() {
             </div>
 
             <h2 className="text-2xl font-semibold mt-8 mb-4">Recent Orders</h2>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Order ID</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Customer Name</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {recentOrders.map((order) => (
-                  <TableRow key={order.id}>
-                    <TableCell>{order.id}</TableCell>
-                    <TableCell>${order.amount.toFixed(2)}</TableCell>
-                    <TableCell>{order.customerName}</TableCell>
-                    <TableCell>
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button variant="outline">Details</Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Order Details</DialogTitle>
-                          </DialogHeader>
-                          <div className="mt-4">
-                            <p><strong>Products:</strong> {orderDetails.products.join(', ')}</p>
-                            <p><strong>Order Value:</strong> ${orderDetails.orderValue.toFixed(2)}</p>
-                            <p><strong>Status:</strong> {orderDetails.status}</p>
-                            <p><strong>Address:</strong> {orderDetails.address}</p>
-                            <p><strong>Customer Name:</strong> {orderDetails.customerName}</p>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                    </TableCell>
+            <div className="shadow-md rounded-lg overflow-hidden">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Order ID</TableHead>
+                    <TableHead>Amount</TableHead>
+                    <TableHead>Customer Name</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {recentOrders.map((order) => (
+                    <TableRow key={order.id}>
+                      <TableCell>{order.id}</TableCell>
+                      <TableCell>${order.amount.toFixed(2)}</TableCell>
+                      <TableCell>{order.customerName}</TableCell>
+                      <TableCell>
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="outline">Details</Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Order Details</DialogTitle>
+                            </DialogHeader>
+                            <div className="mt-4">
+                              <p><strong>Products:</strong> {orderDetails.products.join(', ')}</p>
+                              <p><strong>Order Value:</strong> ${orderDetails.orderValue.toFixed(2)}</p>
+                              <p><strong>Status:</strong> {orderDetails.status}</p>
+                              <p><strong>Address:</strong> {orderDetails.address}</p>
+                              <p><strong>Customer Name:</strong> {orderDetails.customerName}</p>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </>
         )
     }
@@ -842,14 +864,19 @@ export default function SellerDashboard() {
 
   return (
     <div className="flex h-screen">
-      <div className="w-64 p-4">
-        <h2 className="text-xl font-bold mb-4">Seller Dashboard</h2>
+      <div className="w-64 shadow-md p-4">
+        <h2 className="text-xl font-bold mb-6 text-center">Seller Dashboard</h2>
         <nav>
           {['Overview', 'Personal Information', 'Product Reviews & Ratings', 'Order Refund & Exchange', 'Order History', 'Product Listing'].map((item) => (
             <button
               key={item}
               onClick={() => setActiveTab(item)}
-              className={`block w-full text-left py-2 px-4 rounded ${activeTab === item ? 'bg-blue-500 text-white' : 'hover:bg-white-200'}`}
+              className={cn(
+                "block w-full text-left py-2 px-4 rounded transition-colors duration-200",
+                activeTab === item
+                  ? "bg-blue-500 text-white"
+                  : "text-gray-700 hover:bg-gray-200"
+              )}
             >
               {item}
             </button>
@@ -857,9 +884,10 @@ export default function SellerDashboard() {
         </nav>
       </div>
 
-      <main className="flex-1 p-6 overflow-auto">
+      <main className="flex-1 p-8 overflow-auto">
         {renderContent()}
       </main>
+      <Toaster />
     </div>
   )
 }
