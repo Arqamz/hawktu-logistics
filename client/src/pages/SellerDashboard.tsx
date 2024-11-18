@@ -772,7 +772,9 @@ export default function SellerDashboard() {
         return (
           <>
             <h1 className="text-3xl font-bold mb-6">Overview</h1>
-            
+            <div className="mb-5 text-5xl font-bold">
+              <label>Welcome back HawkTU</label>
+            </div>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -863,31 +865,40 @@ export default function SellerDashboard() {
   }
 
   return (
-    <div className="flex h-screen">
-      <div className="w-64 shadow-md p-4">
-        <h2 className="text-xl font-bold mb-6 text-center">Seller Dashboard</h2>
-        <nav>
-          {['Overview', 'Personal Information', 'Product Reviews & Ratings', 'Order Refund & Exchange', 'Order History', 'Product Listing'].map((item) => (
-            <button
-              key={item}
-              onClick={() => setActiveTab(item)}
-              className={cn(
-                "block w-full text-left py-2 px-4 rounded transition-colors duration-200",
-                activeTab === item
-                  ? "bg-blue-500 text-white"
-                  : "text-gray-700 hover:bg-gray-200"
-              )}
-            >
-              {item}
-            </button>
-          ))}
-        </nav>
-      </div>
+    
+    <div className="flex flex-col h-screen">
+      <div className='flex'>
+        <div className="w-64 shadow-md p-4">
+          <h2 className="text-xl font-bold mb-6 text-center">Seller Dashboard</h2>
+          <nav>
+            {['Overview', 'Personal Information', 'Product Reviews & Ratings', 'Order Refund & Exchange', 'Order History', 'Product Listing'].map((item) => (
+              <button
+                key={item}
+                onClick={() => setActiveTab(item)}
+                className={cn(
+                  "block w-full text-left py-2 px-4 rounded transition-colors duration-200",
+                  activeTab === item
+                    ? "bg-blue-500 text-white"
+                    : "text-gray-700 hover:bg-gray-200"
+                )}
+              >
+                {item}
+              </button>
+            ))}
+          </nav>
+        </div>
 
-      <main className="flex-1 p-8 overflow-auto">
-        {renderContent()}
-      </main>
+        <main className="flex-1 p-8 overflow-auto">
+          {renderContent()}
+        </main>
+
       <Toaster />
+      
+
+      </div>
+      <footer className="footer text-center">
+        <p>&copy; 2024 HawkTU. All rights reserved.</p>
+      </footer>
     </div>
   )
 }
