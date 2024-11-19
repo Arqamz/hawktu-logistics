@@ -1,12 +1,13 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { BarChart, Users, Package, DollarSign, ImageIcon } from 'lucide-react'
+import { BarChart, Users, Package, DollarSign, ImageIcon, Bell, LogOut } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Link } from 'react-router-dom'
 import {
   Table,
   TableBody,
@@ -50,6 +51,14 @@ import {
 } from '@/components/ui/pagination'
 import { Toaster, toast } from 'sonner'
 import { cn } from '@/lib/utils'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 
 // Mock data (unchanged)
 const recentOrders = [
@@ -103,6 +112,13 @@ const mockProducts = Array.from({ length: 20 }, (_, i) => ({
   description: `This is description for PROD ${i + 1}`,
 }))
 
+// Mock notifications
+const mockNotifications = [
+  { id: 1, title: 'New Order', description: 'You have received a new order', time: '5 min ago', read: false },
+  { id: 2, title: 'Product Review', description: 'A new review has been posted for Product A', time: '1 hour ago', read: false },
+  { id: 3, title: 'Low Stock Alert', description: 'Product B is running low on stock', time: '2 hours ago', read: true },
+]
+
 // Schemas (unchanged)
 const userInfoSchema = z.object({
   username: z.string().min(3, { message: 'Username must be at least 3 characters' }),
@@ -150,6 +166,9 @@ export default function SellerDashboard() {
   const [editingProduct, setEditingProduct] = useState<typeof mockProducts[0] | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [selectedRequest, setSelectedRequest] = useState<typeof mockRequests[0] | null>(null)
+  const [notifications, setNotifications] = useState(mockNotifications)
+  const [isNotificationSheetOpen, setIsNotificationSheetOpen] = useState(false)
+  const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false);
 
   const reviewsPerPage = 10
 
@@ -183,6 +202,26 @@ export default function SellerDashboard() {
     },
   })
 
+  const handleLogout = () => {
+    setIsLogoutPopupOpen(false); // Close the popup
+  };
+  useEffect(() => {
+    // Simulate receiving a new notification
+    const timer = setTimeout(() => {
+      const newNotification = {
+        id: notifications.length + 1,
+        title: 'New Notification',
+        description: 'This is a new notification',
+        time: 'Just now',
+        read: false,
+      }
+      setNotifications(prev => [newNotification, ...prev])
+      toast.success('New notification received!')
+    }, 10000) // 10 seconds after component mount
+
+    return () => clearTimeout(timer)
+  }, [])
+
   function onUserInfoSubmit(values: z.infer<typeof userInfoSchema>) {
     console.log(values)
     setIsEditing(false)
@@ -203,7 +242,7 @@ export default function SellerDashboard() {
         req.id === id ? { ...req, status: action === 'Approve' ? 'Approved' : 'Rejected' } : req
       )
     )
-    toast.success(`Request ${action}${action.endsWith('e') ? 'd' : 'ed'}`);
+    toast.success(`Request ${action}${action.endsWith('e') ? 'd' : 'ed'}`)
     setIsDialogOpen(false)
     setSelectedRequest(null)
   }
@@ -268,6 +307,21 @@ export default function SellerDashboard() {
     setProducts(prevProducts => prevProducts.filter(p => p.id !== id))
     toast.success('Product Deleted successfully')
   }
+
+  const unreadNotificationsCount = notifications.filter(n => !n.read).length
+
+  const markNotificationAsRead = (id: number) => {
+    setNotifications(prevNotifications =>
+      prevNotifications.map(n =>
+        n.id === id ? { ...n, read: true } : n
+      )
+    )
+  }
+  const markAllAsRead = () => {
+    setNotifications(prevNotifications =>
+      prevNotifications.map(n => ({ ...n, read: true }))
+    );
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -863,11 +917,68 @@ export default function SellerDashboard() {
         )
     }
   }
-
   return (
-    
-    <div className="flex flex-col h-screen">
-      <div className='flex'>
+    <div className="flex flex-col min-h-screen">
+      <header className="shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+          <h1 className="text-2xl font-bold">HawkTU</h1>
+          <div className="flex items-center space-x-4">
+            {/* Notification Button */}
+            <Sheet open={isNotificationSheetOpen} onOpenChange={setIsNotificationSheetOpen}>
+              <SheetTrigger asChild>
+                <Button variant="outline" className="relative border-gray-500">
+                  <Bell className="h-5 w-5" />
+                  {unreadNotificationsCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                      {unreadNotificationsCount}
+                    </span>
+                  )}
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="h-full overflow-y-auto">
+                <SheetHeader>
+                  <SheetTitle>Notifications</SheetTitle>
+                  <SheetDescription>You have {unreadNotificationsCount} unread notifications</SheetDescription>
+                  {/* Mark All as Read Button */}
+                  {unreadNotificationsCount > 0 && (
+                    <Button
+                      variant="outline"
+                      onClick={markAllAsRead}
+                      className="mt-4 w-full border-gray-500 text-gray-700"
+                    >
+                      Mark All as Read
+                    </Button>
+                  )}
+                </SheetHeader>
+                <div className="mt-4 space-y-4">
+                  {notifications.map((notification) => (
+                    <div
+                      key={notification.id}
+                      className={`p-4 rounded-lg ${notification.read ? 'bg-gray-500' : 'bg-blue-500'}`}
+                      onClick={() => markNotificationAsRead(notification.id)}
+                    >
+                      <h3 className="font-semibold">{notification.title}</h3>
+                      <p className="text-sm text-gray-700">{notification.description}</p>
+                      <p className="text-xs text-white-500 mt-1">{notification.time}</p>
+                    </div>
+                  ))}
+                </div>
+              </SheetContent>
+            </Sheet>
+  
+            {/* Logout Button */}
+            <Button
+              variant="outline"
+              onClick={() => setIsLogoutPopupOpen(true)} // Open the logout popup
+              className="border-gray-500"
+            >
+              <LogOut className="h-5 w-5" />
+            </Button>
+          </div>
+        </div>
+      </header>
+  
+      <div className="flex flex-1">
         <div className="w-64 shadow-md p-4">
           <h2 className="text-xl font-bold mb-6 text-center">Seller Dashboard</h2>
           <nav>
@@ -875,30 +986,65 @@ export default function SellerDashboard() {
               <button
                 key={item}
                 onClick={() => setActiveTab(item)}
-                className={cn(
-                  "block w-full text-left py-2 px-4 rounded transition-colors duration-200",
+                className={`block w-full text-left py-2 px-4 rounded transition-colors duration-200 ${
                   activeTab === item
-                    ? "bg-blue-500 text-white"
-                    : "text-gray-700 hover:bg-gray-200"
-                )}
+                    ? 'bg-blue-500 text-white'
+                    : 'text-gray-700 hover:bg-gray-200'
+                }`}
               >
                 {item}
               </button>
             ))}
           </nav>
         </div>
-
+  
         <main className="flex-1 p-8 overflow-auto">
           {renderContent()}
         </main>
-
-      <Toaster />
-      
-
       </div>
-      <footer className="footer text-center">
-        <p>&copy; 2024 HawkTU. All rights reserved.</p>
+  
+      <footer className="py-4 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p>&copy; 2024 HawkTU. All rights reserved.</p>
+          <div className="mt-2">
+            <a className="text-blue-600 hover:underline mr-4">Privacy Policy</a>
+            <a className="text-blue-600 hover:underline mr-4">Terms of Service</a>
+            <a className="text-blue-600 hover:underline">Contact Us</a>
+          </div>
+        </div>
       </footer>
+  
+      {/* Logout Confirmation Popup */}
+      {isLogoutPopupOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-lg font-semibold">Are you sure you want to logout?</h2>
+            <div className="mt-4 flex justify-end space-x-4">
+              <Button
+                variant="outline"
+                onClick={() => setIsLogoutPopupOpen(false)} // Close the popup if cancelled
+                className="border-gray-400 text-gray-600"
+              >
+                Cancel
+              </Button>
+              <Link to="/landing">
+                <a>
+                  <Button
+                    variant="outline"
+                    onClick={handleLogout} // Optional, since redirection is handled by Link
+                    className="bg-red-500 text-white border-red-500"
+                  >
+                    Logout
+                  </Button>
+                </a>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+  
+      {/* Toaster for notifications */}
+      <Toaster />
     </div>
-  )
+  );
 }
