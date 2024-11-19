@@ -1,15 +1,15 @@
 "use client"
 
 import React, { useState, useEffect } from 'react'
-import { Bell, Globe, HelpCircle, User, LogOut } from 'lucide-react'
+import { LayoutDashboard,Store,Bell, Globe, HelpCircle, User, LogOut } from 'lucide-react'
 import { Toaster, toast } from 'sonner'
-import { Link } from 'react-router-dom'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { NotificationButton,useNotifications } from '@/components/notification-system'
+import { NotificationButton, useNotifications } from '@/components/notification-system'
+import { Link } from 'react-router-dom'
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
@@ -78,6 +78,20 @@ export default function UserDashboard() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             <h1 className="text-2xl font-bold">HawkTU</h1>
             <div className="flex items-center space-x-4">
+              <Link to="/shop">
+              <Button
+                variant="outline"
+                className="border-gray-500"
+              >
+                <Store className="h-5 w-5" />
+              </Button></Link>
+              <Link to="/customer-dashboard">
+              <Button
+                variant="outline"
+                className="border-gray-500"
+              >
+                <LayoutDashboard className="h-5 w-5" />
+              </Button></Link>
               <NotificationButton />
               <Button
                 variant="outline"
@@ -86,11 +100,11 @@ export default function UserDashboard() {
               >
                 <LogOut className="h-5 w-5" />
               </Button>
-              <Button onClick={()=>addNotification({
-      title: 'Action Completed',
-      description: 'Your action has been successfully completed.',
-      time: new Date().toLocaleTimeString(),
-    })}>Noti</Button>
+              <Button onClick={() => addNotification({
+                title: 'Action Completed',
+                description: 'Your action has been successfully completed.',
+                time: new Date().toLocaleTimeString(),
+              })}>Noti</Button>
             </div>
           </div>
         </header>
@@ -121,42 +135,39 @@ export default function UserDashboard() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <p>&copy; 2024 HawkTU. All rights reserved.</p>
             <div className="mt-2">
-              <a  className="text-blue-600 hover:underline mr-4">Privacy Policy</a>
+              <a className="text-blue-600 hover:underline mr-4">Privacy Policy</a>
               <a className="text-blue-600 hover:underline mr-4">Terms of Service</a>
-              <a  className="text-blue-600 hover:underline">Contact Us</a>
+              <a className="text-blue-600 hover:underline">Contact Us</a>
             </div>
           </div>
         </footer>
 
         {
-    isLogoutPopupOpen && (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-        <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-          <h2 className="text-lg font-semibold mb-4">Are you sure you want to logout?</h2>
-          <div className="flex justify-end space-x-4">
-            <Button
-              variant="outline"
-              onClick={() => setIsLogoutPopupOpen(false)}
-              className="border-gray-400 text-gray-600"
-            >
-              Cancel
-            </Button>
-            <Link to="/landing">
-              <a>
-                <Button
-                  variant="outline"
-                  onClick={handleLogout} // Optional, since redirection is handled by Link
-                  className="bg-red-500 text-white border-red-500"
-                >
-                  Logout
-                </Button>
-              </a>
-            </Link>
-          </div>
-        </div>
-      </div>
-    )
-  }
+          isLogoutPopupOpen && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+              <div className="p-6 rounded-lg shadow-lg w-96">
+                <h2 className="text-lg font-semibold mb-4">Are you sure you want to logout?</h2>
+                <div className="flex justify-end space-x-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsLogoutPopupOpen(false)}
+                    className="border-gray-400 text-gray-600"
+                  >
+                    Cancel
+                  </Button>
+                  <Link to="/landing">
+                      <Button
+                        variant="outline"
+                        className="bg-red-500 text-white border-red-500"
+                      >
+                        Logout
+                      </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )
+        }
       </div >
     </ErrorBoundary >
   )

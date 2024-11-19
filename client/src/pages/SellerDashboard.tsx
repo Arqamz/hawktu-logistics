@@ -50,16 +50,7 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination'
 import { Toaster, toast } from 'sonner'
-import { cn } from '@/lib/utils'
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
-
+import { NotificationButton ,useNotifications} from '@/components/notification-system'
 // Mock data (unchanged)
 const recentOrders = [
   { id: '001', amount: 120.50, customerName: 'John Doe' },
@@ -113,11 +104,7 @@ const mockProducts = Array.from({ length: 20 }, (_, i) => ({
 }))
 
 // Mock notifications
-const mockNotifications = [
-  { id: 1, title: 'New Order', description: 'You have received a new order', time: '5 min ago', read: false },
-  { id: 2, title: 'Product Review', description: 'A new review has been posted for Product A', time: '1 hour ago', read: false },
-  { id: 3, title: 'Low Stock Alert', description: 'Product B is running low on stock', time: '2 hours ago', read: true },
-]
+
 
 // Schemas (unchanged)
 const userInfoSchema = z.object({
@@ -166,9 +153,8 @@ export default function SellerDashboard() {
   const [editingProduct, setEditingProduct] = useState<typeof mockProducts[0] | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [selectedRequest, setSelectedRequest] = useState<typeof mockRequests[0] | null>(null)
-  const [notifications, setNotifications] = useState(mockNotifications)
-  const [isNotificationSheetOpen, setIsNotificationSheetOpen] = useState(false)
   const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false);
+  const { addNotification } = useNotifications();
 
   const reviewsPerPage = 10
 
@@ -202,25 +188,7 @@ export default function SellerDashboard() {
     },
   })
 
-  const handleLogout = () => {
-    setIsLogoutPopupOpen(false); // Close the popup
-  };
-  useEffect(() => {
-    // Simulate receiving a new notification
-    const timer = setTimeout(() => {
-      const newNotification = {
-        id: notifications.length + 1,
-        title: 'New Notification',
-        description: 'This is a new notification',
-        time: 'Just now',
-        read: false,
-      }
-      setNotifications(prev => [newNotification, ...prev])
-      toast.success('New notification received!')
-    }, 10000) // 10 seconds after component mount
 
-    return () => clearTimeout(timer)
-  }, [])
 
   function onUserInfoSubmit(values: z.infer<typeof userInfoSchema>) {
     console.log(values)
@@ -307,21 +275,6 @@ export default function SellerDashboard() {
     setProducts(prevProducts => prevProducts.filter(p => p.id !== id))
     toast.success('Product Deleted successfully')
   }
-
-  const unreadNotificationsCount = notifications.filter(n => !n.read).length
-
-  const markNotificationAsRead = (id: number) => {
-    setNotifications(prevNotifications =>
-      prevNotifications.map(n =>
-        n.id === id ? { ...n, read: true } : n
-      )
-    )
-  }
-  const markAllAsRead = () => {
-    setNotifications(prevNotifications =>
-      prevNotifications.map(n => ({ ...n, read: true }))
-    );
-  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -876,46 +829,46 @@ export default function SellerDashboard() {
                 <CardTitle>Recent Orders</CardTitle>
               </CardHeader>
               <CardContent>
-              <div className="shadow-md rounded-lg overflow-hidden">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Order ID</TableHead>
-                      <TableHead>Amount</TableHead>
-                      <TableHead>Customer Name</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {recentOrders.map((order) => (
-                      <TableRow key={order.id}>
-                        <TableCell>{order.id}</TableCell>
-                        <TableCell>${order.amount.toFixed(2)}</TableCell>
-                        <TableCell>{order.customerName}</TableCell>
-                        <TableCell>
-                          <Dialog>
-                            <DialogTrigger asChild>
-                              <Button variant="outline">Details</Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                              <DialogHeader>
-                                <DialogTitle>Order Details</DialogTitle>
-                              </DialogHeader>
-                              <div className="mt-4">
-                                <p><strong>Products:</strong> {orderDetails.products.join(', ')}</p>
-                                <p><strong>Order Value:</strong> ${orderDetails.orderValue.toFixed(2)}</p>
-                                <p><strong>Status:</strong> {orderDetails.status}</p>
-                                <p><strong>Address:</strong> {orderDetails.address}</p>
-                                <p><strong>Customer Name:</strong> {orderDetails.customerName}</p>
-                              </div>
-                            </DialogContent>
-                          </Dialog>
-                        </TableCell>
+                <div className="shadow-md rounded-lg overflow-hidden">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Order ID</TableHead>
+                        <TableHead>Amount</TableHead>
+                        <TableHead>Customer Name</TableHead>
+                        <TableHead>Actions</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
+                    </TableHeader>
+                    <TableBody>
+                      {recentOrders.map((order) => (
+                        <TableRow key={order.id}>
+                          <TableCell>{order.id}</TableCell>
+                          <TableCell>${order.amount.toFixed(2)}</TableCell>
+                          <TableCell>{order.customerName}</TableCell>
+                          <TableCell>
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <Button variant="outline">Details</Button>
+                              </DialogTrigger>
+                              <DialogContent>
+                                <DialogHeader>
+                                  <DialogTitle>Order Details</DialogTitle>
+                                </DialogHeader>
+                                <div className="mt-4">
+                                  <p><strong>Products:</strong> {orderDetails.products.join(', ')}</p>
+                                  <p><strong>Order Value:</strong> ${orderDetails.orderValue.toFixed(2)}</p>
+                                  <p><strong>Status:</strong> {orderDetails.status}</p>
+                                  <p><strong>Address:</strong> {orderDetails.address}</p>
+                                  <p><strong>Customer Name:</strong> {orderDetails.customerName}</p>
+                                </div>
+                              </DialogContent>
+                            </Dialog>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
               </CardContent>
             </Card>
           </>
@@ -928,49 +881,7 @@ export default function SellerDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold">HawkTU</h1>
           <div className="flex items-center space-x-4">
-            {/* Notification Button */}
-            <Sheet open={isNotificationSheetOpen} onOpenChange={setIsNotificationSheetOpen}>
-              <SheetTrigger asChild>
-                <Button variant="outline" className="relative border-gray-500">
-                  <Bell className="h-5 w-5" />
-                  {unreadNotificationsCount > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                      {unreadNotificationsCount}
-                    </span>
-                  )}
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="h-full overflow-y-auto">
-                <SheetHeader>
-                  <SheetTitle>Notifications</SheetTitle>
-                  <SheetDescription>You have {unreadNotificationsCount} unread notifications</SheetDescription>
-                  {/* Mark All as Read Button */}
-                  {unreadNotificationsCount > 0 && (
-                    <Button
-                      variant="outline"
-                      onClick={markAllAsRead}
-                      className="mt-4 w-full border-gray-500 text-gray-700"
-                    >
-                      Mark All as Read
-                    </Button>
-                  )}
-                </SheetHeader>
-                <div className="mt-4 space-y-4">
-                  {notifications.map((notification) => (
-                    <div
-                      key={notification.id}
-                      className={`p-4 rounded-lg ${notification.read ? 'bg-gray-500' : 'bg-blue-500'}`}
-                      onClick={() => markNotificationAsRead(notification.id)}
-                    >
-                      <h3 className="font-semibold">{notification.title}</h3>
-                      <p className="text-sm text-gray-700">{notification.description}</p>
-                      <p className="text-xs text-white-500 mt-1">{notification.time}</p>
-                    </div>
-                  ))}
-                </div>
-              </SheetContent>
-            </Sheet>
-
+           <NotificationButton />
             {/* Logout Button */}
             <Button
               variant="outline"
@@ -979,6 +890,11 @@ export default function SellerDashboard() {
             >
               <LogOut className="h-5 w-5" />
             </Button>
+            <Button onClick={() => addNotification({
+                title: 'Action Completed',
+                description: 'Your action has been successfully completed.',
+                time: new Date().toLocaleTimeString(),
+              })}>Noti</Button>
           </div>
         </div>
       </header>
@@ -1031,15 +947,12 @@ export default function SellerDashboard() {
                 Cancel
               </Button>
               <Link to="/landing">
-                <a>
                   <Button
                     variant="outline"
-                    onClick={handleLogout} // Optional, since redirection is handled by Link
                     className="bg-red-500 text-white border-red-500"
                   >
                     Logout
                   </Button>
-                </a>
               </Link>
             </div>
           </div>
