@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { BarChart, Users, Package, DollarSign, ImageIcon, Bell, LogOut } from 'lucide-react'
+import { BarChart, Users, Package, DollarSign, ImageIcon, Bell, LogOut, Car } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
@@ -328,7 +328,7 @@ export default function SellerDashboard() {
       case 'Personal Information':
         return (
           <div className="space-y-8 max-w-2xl mx-auto">
-            <div className="shadow-md rounded-lg p-6">
+            <Card className="shadow-md rounded-lg p-6">
               <h2 className="text-2xl font-bold mb-4">Personal Information</h2>
               <Form {...userInfoForm}>
                 <form onSubmit={userInfoForm.handleSubmit(onUserInfoSubmit)} className="space-y-4">
@@ -409,9 +409,9 @@ export default function SellerDashboard() {
                   )}
                 </form>
               </Form>
-            </div>
+            </Card>
 
-            <div className="shadow-md rounded-lg p-6">
+            <Card className="shadow-md rounded-lg p-6">
               <h2 className="text-2xl font-bold mb-4">Change Password</h2>
               <Form {...passwordForm}>
                 <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-4">
@@ -460,12 +460,12 @@ export default function SellerDashboard() {
                   <Button type="submit" className="w-full">Update Password</Button>
                 </form>
               </Form>
-            </div>
+            </Card>
           </div>
         )
       case 'Product Reviews & Ratings':
         return (
-          <div className="shadow-md rounded-lg p-6">
+          <Card className="shadow-md rounded-lg p-6">
             <h2 className="text-2xl font-bold mb-4">Product Reviews & Ratings</h2>
             <div className="overflow-x-auto">
               <Table>
@@ -518,11 +518,11 @@ export default function SellerDashboard() {
                 </PaginationItem>
               </PaginationContent>
             </Pagination>
-          </div>
+          </Card>
         )
       case 'Order Refund & Exchange':
         return (
-          <div className="shadow-md rounded-lg p-6">
+          <Card className="shadow-md rounded-lg p-6">
             <h2 className="text-2xl font-bold mb-4">Order Refund & Exchange</h2>
             <Select onValueChange={setRefundFilter} defaultValue={refundFilter}>
               <SelectTrigger className="w-[180px] mb-4">
@@ -592,11 +592,11 @@ export default function SellerDashboard() {
                 </TableBody>
               </Table>
             </div>
-          </div>
+          </Card>
         )
       case 'Order History':
         return (
-          <div className="shadow-md rounded-lg p-6">
+          <Card className="shadow-md rounded-lg p-6">
             <h2 className="text-2xl font-bold mb-4">Order History</h2>
             <div className="mb-4">
               <Select onValueChange={handleSort} defaultValue={sortBy}>
@@ -655,11 +655,11 @@ export default function SellerDashboard() {
                 </TableBody>
               </Table>
             </div>
-          </div>
+          </Card>
         )
       case 'Product Listing':
         return (
-          <div className="shadow-md rounded-lg p-6">
+          <Card className="shadow-md rounded-lg p-6">
             <h2 className="text-2xl font-bold mb-4">Product Listing</h2>
             <div className="flex justify-between mb-4">
               <Input
@@ -820,7 +820,7 @@ export default function SellerDashboard() {
                 </TableBody>
               </Table>
             </div>
-          </div>
+          </Card>
         )
       default:
         return (
@@ -871,55 +871,60 @@ export default function SellerDashboard() {
                 </CardContent>
               </Card>
             </div>
-
-            <h2 className="text-2xl font-semibold mt-8 mb-4">Recent Orders</h2>
-            <div className="shadow-md rounded-lg overflow-hidden">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Order ID</TableHead>
-                    <TableHead>Amount</TableHead>
-                    <TableHead>Customer Name</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {recentOrders.map((order) => (
-                    <TableRow key={order.id}>
-                      <TableCell>{order.id}</TableCell>
-                      <TableCell>${order.amount.toFixed(2)}</TableCell>
-                      <TableCell>{order.customerName}</TableCell>
-                      <TableCell>
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button variant="outline">Details</Button>
-                          </DialogTrigger>
-                          <DialogContent>
-                            <DialogHeader>
-                              <DialogTitle>Order Details</DialogTitle>
-                            </DialogHeader>
-                            <div className="mt-4">
-                              <p><strong>Products:</strong> {orderDetails.products.join(', ')}</p>
-                              <p><strong>Order Value:</strong> ${orderDetails.orderValue.toFixed(2)}</p>
-                              <p><strong>Status:</strong> {orderDetails.status}</p>
-                              <p><strong>Address:</strong> {orderDetails.address}</p>
-                              <p><strong>Customer Name:</strong> {orderDetails.customerName}</p>
-                            </div>
-                          </DialogContent>
-                        </Dialog>
-                      </TableCell>
+            <Card className='mt-8'>
+              <CardHeader>
+                <CardTitle>Recent Orders</CardTitle>
+              </CardHeader>
+              <CardContent>
+              <div className="shadow-md rounded-lg overflow-hidden">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Order ID</TableHead>
+                      <TableHead>Amount</TableHead>
+                      <TableHead>Customer Name</TableHead>
+                      <TableHead>Actions</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+                  </TableHeader>
+                  <TableBody>
+                    {recentOrders.map((order) => (
+                      <TableRow key={order.id}>
+                        <TableCell>{order.id}</TableCell>
+                        <TableCell>${order.amount.toFixed(2)}</TableCell>
+                        <TableCell>{order.customerName}</TableCell>
+                        <TableCell>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="outline">Details</Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle>Order Details</DialogTitle>
+                              </DialogHeader>
+                              <div className="mt-4">
+                                <p><strong>Products:</strong> {orderDetails.products.join(', ')}</p>
+                                <p><strong>Order Value:</strong> ${orderDetails.orderValue.toFixed(2)}</p>
+                                <p><strong>Status:</strong> {orderDetails.status}</p>
+                                <p><strong>Address:</strong> {orderDetails.address}</p>
+                                <p><strong>Customer Name:</strong> {orderDetails.customerName}</p>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+              </CardContent>
+            </Card>
           </>
         )
     }
   }
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="shadow-sm">
+      <header className="shadow-sm border-b-2">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold">HawkTU</h1>
           <div className="flex items-center space-x-4">
@@ -965,7 +970,7 @@ export default function SellerDashboard() {
                 </div>
               </SheetContent>
             </Sheet>
-  
+
             {/* Logout Button */}
             <Button
               variant="outline"
@@ -977,33 +982,31 @@ export default function SellerDashboard() {
           </div>
         </div>
       </header>
-  
-      <div className="flex flex-1">
-        <div className="w-64 shadow-md p-4">
+      <div className="flex flex-1 ">
+        <div className="w-64 shadow-md p-4 border-r-2">
           <h2 className="text-xl font-bold mb-6 text-center">Seller Dashboard</h2>
           <nav>
             {['Overview', 'Personal Information', 'Product Reviews & Ratings', 'Order Refund & Exchange', 'Order History', 'Product Listing'].map((item) => (
               <button
                 key={item}
                 onClick={() => setActiveTab(item)}
-                className={`block w-full text-left py-2 px-4 rounded transition-colors duration-200 ${
-                  activeTab === item
-                    ? 'bg-blue-500 text-white'
-                    : 'text-gray-700 hover:bg-gray-200'
-                }`}
+                className={`block w-full text-left py-2 px-4 rounded transition-colors duration-200 ${activeTab === item
+                  ? 'bg-blue-500 text-white'
+                  : 'text-gray-700 hover:bg-gray-200'
+                  }`}
               >
                 {item}
               </button>
             ))}
           </nav>
         </div>
-  
-        <main className="flex-1 p-8 overflow-auto">
+
+        <main className="flex-1 p-8 bg-gray-100/40 p-6 dark:bg-gray-800/40 overflow-auto">
           {renderContent()}
         </main>
       </div>
-  
-      <footer className="py-4 text-center">
+
+      <footer className="py-4 text-center border-t-2">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p>&copy; 2024 HawkTU. All rights reserved.</p>
           <div className="mt-2">
@@ -1013,7 +1016,7 @@ export default function SellerDashboard() {
           </div>
         </div>
       </footer>
-  
+
       {/* Logout Confirmation Popup */}
       {isLogoutPopupOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
@@ -1042,7 +1045,7 @@ export default function SellerDashboard() {
           </div>
         </div>
       )}
-  
+
       {/* Toaster for notifications */}
       <Toaster />
     </div>
