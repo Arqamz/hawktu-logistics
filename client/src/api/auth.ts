@@ -9,7 +9,7 @@ import { LoginRequest, LoginResponse } from '@/types/auth/LoginTypes';
 export const login = async (data: LoginRequest): Promise<LoginResponse> => {
   try {
     const response = await axiosInstance.post('/auth/login', data);
-    return response.data; // Return the response data
+    return response.data;
   } catch (error: unknown) {
     // Use axios.isAxiosError to check if the error is an AxiosError
     if (axios.isAxiosError(error)) {
