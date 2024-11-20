@@ -84,7 +84,7 @@ export const NotificationButton: React.FC = () => {
           )}
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-[400px] sm:w-[540px]">
+      <SheetContent side="right" className=" h-full overflow-auto w-[400px] sm:w-[540px]">
         <SheetHeader>
           <SheetTitle>Notifications</SheetTitle>
           <SheetDescription>You have {unreadCount} unread notifications</SheetDescription>
@@ -102,12 +102,12 @@ export const NotificationButton: React.FC = () => {
           {notifications.map((notification) => (
             <div
               key={notification.id}
-              className={`p-4 rounded-lg ${notification.read ? 'bg-gray-100' : 'bg-blue-100'} cursor-pointer`}
+              className={`p-4 rounded-lg ${notification.read ? 'bg-gray-500' : 'bg-blue-500'} cursor-pointer`}
               onClick={() => markAsRead(notification.id)}
             >
               <h3 className="font-semibold">{notification.title}</h3>
               <p className="text-sm text-gray-600">{notification.description}</p>
-              <p className="text-xs text-gray-500 mt-1">{notification.time}</p>
+              <p className="text-xs text-white-500 mt-1">{notification.time}</p>
             </div>
           ))}
         </div>
