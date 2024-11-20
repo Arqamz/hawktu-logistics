@@ -1,26 +1,13 @@
-import { Link } from 'react-router-dom'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
-
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
+import { Link } from 'react-router-dom';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { useLogin } from '@/hooks/useLogin';
 
 // Validation schema with zod
 const formSchema = z.object({
@@ -29,7 +16,7 @@ const formSchema = z.object({
     .string()
     .min(6, { message: 'Password must be at least 6 characters long' })
     .regex(/[a-zA-Z0-9]/, { message: 'Password must be alphanumeric' }),
-})
+});
 
 export default function LoginPreview() {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -38,28 +25,20 @@ export default function LoginPreview() {
       email: '',
       password: '',
     },
-  })
+  });
 
+  const { login, isLoading, error, isSuccess } = useLogin(); // Use the custom login hook
+
+  // Handle form submission
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      })
-
-      if (!response.ok) {
-        throw new Error('Login failed')
+      await login(values); // Call the login function from the custom hook
+      if (isSuccess) {
+        toast.success('Login successful!');
+        // Optionally, redirect to the dashboard or home page
       }
-
-      const data = await response.json()
-      toast.success(`Welcome, ${data.user.email}!`)
-      localStorage.setItem('token', data.token)
-    } catch (error) {
-      console.error('Login error', error)
-      toast.error('Invalid email or password. Please try again.')
+    } catch (err) {
+      toast.error(error || 'Login failed');
     }
   }
 
@@ -124,12 +103,13 @@ export default function LoginPreview() {
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" className="w-full">
-                    Login
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? 'Logging in...' : 'Login'}
                   </Button>
                 </div>
               </form>
             </Form>
+            {error && <p className="text-red-500 text-sm mt-2">{error}</p>} {/* Display error */}
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{' '}
               <Link to="/registration" className="underline">
@@ -140,5 +120,5 @@ export default function LoginPreview() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
