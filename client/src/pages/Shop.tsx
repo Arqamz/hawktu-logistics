@@ -4,13 +4,18 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { X, Star, ShoppingCart, User, ChevronLeft, ChevronRight, Plus, Minus } from 'lucide-react'
+import {  Star, ShoppingCart, ChevronLeft, ChevronRight, Plus, Minus } from 'lucide-react'
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { NotificationButton, useNotifications } from '@/components/notification-system'
+import { LayoutDashboard,Bell, User, LogOut } from 'lucide-react'
+import { Link } from "react-router-dom"
+
+
+
 
 // Mock data (unchanged)
 const categories = ["All", "Electronics", "Clothing", "Books", "Home & Garden"]
@@ -41,6 +46,8 @@ export default function AppComponent() {
   const [currentPage, setCurrentPage] = useState(1)
   const [priceRange, setPriceRange] = useState([0, 100])
   const [ratingRange, setRatingRange] = useState([1, 5])
+  const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false)
+  const { addNotification } = useNotifications();
   const itemsPerPage = 20
 
   const scrollToTop = () => {
@@ -130,15 +137,41 @@ export default function AppComponent() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
-      <header className="flex justify-center items-center p-4 border-b">
-        <img src="/placeholder.svg" alt="Logo" className="w-24 h-12" />
-        <nav className="ml-8">
-          <Button variant="link">Home</Button>
-          <Button variant="link">Products</Button>
-          <Button variant="link">About</Button>
-          <Button variant="link">Contact</Button>
-        </nav>
-      </header>
+      <header className="shadow-sm border-b-2">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <h1 className="text-2xl font-bold">HawkTU</h1>
+            <div className="flex items-center space-x-4">
+              
+              <Link to="/customer-dashboard">
+              <Button
+                variant="outline"
+                className="border-gray-500"
+              >
+                <LayoutDashboard className="h-5 w-5" />
+              </Button></Link>
+              <Link to="/customer-info">
+              <Button
+                variant="outline"
+                className="border-gray-500"
+              >
+                <User className="h-5 w-5" />
+              </Button></Link>
+              <NotificationButton />
+              <Button
+                variant="outline"
+                onClick={() => setIsLogoutPopupOpen(true)}
+                className="border-gray-500"
+              >
+                <LogOut className="h-5 w-5" />
+              </Button>
+              <Button onClick={() => addNotification({
+                title: 'Action Completed',
+                description: 'Your action has been successfully completed.',
+                time: new Date().toLocaleTimeString(),
+              })}>Noti</Button>
+            </div>
+          </div>
+        </header>
 
       <div className="flex flex-1">
         <div className="w-64 p-4 border-r">
@@ -367,10 +400,6 @@ export default function AppComponent() {
                   </div>
                 </PopoverContent>
               </Popover>
-              <Button variant="outline">
-                <User className="mr-2 h-4 w-4" />
-                Profile
-              </Button>
             </div>
           </div>
 
@@ -542,6 +571,32 @@ export default function AppComponent() {
           </div>
         </div>
       </div>
+      {
+          isLogoutPopupOpen && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+              <div className="p-6 rounded-lg shadow-lg w-96">
+                <h2 className="text-lg font-semibold mb-4">Are you sure you want to logout?</h2>
+                <div className="flex justify-end space-x-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsLogoutPopupOpen(false)}
+                    className="border-gray-400 text-gray-600"
+                  >
+                    Cancel
+                  </Button>
+                  <Link to="/landing">
+                      <Button
+                        variant="outline"
+                        className="bg-red-500 text-white border-red-500"
+                      >
+                        Logout
+                      </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )
+        }
     </div>
   )
 }

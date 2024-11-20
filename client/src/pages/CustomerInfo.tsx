@@ -1,15 +1,15 @@
 "use client"
 
 import React, { useState, useEffect } from 'react'
-import { Bell, Globe, HelpCircle, User } from 'lucide-react'
+import { LayoutDashboard,Store,Bell, Globe, HelpCircle, User, LogOut } from 'lucide-react'
 import { Toaster, toast } from 'sonner'
-
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { NotificationButton, useNotifications } from '@/components/notification-system'
+import { Link } from 'react-router-dom'
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
@@ -44,7 +44,8 @@ const navItems = [
 
 export default function UserDashboard() {
   const [activePage, setActivePage] = useState("Edit Profile")
-
+  const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false)
+  const { addNotification } = useNotifications();
   useEffect(() => {
     console.log('UserDashboard mounted')
   }, [])
@@ -64,32 +65,111 @@ export default function UserDashboard() {
     }
   }
 
+  const handleLogout = () => {
+    setIsLogoutPopupOpen(false)
+    // Add logout logic here
+  }
+
   return (
     <ErrorBoundary>
-      <div className="flex min-h-screen">
+      <div className="flex flex-col min-h-screen">
         <Toaster />
-        <nav className="w-64 shrink-0 border-r bg-white p-6 dark:border-gray-800 dark:bg-gray-950">
-          <div className="space-y-6">
-            {navItems.map((item) => (
-              <button
-                key={item.name}
-                className={`flex items-center gap-2 font-medium w-full text-left px-2 py-1 rounded ${
-                  activePage === item.name ? 'text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/40' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50'
-                }`}
-                onClick={() => setActivePage(item.name)}
+        <header className="shadow-sm border-b-2">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <h1 className="text-2xl font-bold">HawkTU</h1>
+            <div className="flex items-center space-x-4">
+              <Link to="/shop">
+              <Button
+                variant="outline"
+                className="border-gray-500"
               >
-                <item.icon className="h-5 w-5" />
-                <span>{item.name}</span>
-              </button>
-            ))}
+                <Store className="h-5 w-5" />
+              </Button></Link>
+              <Link to="/customer-dashboard">
+              <Button
+                variant="outline"
+                className="border-gray-500"
+              >
+                <LayoutDashboard className="h-5 w-5" />
+              </Button></Link>
+              <NotificationButton />
+              <Button
+                variant="outline"
+                onClick={() => setIsLogoutPopupOpen(true)}
+                className="border-gray-500"
+              >
+                <LogOut className="h-5 w-5" />
+              </Button>
+              <Button onClick={() => addNotification({
+                title: 'Action Completed',
+                description: 'Your action has been successfully completed.',
+                time: new Date().toLocaleTimeString(),
+              })}>Noti</Button>
+            </div>
           </div>
-        </nav>
-        <main className="flex-1 bg-gray-100/40 p-6 dark:bg-gray-800/40 md:p-10">
-          <h1 className="text-2xl font-bold mb-6">{activePage}</h1>
-          {renderPageContent()}
-        </main>
-      </div>
-    </ErrorBoundary>
+        </header>
+
+        <div className="flex flex-1">
+          <nav className="w-64 shrink-0 border-r  p-6  ">
+            <div className="space-y-6">
+              {navItems.map((item) => (
+                <button
+                  key={item.name}
+                  className={`flex items-center gap-2 font-medium w-full text-left px-2 py-1 rounded ${activePage === item.name ? 'text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/40' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50'
+                    }`}
+                  onClick={() => setActivePage(item.name)}
+                >
+                  <item.icon className="h-5 w-5" />
+                  <span>{item.name}</span>
+                </button>
+              ))}
+            </div>
+          </nav>
+          <main className="flex-1 bg-gray-100/40 p-6 dark:bg-gray-800/40 md:p-10">
+            <h1 className="text-2xl font-bold mb-6">{activePage}</h1>
+            {renderPageContent()}
+          </main>
+        </div>
+
+        <footer className=" py-4 text-center border-t-2">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p>&copy; 2024 HawkTU. All rights reserved.</p>
+            <div className="mt-2">
+              <a className="text-blue-600 hover:underline mr-4">Privacy Policy</a>
+              <a className="text-blue-600 hover:underline mr-4">Terms of Service</a>
+              <a className="text-blue-600 hover:underline">Contact Us</a>
+            </div>
+          </div>
+        </footer>
+
+        {
+          isLogoutPopupOpen && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+              <div className="p-6 rounded-lg shadow-lg w-96">
+                <h2 className="text-lg font-semibold mb-4">Are you sure you want to logout?</h2>
+                <div className="flex justify-end space-x-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsLogoutPopupOpen(false)}
+                    className="border-gray-400 text-gray-600"
+                  >
+                    Cancel
+                  </Button>
+                  <Link to="/landing">
+                      <Button
+                        variant="outline"
+                        className="bg-red-500 text-white border-red-500"
+                      >
+                        Logout
+                      </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )
+        }
+      </div >
+    </ErrorBoundary >
   )
 }
 
@@ -307,8 +387,8 @@ function NotificationsPage() {
                   {notificationType === "Order Confirmations" && "Receive notifications for order confirmations and updates."}
                 </p>
               </div>
-              <Button 
-                variant={isEnabled ? "destructive" : "outline"} 
+              <Button
+                variant={isEnabled ? "destructive" : "outline"}
                 onClick={() => handleToggle(notificationType)}
               >
                 {isEnabled ? "Disable" : "Enable"}

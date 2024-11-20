@@ -6,13 +6,12 @@ import Dashboard from "./pages/Dashboard";
 import Empty from "./pages/Empty";
 import Sample from "./pages/Sample";
 import Login from "./pages/Login";
-import ClientRegistration from "./pages/ClientRegistration";
-import SellerRegistration from "./pages/SellerRegistration";
-import Landing from "./pages/LandingPage";
+import Registration from "./pages/Registration";
 import CustomerInformation from "./pages/CustomerInfo";
-import Registration from "./pages/RegisterLanding";
+import Landing from "./pages/Landing";
 import Shopping from "./pages/Shop";
 import CustomerDashboard from "./pages/CustomerDashboard";
+import SellerDashboard from "./pages/SellerDashboard"
 import Checkout from "./pages/Checkout";
 export const router = createBrowserRouter(
   [
@@ -21,7 +20,7 @@ export const router = createBrowserRouter(
       element: <Applayout />,
       children: [
         {
-          path: "/dddashboard",
+          path: "/dashboard",
           element: <Dashboard />,
         },
         {
@@ -38,19 +37,12 @@ export const router = createBrowserRouter(
       path: "/login",
       element: <Login />,
     },
-    {
-        path: "/client-registration",
-        element: <ClientRegistration />,
-      },{
-        path: "/seller-registration",
-        element: <SellerRegistration />,
-      },
-      {
+     {
         path: "/registration",
         element: <Registration />,
       },
       {
-        path: "",
+        path: "/landing",
         element: <Landing />,
       },
       {
@@ -68,6 +60,10 @@ export const router = createBrowserRouter(
       {
         path: "/customer-dashboard",
         element: <CustomerDashboard />,
+      },
+      {
+        path: "/seller-dashboard",
+        element:<SellerDashboard/>,
       },
       {
         path: "/checkout",

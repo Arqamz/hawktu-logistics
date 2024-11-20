@@ -41,15 +41,7 @@ export const mainMenu: NavItemWithChildren[] = [
         to: '/login',
     },
     {
-        title: 'Client Registration',
-        to: '/client-registration',
-    },
-    {
-        title: 'Seller Registration',
-        to: '/seller-registration',
-    },
-    {
-        title: 'Register Landing',
+        title: 'Registration',
         to: '/registration',
     },
     {
@@ -65,8 +57,12 @@ export const mainMenu: NavItemWithChildren[] = [
         to:'/shop',
     },
     {
-        title: 'CustomerDashboard',
+        title: 'Customer Dashboard',
         to: '/customer-dashboard',
+    },
+    {
+        title: 'Seller Dashboard',
+        to: '/seller-dashboard',
     },
 ]
 

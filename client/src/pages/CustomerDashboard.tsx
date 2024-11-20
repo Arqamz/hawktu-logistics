@@ -4,16 +4,20 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { User, Store, Bell, LogOut } from 'lucide-react'
+import { NotificationButton, useNotifications } from '@/components/notification-system'
+import { Link } from 'react-router-dom'
 
 export default function CustomerDashboard() {
   const [currentPage, setCurrentPage] = useState('dashboard')
   const [walletBalance, setWalletBalance] = useState(250)
   const [loyaltyPoints, setLoyaltyPoints] = useState(1250)
-
+  const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false)
+  const { addNotification } = useNotifications();
   const renderPage = () => {
-    switch(currentPage) {
+    switch (currentPage) {
       case 'dashboard':
-        return <DashboardPage walletBalance={walletBalance} loyaltyPoints={loyaltyPoints} setCurrentPage={setCurrentPage}/>
+        return <DashboardPage walletBalance={walletBalance} loyaltyPoints={loyaltyPoints} setCurrentPage={setCurrentPage} />
       case 'loyalty-points':
         return <LoyaltyPointsPage loyaltyPoints={loyaltyPoints} setLoyaltyPoints={setLoyaltyPoints} />
       case 'wallet-recharge':
@@ -26,29 +30,92 @@ export default function CustomerDashboard() {
   }
 
   return (
-    <div className="flex min-h-screen">
-      <nav className="w-64 shrink-0 border-r bg-white p-6 dark:border-gray-800 dark:bg-gray-950">
-        <div className="space-y-6">
-          <NavItem icon={<HomeIcon />} label="Dashboard" onClick={() => setCurrentPage('dashboard')} active={currentPage === 'dashboard'} />
-          <NavItem icon={<StarIcon />} label="Loyalty Points" onClick={() => setCurrentPage('loyalty-points')} active={currentPage === 'loyalty-points'} />
-          <NavItem icon={<WalletIcon />} label="Wallet Recharge" onClick={() => setCurrentPage('wallet-recharge')} active={currentPage === 'wallet-recharge'} />
-          <NavItem icon={<ClipboardListIcon />} label="Order History" onClick={() => setCurrentPage('order-history')} active={currentPage === 'order-history'} />
+
+    <div className="flex flex-col min-h-screen">
+      <header className="shadow-sm border-b-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+          <h1 className="text-2xl font-bold">HawkTU</h1>
+          <div className="flex items-center space-x-4">
+            <Link to="/shop">
+              <Button
+                variant="outline"
+                className="border-gray-500"
+              >
+                <Store className="h-5 w-5" />
+              </Button></Link>
+            <Link to="/customer-info">
+              <Button
+                variant="outline"
+                className="border-gray-500"
+              >
+                <User className="h-5 w-5" />
+              </Button></Link>
+            <NotificationButton />
+            <Button
+              variant="outline"
+              onClick={() => setIsLogoutPopupOpen(true)}
+              className="border-gray-500"
+            >
+              <LogOut className="h-5 w-5" />
+            </Button>
+            <Button onClick={() => addNotification({
+              title: 'Action Completed',
+              description: 'Your action has been successfully completed.',
+              time: new Date().toLocaleTimeString(),
+            })}>Noti</Button>
+          </div>
         </div>
-      </nav>
-      <main className="flex-1 bg-gray-100/40 p-6 dark:bg-gray-800/40 md:p-10">
-        {renderPage()}
-      </main>
+      </header>
+      <div className='flex flex-1'>
+        <nav className="w-64 shrink-0 border-r bg-white p-6 dark:border-gray-800 dark:bg-gray-950">
+          <div className="space-y-6">
+            <NavItem icon={<HomeIcon />} label="Dashboard" onClick={() => setCurrentPage('dashboard')} active={currentPage === 'dashboard'} />
+            <NavItem icon={<StarIcon />} label="Loyalty Points" onClick={() => setCurrentPage('loyalty-points')} active={currentPage === 'loyalty-points'} />
+            <NavItem icon={<WalletIcon />} label="Wallet Recharge" onClick={() => setCurrentPage('wallet-recharge')} active={currentPage === 'wallet-recharge'} />
+            <NavItem icon={<ClipboardListIcon />} label="Order History" onClick={() => setCurrentPage('order-history')} active={currentPage === 'order-history'} />
+          </div>
+        </nav>
+        <main className="flex-1 bg-gray-100/40 p-6 dark:bg-gray-800/40 md:p-10">
+
+          {renderPage()}
+        </main>
+      </div>
+      {
+        isLogoutPopupOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="p-6 rounded-lg shadow-lg w-96">
+              <h2 className="text-lg font-semibold mb-4">Are you sure you want to logout?</h2>
+              <div className="flex justify-end space-x-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsLogoutPopupOpen(false)}
+                  className="border-gray-400 text-gray-600"
+                >
+                  Cancel
+                </Button>
+                <Link to="/landing">
+                  <Button
+                    variant="outline"
+                    className="bg-red-500 text-white border-red-500"
+                  >
+                    Logout
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        )
+      }
     </div>
   )
 }
 
 function NavItem({ icon, label, onClick, active }) {
   return (
-    <button 
-      onClick={onClick} 
-      className={`flex items-center gap-2 font-medium w-full text-left px-2 py-1 rounded ${
-        active ? 'text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/40' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50'
-      }`}
+    <button
+      onClick={onClick}
+      className={`flex items-center gap-2 font-medium w-full text-left px-2 py-1 rounded ${active ? 'text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/40' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50'
+        }`}
     >
       {icon}
       {label}
@@ -57,75 +124,75 @@ function NavItem({ icon, label, onClick, active }) {
 }
 
 function DashboardPage({ walletBalance, loyaltyPoints, setCurrentPage }) {
-    const recentOrders = [
-      {
-        orderId: "12345",
-        date: "2023-05-15",
-        products: [
-          { name: "Product A", status: "Delivered" },
-          { name: "Product B", status: "Shipped" },
-        ],
-      },
-      {
-        orderId: "12346",
-        date: "2023-06-01",
-        products: [{ name: "Product C", status: "Processing" }],
-      },
-      {
-        orderId: "12347",
-        date: "2023-06-10",
-        products: [
-          { name: "Product D", status: "Delivered" },
-          { name: "Product E", status: "Delivered" },
-          { name: "Product F", status: "Cancelled" },
-        ],
-      },
-    ];
-  
-    return (
-      <div className="mx-auto max-w-4xl space-y-6">
-        <div className="grid gap-6 md:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Wallet Balance</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold">${walletBalance.toFixed(2)}</p>
-              <Button
-                className="mt-4"
-                onClick={() => setCurrentPage("wallet-recharge")} 
-              >
-                Recharge Wallet
-              </Button>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Loyalty Points</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold">{loyaltyPoints} pts</p>
-            </CardContent>
-          </Card>
-        </div>
+  const recentOrders = [
+    {
+      orderId: "12345",
+      date: "2023-05-15",
+      products: [
+        { name: "Product A", status: "Delivered" },
+        { name: "Product B", status: "Shipped" },
+      ],
+    },
+    {
+      orderId: "12346",
+      date: "2023-06-01",
+      products: [{ name: "Product C", status: "Processing" }],
+    },
+    {
+      orderId: "12347",
+      date: "2023-06-10",
+      products: [
+        { name: "Product D", status: "Delivered" },
+        { name: "Product E", status: "Delivered" },
+        { name: "Product F", status: "Cancelled" },
+      ],
+    },
+  ];
+
+  return (
+    <div className="mx-auto max-w-4xl space-y-6">
+      <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Recent Orders</CardTitle>
+            <CardTitle>Wallet Balance</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-6">
-              {recentOrders.map((order) => (
-                <OrderItem key={order.orderId} order={order} />
-              ))}
-            </div>
+            <p className="text-3xl font-bold">${walletBalance.toFixed(2)}</p>
+            <Button
+              className="mt-4"
+              onClick={() => setCurrentPage("wallet-recharge")}
+            >
+              Recharge Wallet
+            </Button>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Loyalty Points</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-3xl font-bold">{loyaltyPoints} pts</p>
           </CardContent>
         </Card>
       </div>
-    );
-  }
-  
-  
-  
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Orders</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-6">
+            {recentOrders.map((order) => (
+              <OrderItem key={order.orderId} order={order} />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+
+
 
 
 function OrderItem({ order }) {
@@ -191,20 +258,20 @@ function WalletRechargePage({ walletBalance, setWalletBalance }) {
           <form onSubmit={handleRecharge} className="space-y-4">
             <div>
               <Label htmlFor="recharge-amount">Recharge Amount</Label>
-              <Input 
-                id="recharge-amount" 
-                type="number" 
-                value={rechargeAmount} 
+              <Input
+                id="recharge-amount"
+                type="number"
+                value={rechargeAmount}
                 onChange={(e) => setRechargeAmount(e.target.value)}
                 placeholder="Enter amount"
               />
             </div>
             <div>
               <Label htmlFor="card-number">Card Number</Label>
-              <Input 
-                id="card-number" 
-                type="text" 
-                value={cardNumber} 
+              <Input
+                id="card-number"
+                type="text"
+                value={cardNumber}
                 onChange={(e) => setCardNumber(e.target.value)}
                 placeholder="1234 5678 9012 3456"
               />
@@ -212,20 +279,20 @@ function WalletRechargePage({ walletBalance, setWalletBalance }) {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="expiry-date">Expiry Date</Label>
-                <Input 
-                  id="expiry-date" 
-                  type="text" 
-                  value={expiryDate} 
+                <Input
+                  id="expiry-date"
+                  type="text"
+                  value={expiryDate}
                   onChange={(e) => setExpiryDate(e.target.value)}
                   placeholder="MM/YY"
                 />
               </div>
               <div>
                 <Label htmlFor="cvv">CVV</Label>
-                <Input 
-                  id="cvv" 
-                  type="text" 
-                  value={cvv} 
+                <Input
+                  id="cvv"
+                  type="text"
+                  value={cvv}
                   onChange={(e) => setCvv(e.target.value)}
                   placeholder="123"
                 />
