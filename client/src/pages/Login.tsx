@@ -35,7 +35,8 @@ export default function LoginPreview() {
       await login(values);
       if (isSuccess) {
         toast.success('Login successful!');
-        // Redirect to the dashboard or home page here
+        // Redirect to shop
+        window.location.href = '/shop';
       }
     } catch (err) {
       toast.error(error || 'Login failed');
