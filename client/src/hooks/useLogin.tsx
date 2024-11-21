@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { login } from '@/api/auth'; // Import your API login function
+import { login } from '@/api/auth';
 import { LoginRequest } from '@/types/auth/LoginTypes';
-import axios, { AxiosError } from 'axios'; // Import AxiosError if using Axios
+import axios, { AxiosError } from 'axios';
 
 export const useLogin = () => {
   // React state to track loading, error, and any other states

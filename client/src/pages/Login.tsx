@@ -27,15 +27,15 @@ export default function LoginPreview() {
     },
   });
 
-  const { login, isLoading, error, isSuccess } = useLogin(); // Use the custom login hook
+  const { login, isLoading, error, isSuccess } = useLogin();
 
   // Handle form submission
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await login(values); // Call the login function from the custom hook
+      await login(values);
       if (isSuccess) {
         toast.success('Login successful!');
-        // Optionally, redirect to the dashboard or home page
+        // Redirect to the dashboard or home page here
       }
     } catch (err) {
       toast.error(error || 'Login failed');
