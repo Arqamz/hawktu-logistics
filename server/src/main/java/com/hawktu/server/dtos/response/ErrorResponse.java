@@ -1,4 +1,4 @@
-package com.hawktu.server.dto;
+package com.hawktu.server.dto.response;
 
 public class ErrorResponse {
     private String message;
