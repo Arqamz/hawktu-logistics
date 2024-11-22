@@ -1,10 +1,10 @@
 package com.hawktu.server.controller;
 
-import com.hawktu.server.dto.request.*;
-import com.hawktu.server.dto.response.*;
+import com.hawktu.server.dto.api.request.*;
+import com.hawktu.server.dto.api.response.*;
 import com.hawktu.server.model.User;
 import com.hawktu.server.repository.UserRepository;
-import com.hawktu.server.util.JwtUtil;
+import com.hawktu.server.JwtUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +41,7 @@ public class AuthController {
             }
             
             User user = userOptional.get();
-            if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
+            if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
                 logger.error("Password mismatch for user: {}", user.getEmail());
                 return ResponseEntity.status(401).body(new ErrorResponse("Invalid email or password", 401));
             }
@@ -55,7 +55,7 @@ public class AuthController {
                 accessToken,
                 refreshToken,
                 user.getEmail(),
-                user.getName()
+                user.getUsername()
             );
             
             return ResponseEntity.ok(response);

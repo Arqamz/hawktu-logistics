@@ -1,4 +1,4 @@
-package com.hawktu.server.util;
+package com.hawktu.server;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
