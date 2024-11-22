@@ -19,7 +19,7 @@ public class JwtUtil {
     private final SecretKey secretKey = Jwts.SIG.HS512.key().build();
     
     // Different expiration times for access and refresh tokens
-    private final long accessTokenExpiration = 900000; // 15 minutes
+    private final long accessTokenExpiration = 86400000; // 24 hours
     private final long refreshTokenExpiration = 604800000; // 7 days
 
     // Token type claim
