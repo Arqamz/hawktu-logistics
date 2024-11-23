@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserFactory {
-    public User createUser(
+    static public User createUser(
         String username, 
         String password, 
         String email, 
@@ -26,24 +26,4 @@ public class UserFactory {
             .build();
     }
 
-    public User createUserWithWalletBalance(
-        String username, 
-        String password, 
-        String email, 
-        String firstName, 
-        String lastName, 
-        String phoneNumber,
-        Double initialBalance
-    ) {
-        return new UserBuilder()
-            .username(username)
-            .password(password)
-            .email(email)
-            .firstName(firstName)
-            .lastName(lastName)
-            .phoneNumber(phoneNumber)
-            .walletBalance(initialBalance)
-            .loyaltyPoints(0)
-            .build();
-    }
 }

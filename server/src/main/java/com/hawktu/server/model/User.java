@@ -3,8 +3,7 @@ package com.hawktu.server.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import com.hawktu.server.interfaces.IUser;
-import java.time.LocalDateTime;
-import java.util.List;
+
 
 @Entity
 @Table(name = "users")
@@ -62,15 +61,7 @@ public class User implements IUser {
     }
 
     // Implementing IUser interface methods
-    @Override
-    public Long getId() {
-        return id;
-    }
 
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     @Override
     public String getUsername() {
