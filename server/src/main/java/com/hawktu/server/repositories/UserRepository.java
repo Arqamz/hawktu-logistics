@@ -1,6 +1,6 @@
-package com.hawktu.server.repository;
+package com.hawktu.server.repositories;
 
-import com.hawktu.server.model.User;
+import com.hawktu.server.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

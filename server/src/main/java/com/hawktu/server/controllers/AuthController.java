@@ -1,10 +1,10 @@
-package com.hawktu.server.controller;
+package com.hawktu.server.controllers;
 
-import com.hawktu.server.dto.api.request.*;
-import com.hawktu.server.dto.api.response.*;
-import com.hawktu.server.model.User;
-import com.hawktu.server.repository.UserRepository;
-import com.hawktu.server.JwtUtil;
+import com.hawktu.server.dtos.request.*;
+import com.hawktu.server.dtos.response.*;
+import com.hawktu.server.models.User;
+import com.hawktu.server.repositories.UserRepository;
+import com.hawktu.server.utils.JwtUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;

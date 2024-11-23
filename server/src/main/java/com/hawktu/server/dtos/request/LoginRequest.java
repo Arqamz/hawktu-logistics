@@ -1,4 +1,4 @@
-package com.hawktu.server.dto.api.request;
+package com.hawktu.server.dtos.request;
 
 public class LoginRequest {
     private String email;

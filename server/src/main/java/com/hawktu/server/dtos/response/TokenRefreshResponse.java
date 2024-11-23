@@ -1,4 +1,4 @@
-package com.hawktu.server.dto.api.response;
+package com.hawktu.server.dtos.response;
 
 public class TokenRefreshResponse {
     private String accessToken;

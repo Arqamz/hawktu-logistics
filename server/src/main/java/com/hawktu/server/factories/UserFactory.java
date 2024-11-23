@@ -1,7 +1,7 @@
-package com.hawktu.server.factory;
+package com.hawktu.server.factories;
 
-import com.hawktu.server.builder.UserBuilder;
-import com.hawktu.server.model.User;
+import com.hawktu.server.builders.UserBuilder;
+import com.hawktu.server.models.User;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,5 +25,4 @@ public class UserFactory {
             .loyaltyPoints(0)
             .build();
     }
-
 }

@@ -1,9 +1,8 @@
-package com.hawktu.server.model;
+package com.hawktu.server.models;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import com.hawktu.server.interfaces.IUser;
-
 
 @Entity
 @Table(name = "users")

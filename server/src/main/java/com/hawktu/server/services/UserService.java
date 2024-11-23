@@ -1,9 +1,8 @@
-package com.hawktu.server.service;
+package com.hawktu.server.services;
 
-import com.hawktu.server.model.User;
-import com.hawktu.server.repository.UserRepository;
-import com.hawktu.server.service.UserService;
-import com.hawktu.server.factory.UserFactory;
+import com.hawktu.server.models.User;
+import com.hawktu.server.repositories.UserRepository;
+import com.hawktu.server.factories.UserFactory;
 
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;

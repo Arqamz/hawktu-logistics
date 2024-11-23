@@ -1,10 +1,10 @@
-package com.hawktu.server.builder;
+package com.hawktu.server.builders;
 
-import com.hawktu.server.model.User;
+import com.hawktu.server.models.User;
 import java.time.LocalDateTime;
 
 public class UserBuilder {
-    private User user;
+    private final User user;
 
     public UserBuilder() {
         this.user = new User();
