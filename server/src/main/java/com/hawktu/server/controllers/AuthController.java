@@ -2,8 +2,8 @@ package com.hawktu.server.controllers;
 
 import com.hawktu.server.dtos.request.*;
 import com.hawktu.server.dtos.response.*;
-import com.hawktu.server.models.User;
-import com.hawktu.server.repositories.UserRepository;
+import com.hawktu.server.models.Customer;
+import com.hawktu.server.repositories.CustomerRepository;
 import com.hawktu.server.utils.JwtUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,12 +18,12 @@ import java.util.Optional;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final UserRepository userRepository;
+    private final CustomerRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+    public AuthController(CustomerRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
@@ -34,13 +34,13 @@ public class AuthController {
         logger.debug("Received login request for email: {}", request.getEmail());
 
         try {
-            Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
+            Optional<Customer> userOptional = userRepository.findByEmail(request.getEmail());
             if (userOptional.isEmpty()) {
                 logger.error("User not found: {}", request.getEmail());
                 return ResponseEntity.status(401).body(new ErrorResponse("Invalid email or password", 401));
             }
             
-            User user = userOptional.get();
+            Customer user = userOptional.get();
             if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
                 logger.error("Password mismatch for user: {}", user.getEmail());
                 return ResponseEntity.status(401).body(new ErrorResponse("Invalid email or password", 401));
