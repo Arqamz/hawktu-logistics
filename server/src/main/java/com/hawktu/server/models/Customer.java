@@ -1,12 +1,16 @@
 package com.hawktu.server.models;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import com.hawktu.server.interfaces.IUser;
 
-@Entity
-@Table(name = "users")
-public class User implements IUser {
+import com.hawktu.server.interfaces.ICustomer;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+public class Customer implements ICustomer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,15 +42,13 @@ public class User implements IUser {
     @Column(nullable = false)
     private Integer loyaltyPoints = 0;
 
-    // No-args constructor
-    public User() {
-        this.registeredAt = LocalDateTime.now();
+    public Customer() {
+        // Default constructor for JPA
     }
 
-    // Full constructor
-    public User(Long id, String username, String password, String email, 
-                String firstName, String lastName, String phoneNumber, 
-                LocalDateTime registeredAt, Double walletBalance, Integer loyaltyPoints) {
+    public Customer(Long id, String username, String password, String email, 
+                    String firstName, String lastName, String phoneNumber, 
+                    LocalDateTime registeredAt, Double walletBalance, Integer loyaltyPoints) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -54,13 +56,15 @@ public class User implements IUser {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-        this.registeredAt = registeredAt != null ? registeredAt : LocalDateTime.now();
-        this.walletBalance = walletBalance != null ? walletBalance : 0.0;
-        this.loyaltyPoints = loyaltyPoints != null ? loyaltyPoints : 0;
+        this.registeredAt = registeredAt;
+        this.walletBalance = walletBalance;
+        this.loyaltyPoints = loyaltyPoints;
     }
 
-    // Implementing IUser interface methods
-
+    @Override
+    public Long getId() {
+        return id;
+    }
 
     @Override
     public String getUsername() {
@@ -127,10 +131,6 @@ public class User implements IUser {
         return registeredAt;
     }
 
-    @Override
-    public void setRegisteredAt(LocalDateTime registeredAt) {
-        this.registeredAt = registeredAt;
-    }
 
     @Override
     public Double getWalletBalance() {
@@ -151,38 +151,4 @@ public class User implements IUser {
     public void setLoyaltyPoints(Integer loyaltyPoints) {
         this.loyaltyPoints = loyaltyPoints;
     }
-
-    // Equals, HashCode, and ToString methods
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        
-        User user = (User) o;
-        
-        if (id != null ? !id.equals(user.id) : user.id != null) return false;
-        return username != null ? username.equals(user.username) : user.username == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (username != null ? username.hashCode() : 0);
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", registeredAt=" + registeredAt +
-                '}';
-    }
 }
-
-
-
