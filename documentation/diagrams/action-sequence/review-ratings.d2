@@ -1,0 +1,67 @@
+=Product Review and Rating: {
+    label: "Product Review and Rating"
+  
+    "": {
+      shape: sequence_diagram
+  
+      Customer.t1: actor
+      ProductReviewSystem.t1: actor
+      Database.t1: actor
+  
+      Customer.t1 -> ProductReviewSystem.t1: navigateToOrderHistory()
+      ProductReviewSystem.t1 -> Database.t1: fetchOrderHistory(customerId)
+      ProductReviewSystem.t1 <- Database.t1: orderHistoryDetails {
+        style.stroke-dash: 5
+      }
+      Customer.t1 <- ProductReviewSystem.t1: displayOrderHistory() {
+        style.stroke-dash: 5
+      }
+  
+      Customer.t1 -> ProductReviewSystem.t2: selectProductAndClickReview(productId)
+      ProductReviewSystem.t2 -> Customer.t1: displayReviewForm() {
+        style.stroke-dash: 5
+      }
+  
+      Customer.t1 -> ProductReviewSystem.t3: submitReview(productId, rating, reviewText)
+  
+      alt label: "Review Submission Validation" {
+        style.stroke-width: 5
+  
+        if label: "Invalid Input" {
+          style.fill: firebrick
+          ProductReviewSystem.t3 -> Customer.t1: notifyValidationError("Invalid rating or review text.") {
+            style.stroke-dash: 5
+          }
+        }
+        else label: "Valid Input" {
+          ProductReviewSystem.t3 -> Database.t2: addReviewToDatabase(productId, customerId, rating, reviewText) {
+            style.stroke-dash: 5
+          }
+  
+          alt1 label: "Database Update Confirmation" {
+            style.stroke-width: 5
+  
+            if label: "Database Failure" {
+              style.fill: firebrick
+              Database.t2 -> ProductReviewSystem.t3: notifyUpdateFailure("Failed to add review.") {
+                style.stroke-dash: 5
+              }
+              ProductReviewSystem.t3 -> Customer.t1: notifyError("Review submission unsuccessful. Please try again.") {
+                style.stroke-dash: 5
+              }
+            }
+            else label: "Database Success" {
+              style.fill: green
+              Database.t2 -> ProductReviewSystem.t3: confirmReviewAdded {
+                style.stroke-dash: 5
+              }
+              ProductReviewSystem.t3 -> Customer.t1: notifySuccess("Review submitted successfully.") {
+                style.stroke-dash: 5
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
