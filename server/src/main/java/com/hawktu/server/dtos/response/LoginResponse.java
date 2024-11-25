@@ -1,4 +1,4 @@
-package com.hawktu.server.dto.response;
+package com.hawktu.server.dtos.response;
 
 public class LoginResponse {
     private String accessToken;

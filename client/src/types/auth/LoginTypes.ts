@@ -1,6 +1,7 @@
 export interface LoginRequest {
     email: string;
     password: string;
+    //add account type.
 }
   
 export interface LoginResponse {

@@ -1,4 +1,4 @@
-package com.hawktu.server.dto.request;
+package com.hawktu.server.dtos.request;
 
 public class RefreshTokenRequest {
     private String refreshToken;
