@@ -2,14 +2,7 @@ package com.hawktu.server.models;
 
 import java.math.BigDecimal;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "products")
@@ -37,21 +30,26 @@ public class Product {
     private Double averageRating;
 
     @Column(nullable = false)
+    private Long categoryId;
+    
+    @Column(nullable = false)
     private int stock;
- 
-    @ManyToOne
-    @JoinColumn(name = "seller_id", nullable = false)
-    private Seller seller;
+
+    @Column(nullable = false)
+    private Long sellerId;
 
     public Product() {}
 
-    public Product(String name, String description, BigDecimal price, String imageLink, Seller seller) {
+    public Product(String name, String description, BigDecimal price, String imageLink, boolean unlisted, Double averageRating, Long categoryId, int stock, Long sellerId) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.imageLink = imageLink;
-        this.seller = seller;
-        this.unlisted = false;
+        this.unlisted = unlisted;
+        this.averageRating = averageRating;
+        this.categoryId = categoryId;
+        this.stock = stock;
+        this.sellerId = sellerId;
     }
 
     public Long getId() {
@@ -106,6 +104,14 @@ public class Product {
         return averageRating;
     }
 
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
     public int getStock() {
         return stock;
     }
@@ -114,12 +120,12 @@ public class Product {
         this.stock = stock;
     }
 
-    public Seller getSeller() {
-        return seller;
+    public Long getSellerId() {
+        return sellerId;
     }
 
-    public void setSeller(Seller seller) {
-        this.seller = seller;
+    public void setSellerId(Long sellerId) {
+        this.sellerId = sellerId;
     }
 
     public void unlist() {
@@ -132,7 +138,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return String.format("Product[id=%s, name=%s, price=%s, unlisted=%s]", 
-                "P" + this.getId(), this.name, this.price, this.unlisted);
+        return String.format("Product[id=%s, name=%s, price=%s, category=%s, unlisted=%s]", 
+                "P" + this.getId(), this.name, this.price, this.categoryId, this.unlisted);
     }
 }
