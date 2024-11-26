@@ -2,72 +2,54 @@
 
 package com.hawktu.server.repositories;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.hawktu.server.models.Product;
 
-public class ProductRepository {
-    private final List<Product> products;
+import java.math.BigDecimal;
+import java.util.List;
 
-    public ProductRepository() {
-        this.products = new ArrayList<>();
-    }
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-    public void addProduct(Product product) {
-        if (findProductById(product.getId()).isPresent()) {
-            throw new IllegalArgumentException("Product with ID " + product.getId() + " already exists.");
-        }
-        this.products.add(product);
-    }
 
-    public boolean deleteProduct(long productId) {
-        return products.removeIf(product -> product.getId().equals(productId));
-    }
+@Repository
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    // Find products by name (partial match)
+    List<Product> findByNameContainingIgnoreCase(String name);
 
-    public void updateProduct(Product updatedProduct) {
-        findProductById(updatedProduct.getId())
-            .ifPresentOrElse(product -> {
-                product.setName(updatedProduct.getName());
-                product.setDescription(updatedProduct.getDescription());
-                product.setPrice(updatedProduct.getPrice());
-                product.setImageLink(updatedProduct.getImageLink());
-                product.setUnlisted(updatedProduct.isUnlisted());
-            }, () -> {
-                throw new IllegalArgumentException("Product with ID P" + updatedProduct.getId() + " not found.");
-            });
-    }
+    // Find products by seller ID
+    List<Product> findBySellerId(Long sellerId);
 
-    public void markAsUnlisted(long productId) {
-        findProductById(productId).ifPresentOrElse(
-            Product::unlist,
-            () -> {
-                throw new IllegalArgumentException("Product with ID " + productId + " not found.");
-            }
-        );
-    }
+    // Find products by category ID
+    List<Product> findByCategoryId(Long categoryId);
 
-    public List<Product> searchByName(String name) {
-        return products.stream()
-                .filter(product -> product.getName().toLowerCase().contains(name.toLowerCase()))
-                .collect(Collectors.toList());
-    }
-    
-    public Optional<Product> findProductById(long productId) {
-        return products.stream().filter(product -> product.getId().equals(productId)).findFirst();
-    }
+    // Find listed products
+    List<Product> findByUnlistedFalse();
 
-    public List<Product> getAllListedProducts() {
-        return products.stream()
-                .filter(product -> !product.isUnlisted())
-                .collect(Collectors.toList());
-    }
+    // Find unlisted products
+    List<Product> findByUnlistedTrue();
 
-    public List<Product> getAllUnlistedProducts() {
-        return products.stream()
-                .filter(Product::isUnlisted)
-                .collect(Collectors.toList());
-    }
+    // Find products within a price range
+    List<Product> findByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice);
+
+    // Find products with stock above a certain threshold
+    List<Product> findByStockGreaterThan(int minStock);
+
+    // Find products by seller ID and category ID
+    List<Product> findBySellerIdAndCategoryId(Long sellerId, Long categoryId);
+
+    // Custom query to find products with average rating above a certain value
+    @Query("SELECT p FROM Product p WHERE p.averageRating > :minRating AND p.unlisted = false")
+    List<Product> findHighlyRatedProducts(@Param("minRating") Double minRating);
+
+    // Check if a product exists by name
+    boolean existsByName(String name);
+
+    // Find products sorted by price (low to high)
+    List<Product> findByOrderByPriceAsc();
+
+    // Find products sorted by average rating (high to low)
+    List<Product> findByOrderByAverageRatingDesc();
 }

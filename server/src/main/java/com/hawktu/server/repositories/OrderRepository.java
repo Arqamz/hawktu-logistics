@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface GlobalOrderRepository extends JpaRepository<Order, Long> {
+public interface OrderRepository extends JpaRepository<Order, Long> {
 
     // Fetch all orders for a specific customer
     List<Order> findByCustomerId(Long customerId);

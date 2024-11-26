@@ -55,7 +55,7 @@ public class AuthController {
                 accessToken,
                 refreshToken,
                 user.getEmail(),
-                user.getUsername()
+                user.getFirstName()
             );
             
             return ResponseEntity.ok(response);
