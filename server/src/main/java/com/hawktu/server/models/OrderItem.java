@@ -30,27 +30,26 @@ public class OrderItem {
     @Column(nullable = false)
     private BigDecimal totalPrice;
 
+    @ManyToOne
+    @JoinColumn(name = "delivery_address_id")
+    private Address deliveryAddress;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OrderItemState state;
-
-    @Column(name = "review", columnDefinition = "TEXT")
-    private String review;
-
-    @Column(name = "rating")
-    private Integer rating;
 
     public OrderItem() {
         this.state = new ProcessingState();
     }
 
-    public OrderItem(Order order, Product product, int quantity, BigDecimal unitPrice) {
+    public OrderItem(Order order, Product product, int quantity, BigDecimal unitPrice, Address deliveryAddress) {
         this.order = order;
         this.product = product;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
-        this.totalPrice = unitPrice.multiply(BigDecimal.valueOf(quantity));
+        this.deliveryAddress = deliveryAddress;
         this.state = new ProcessingState();
+        recalculateTotalPrice();
     }
 
     public Long getId() {
@@ -103,35 +102,16 @@ public class OrderItem {
         this.state = state;
     }
 
-    public String getReview() {
-        return review;
+    public Address getDeliveryAddress() {
+        return deliveryAddress;
     }
 
-    public void setReview(String review) {
-        this.review = review;
+    public void setDeliveryAddress(Address deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
     }
 
-    public Integer getRating() {
-        return rating;
-    }
-
-    public void setRating(Integer rating) {
-        this.rating = rating;
-    }
-
-    // Helper Methods
     private void recalculateTotalPrice() {
         this.totalPrice = this.unitPrice.multiply(BigDecimal.valueOf(this.quantity));
-    }
-
-    // Adding review and rating
-    public void addReviewAndRating(String review, Integer rating) {
-        if (this.state.canReview()) { // DEFINE canReview in each of the states
-            this.review = review;
-            this.rating = rating;
-        } else {
-            throw new IllegalStateException("Reviews can only be added for completed items.");
-        }
     }
 
     @Override
