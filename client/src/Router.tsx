@@ -13,6 +13,7 @@ import Shopping from "./pages/Shop";
 import CustomerDashboard from "./pages/CustomerDashboard";
 import SellerDashboard from "./pages/SellerDashboard"
 import Checkout from "./pages/Checkout";
+import OrderTracking from "./pages/OrderTracking";
 export const router = createBrowserRouter(
   [
     {
@@ -68,6 +69,10 @@ export const router = createBrowserRouter(
       {
         path: "/checkout",
         element: <Checkout />,
+      },
+      {
+        path: "/order-tracking",
+        element: <OrderTracking />,
       },
   ],
   {
