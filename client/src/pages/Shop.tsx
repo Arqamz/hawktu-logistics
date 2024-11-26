@@ -7,13 +7,13 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import {  Star, ShoppingCart, ChevronLeft, ChevronRight, Plus, Minus } from 'lucide-react'
+import { Star, ShoppingCart, ChevronLeft, ChevronRight, Plus, Minus } from 'lucide-react'
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { NotificationButton, useNotifications } from '@/components/notification-system'
-import { LayoutDashboard,Bell, User, LogOut } from 'lucide-react'
+import { LayoutDashboard, Bell, User, LogOut } from 'lucide-react'
 import { Link } from "react-router-dom"
-
+import { Toaster, toast } from 'sonner'
 
 
 
@@ -130,48 +130,56 @@ export default function AppComponent() {
   }
 
   const handleCheckout = () => {
-    navigate('/checkout', { state: { cartItems } })
-  }
+    if (cartItems.length === 0) {
+      toast.error("Cart is empty.", {
+        className: "bg-red-600",
+      });
+      return; 
+    }
+  
+    navigate('/checkout', { state: { cartItems } });
+  };
+  
 
   const paginatedItems = filteredItems.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <header className="shadow-sm border-b-2">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <h1 className="text-2xl font-bold">HawkTU</h1>
-            <div className="flex items-center space-x-4">
-              
-              <Link to="/customer-dashboard">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+          <h1 className="text-2xl font-bold">HawkTU</h1>
+          <div className="flex items-center space-x-4">
+
+            <Link to="/customer-dashboard">
               <Button
                 variant="outline"
                 className="border-gray-500"
               >
                 <LayoutDashboard className="h-5 w-5" />
               </Button></Link>
-              <Link to="/customer-info">
+            <Link to="/customer-info">
               <Button
                 variant="outline"
                 className="border-gray-500"
               >
                 <User className="h-5 w-5" />
               </Button></Link>
-              <NotificationButton />
-              <Button
-                variant="outline"
-                onClick={() => setIsLogoutPopupOpen(true)}
-                className="border-gray-500"
-              >
-                <LogOut className="h-5 w-5" />
-              </Button>
-              <Button onClick={() => addNotification({
-                title: 'Action Completed',
-                description: 'Your action has been successfully completed.',
-                time: new Date().toLocaleTimeString(),
-              })}>Noti</Button>
-            </div>
+            <NotificationButton />
+            <Button
+              variant="outline"
+              onClick={() => setIsLogoutPopupOpen(true)}
+              className="border-gray-500"
+            >
+              <LogOut className="h-5 w-5" />
+            </Button>
+            <Button onClick={() => addNotification({
+              title: 'Action Completed',
+              description: 'Your action has been successfully completed.',
+              time: new Date().toLocaleTimeString(),
+            })}>Noti</Button>
           </div>
-        </header>
+        </div>
+      </header>
 
       <div className="flex flex-1">
         <div className="w-64 p-4 border-r">
@@ -428,103 +436,103 @@ export default function AppComponent() {
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                <Dialog>
-        <DialogTrigger asChild>
-          <Button onClick={() => setSelectedItem(item)}>View Details</Button>
-        </DialogTrigger>
-        <DialogContent className="max-w-3xl">
-          <DialogHeader>
-            <DialogTitle>{selectedItem?.name}</DialogTitle>
-            <DialogDescription>By {selectedItem?.sellerName}</DialogDescription>
-          </DialogHeader>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="relative h-64">
-              <img
-                src={`/placeholder.svg?height=300&width=400`}
-                alt={selectedItem?.name}
-                className="w-full h-full object-cover"
-              />
-              <Button className="absolute top-1/2 left-2 transform -translate-y-1/2">
-                <ChevronLeft className="h-6 w-6" />
-              </Button>
-              <Button className="absolute top-1/2 right-2 transform -translate-y-1/2">
-                <ChevronRight className="h-6 w-6" />
-              </Button>
-            </div>
-            <div>
-              <p className="text-lg mb-2">{selectedItem?.description}</p>
-              <p className="text-2xl font-bold mb-2">${selectedItem?.price}</p>
-              <div className="flex items-center mb-4">
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <Star
-                    key={index}
-                    className={`h-5 w-5 ${index < selectedItem?.rating ? "text-yellow-400 fill-current" : "text-gray-300"}`}
-                  />
-                ))}
-                <span className="ml-2 text-sm text-gray-600">({selectedItem?.reviews.length} reviews)</span>
-              </div>
-              <div className="mb-4">
-                {cartItems.find(cartItem => cartItem.id === selectedItem?.id) ? (
-                  <div className="flex items-center">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => updateCartItemQuantity(selectedItem, Math.max(0, cartItems.find(cartItem => cartItem.id === selectedItem.id).quantity - 1))}
-                    >
-                      <Minus className="h-4 w-4" />
-                    </Button>
-                    <span className="mx-2">
-                      {cartItems.find(cartItem => cartItem.id === selectedItem.id).quantity}
-                    </span>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => updateCartItemQuantity(selectedItem, cartItems.find(cartItem => cartItem.id === selectedItem.id).quantity + 1)}
-                    >
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ) : (
-                  <Button onClick={() => addToCart(selectedItem)}>Add to Cart</Button>
-                )}
-              </div>
-            </div>
-          </div>
-          <DialogFooter>
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline">View All Reviews</Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-[400px] sm:w-[540px]">
-                <SheetHeader>
-                  <SheetTitle>Customer Reviews for {selectedItem?.name}</SheetTitle>
-                  <SheetDescription>
-                    {selectedItem?.reviews.length} reviews in total
-                  </SheetDescription>
-                </SheetHeader>
-                <div className="mt-4 space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
-                  {selectedItem?.reviews.map((review) => (
-                    <div key={review.id} className="border-b pb-4">
-                      <div className="flex items-center mb-2">
-                        <span className="font-bold mr-2">{review.user}</span>
-                        <div className="flex">
-                          {Array.from({ length: 5 }).map((_, index) => (
-                            <Star
-                              key={index}
-                              className={`h-4 w-4 ${index < review.rating ? "text-yellow-400 fill-current" : "text-gray-300"}`}
-                            />
-                          ))}
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button onClick={() => setSelectedItem(item)}>View Details</Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-3xl">
+                      <DialogHeader>
+                        <DialogTitle>{selectedItem?.name}</DialogTitle>
+                        <DialogDescription>By {selectedItem?.sellerName}</DialogDescription>
+                      </DialogHeader>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="relative h-64">
+                          <img
+                            src={`/placeholder.svg?height=300&width=400`}
+                            alt={selectedItem?.name}
+                            className="w-full h-full object-cover"
+                          />
+                          <Button className="absolute top-1/2 left-2 transform -translate-y-1/2">
+                            <ChevronLeft className="h-6 w-6" />
+                          </Button>
+                          <Button className="absolute top-1/2 right-2 transform -translate-y-1/2">
+                            <ChevronRight className="h-6 w-6" />
+                          </Button>
+                        </div>
+                        <div>
+                          <p className="text-lg mb-2">{selectedItem?.description}</p>
+                          <p className="text-2xl font-bold mb-2">${selectedItem?.price}</p>
+                          <div className="flex items-center mb-4">
+                            {Array.from({ length: 5 }).map((_, index) => (
+                              <Star
+                                key={index}
+                                className={`h-5 w-5 ${index < selectedItem?.rating ? "text-yellow-400 fill-current" : "text-gray-300"}`}
+                              />
+                            ))}
+                            <span className="ml-2 text-sm text-gray-600">({selectedItem?.reviews.length} reviews)</span>
+                          </div>
+                          <div className="mb-4">
+                            {cartItems.find(cartItem => cartItem.id === selectedItem?.id) ? (
+                              <div className="flex items-center">
+                                <Button
+                                  variant="outline"
+                                  size="icon"
+                                  onClick={() => updateCartItemQuantity(selectedItem, Math.max(0, cartItems.find(cartItem => cartItem.id === selectedItem.id).quantity - 1))}
+                                >
+                                  <Minus className="h-4 w-4" />
+                                </Button>
+                                <span className="mx-2">
+                                  {cartItems.find(cartItem => cartItem.id === selectedItem.id).quantity}
+                                </span>
+                                <Button
+                                  variant="outline"
+                                  size="icon"
+                                  onClick={() => updateCartItemQuantity(selectedItem, cartItems.find(cartItem => cartItem.id === selectedItem.id).quantity + 1)}
+                                >
+                                  <Plus className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            ) : (
+                              <Button onClick={() => addToCart(selectedItem)}>Add to Cart</Button>
+                            )}
+                          </div>
                         </div>
                       </div>
-                      <p>{review.comment}</p>
-                    </div>
-                  ))}
-                </div>
-              </SheetContent>
-            </Sheet>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+                      <DialogFooter>
+                        <Sheet>
+                          <SheetTrigger asChild>
+                            <Button variant="outline">View All Reviews</Button>
+                          </SheetTrigger>
+                          <SheetContent side="right" className="w-[400px] sm:w-[540px]">
+                            <SheetHeader>
+                              <SheetTitle>Customer Reviews for {selectedItem?.name}</SheetTitle>
+                              <SheetDescription>
+                                {selectedItem?.reviews.length} reviews in total
+                              </SheetDescription>
+                            </SheetHeader>
+                            <div className="mt-4 space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
+                              {selectedItem?.reviews.map((review) => (
+                                <div key={review.id} className="border-b pb-4">
+                                  <div className="flex items-center mb-2">
+                                    <span className="font-bold mr-2">{review.user}</span>
+                                    <div className="flex">
+                                      {Array.from({ length: 5 }).map((_, index) => (
+                                        <Star
+                                          key={index}
+                                          className={`h-4 w-4 ${index < review.rating ? "text-yellow-400 fill-current" : "text-gray-300"}`}
+                                        />
+                                      ))}
+                                    </div>
+                                  </div>
+                                  <p>{review.comment}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </SheetContent>
+                        </Sheet>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                   {cartItems.find(cartItem => cartItem.id === item.id) ? (
                     <div className="flex items-center">
                       <Button
@@ -572,31 +580,33 @@ export default function AppComponent() {
         </div>
       </div>
       {
-          isLogoutPopupOpen && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-              <div className="p-6 rounded-lg shadow-lg w-96">
-                <h2 className="text-lg font-semibold mb-4">Are you sure you want to logout?</h2>
-                <div className="flex justify-end space-x-4">
+        isLogoutPopupOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="p-6 rounded-lg shadow-lg w-96">
+              <h2 className="text-lg font-semibold mb-4">Are you sure you want to logout?</h2>
+              <div className="flex justify-end space-x-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsLogoutPopupOpen(false)}
+                  className="border-gray-400 text-gray-600"
+                >
+                  Cancel
+                </Button>
+                <Link to="/landing">
                   <Button
                     variant="outline"
-                    onClick={() => setIsLogoutPopupOpen(false)}
-                    className="border-gray-400 text-gray-600"
+                    className="bg-red-500 text-white border-red-500"
                   >
-                    Cancel
+                    Logout
                   </Button>
-                  <Link to="/landing">
-                      <Button
-                        variant="outline"
-                        className="bg-red-500 text-white border-red-500"
-                      >
-                        Logout
-                      </Button>
-                  </Link>
-                </div>
+                </Link>
               </div>
             </div>
-          )
-        }
+          </div>
+        )
+      }
+            <Toaster position="bottom-right" />
+
     </div>
   )
 }
