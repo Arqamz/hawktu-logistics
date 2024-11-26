@@ -37,8 +37,6 @@ class ErrorBoundary extends React.Component {
 
 const navItems = [
   { name: "Edit Profile", icon: User },
-  { name: "Notifications", icon: Bell },
-  { name: "Language & Region", icon: Globe },
   { name: "Help & Support", icon: HelpCircle },
 ]
 
@@ -54,10 +52,6 @@ export default function UserDashboard() {
     switch (activePage) {
       case "Edit Profile":
         return <EditProfilePage />
-      case "Notifications":
-        return <NotificationsPage />
-      case "Language & Region":
-        return <LanguageRegionPage />
       case "Help & Support":
         return <HelpSupportPage />
       default:
@@ -350,101 +344,6 @@ function ChangePasswordForm() {
       </div>
       <Button type="submit">Change Password</Button>
     </form>
-  )
-}
-
-function NotificationsPage() {
-  const [notificationStates, setNotificationStates] = useState({
-    "Loyalty Points Updates": false,
-    "Wallet Recharges": false,
-    "Order Confirmations": false
-  })
-
-  const handleToggle = (notificationType) => {
-    setNotificationStates(prevStates => ({
-      ...prevStates,
-      [notificationType]: !prevStates[notificationType]
-    }))
-
-    const action = notificationStates[notificationType] ? "disabled" : "enabled"
-    toast.success(`Notifications ${action} for ${notificationType}`)
-  }
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Notification Settings</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {Object.entries(notificationStates).map(([notificationType, isEnabled]) => (
-            <div key={notificationType} className="flex items-center justify-between">
-              <div>
-                <h3 className="font-medium">{notificationType}</h3>
-                <p className="text-sm text-gray-500">
-                  {notificationType === "Loyalty Points Updates" && "Receive notifications about your loyalty points balance."}
-                  {notificationType === "Wallet Recharges" && "Get notified when your wallet is recharged."}
-                  {notificationType === "Order Confirmations" && "Receive notifications for order confirmations and updates."}
-                </p>
-              </div>
-              <Button
-                variant={isEnabled ? "destructive" : "outline"}
-                onClick={() => handleToggle(notificationType)}
-              >
-                {isEnabled ? "Disable" : "Enable"}
-              </Button>
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  )
-}
-
-function LanguageRegionPage() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Language and Region Settings</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-6">
-          <div className="grid gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="language">Language</Label>
-              <Select onValueChange={(value) => toast.success(`Language changed to ${value}`)}>
-                <SelectTrigger id="language">
-                  <SelectValue placeholder="Select a language" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="en">English</SelectItem>
-                  <SelectItem value="es">Español</SelectItem>
-                  <SelectItem value="fr">Français</SelectItem>
-                  <SelectItem value="de">Deutsch</SelectItem>
-                  <SelectItem value="it">Italiano</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="region">Region</Label>
-              <Select onValueChange={(value) => toast.success(`Region changed to ${value}`)}>
-                <SelectTrigger id="region">
-                  <SelectValue placeholder="Select a region" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="us">United States</SelectItem>
-                  <SelectItem value="ca">Canada</SelectItem>
-                  <SelectItem value="uk">United Kingdom</SelectItem>
-                  <SelectItem value="au">Australia</SelectItem>
-                  <SelectItem value="eu">European Union</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <Button onClick={() => toast.success('Preferences saved')}>Save Preferences</Button>
-        </div>
-      </CardContent>
-    </Card>
   )
 }
 

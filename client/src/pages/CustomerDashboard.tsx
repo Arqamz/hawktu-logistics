@@ -130,7 +130,7 @@ function DashboardPage({ walletBalance, loyaltyPoints, setCurrentPage }) {
       date: "2023-05-15",
       products: [
         { name: "Product A", status: "Delivered" },
-        { name: "Product B", status: "Shipped" },
+        { name: "Product B", status: "Shipping" },
       ],
     },
     {
@@ -403,7 +403,7 @@ function OrderHistoryPage() {
       orderId: "12349",
       date: "2023-01-05",
       products: [
-        { name: "Product I", status: "Delivered" },
+        { name: "Product I", status: "Shipping" },
       ]
     },
   ]

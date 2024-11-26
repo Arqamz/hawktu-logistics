@@ -31,7 +31,7 @@ export default function CheckoutPage() {
         setShowSuccessPopup(true)
         setTimeout(() => {
             setShowSuccessPopup(false)
-            navigate('/')
+            navigate('/shop')
         }, 3000)
     }
 
