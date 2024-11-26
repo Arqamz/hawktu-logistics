@@ -11,15 +11,14 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    // Store only the product ID as a foreign key reference instead of the entire Product
+    // We will have to verify that the product ID exists in the database by ourselves
+    @Column(name = "product_id", nullable = false)
+    private Long productId;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Rating rating;
+    private int rating;
 
-    // Make sure this is validated up in the frontend
     @Column(length = 200)
     private String comment;
 
@@ -28,8 +27,8 @@ public class Review {
 
     public Review() {}
 
-    public Review(Product product, Rating rating, String comment) {
-        this.product = product;
+    public Review(Long productId, int rating, String comment) {
+        this.productId = productId;
         this.rating = rating;
         this.comment = comment;
         this.createdAt = LocalDateTime.now();
@@ -39,19 +38,20 @@ public class Review {
         return id;
     }
 
-    public Product getProduct() {
-        return product;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
-    public Rating getRating() {
+    public int getRating() {
         return rating;
     }
 
-    public void setRating(Rating rating) {
+    public void setRating(int rating) {
+        
         this.rating = rating;
     }
 
