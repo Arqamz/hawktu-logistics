@@ -134,12 +134,12 @@ export default function AppComponent() {
       toast.error("Cart is empty.", {
         className: "bg-red-600",
       });
-      return; 
+      return;
     }
-  
+
     navigate('/checkout', { state: { cartItems } });
   };
-  
+
 
   const paginatedItems = filteredItems.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
 
@@ -571,11 +571,15 @@ export default function AppComponent() {
               Page {currentPage} of {Math.ceil(filteredItems.length / itemsPerPage)}
             </span>
             <Button
-              onClick={() => setCurrentPage(Math.min(currentPage + 1, Math.ceil(filteredItems.length / itemsPerPage)))}
+              onClick={() => {
+                setCurrentPage(Math.min(currentPage + 1, Math.ceil(filteredItems.length / itemsPerPage)));
+                scrollToTop();
+              }}
               disabled={currentPage === Math.ceil(filteredItems.length / itemsPerPage)}
             >
               Next
             </Button>
+
           </div>
         </div>
       </div>
@@ -605,7 +609,7 @@ export default function AppComponent() {
           </div>
         )
       }
-            <Toaster position="bottom-right" />
+      <Toaster position="bottom-right" />
 
     </div>
   )
