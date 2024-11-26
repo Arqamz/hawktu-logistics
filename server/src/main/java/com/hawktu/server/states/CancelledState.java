@@ -1,6 +1,7 @@
 package com.hawktu.server.states;
 
-public class CancelledState implements OrderItemState {
+public class CancelledState implements OrderItemState {   
+
     @Override
     public OrderItemState nextState() {
         throw new IllegalStateException("Cannot transition from Cancelled state.");
@@ -12,8 +13,8 @@ public class CancelledState implements OrderItemState {
     }
 
     @Override
-    public OrderItemState refund() {
-        return new RefundRequestedState();
+    public OrderItemState requestRefund() {
+        throw new IllegalStateException("Cannot request refund for a cancelled order.");
     }
 
     @Override
@@ -24,5 +25,35 @@ public class CancelledState implements OrderItemState {
     @Override
     public OrderItemState denyRefund() {
         throw new IllegalStateException("Cannot deny refund from Cancelled state.");
+    }
+
+    @Override
+    public boolean canNext() {
+        return false;
+    }
+
+    @Override
+    public boolean canCancel() {
+        return false;
+    }
+
+    @Override
+    public boolean canRequestRefund() {
+        return false;
+    }
+
+    @Override
+    public boolean canApproveRefund() {
+        return false;
+    }
+
+    @Override
+    public boolean canDenyRefund() {
+        return false;
+    }
+
+    @Override
+    public boolean canReview() {
+        return false;
     }
 }

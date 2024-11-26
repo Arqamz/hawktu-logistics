@@ -9,11 +9,11 @@ public class RefundRequestedState implements OrderItemState {
 
     @Override
     public OrderItemState cancel() {
-        throw new IllegalStateException("Cannot cancel an order in Refund Requested state.");
+        throw new IllegalStateException("Cannot cancel an order which has been delivered.");
     }
 
     @Override
-    public OrderItemState refund() {
+    public OrderItemState requestRefund() {
         throw new IllegalStateException("Refund has already been requested.");
     }
 
@@ -25,5 +25,35 @@ public class RefundRequestedState implements OrderItemState {
     @Override
     public OrderItemState denyRefund() {
         return new RefundDeniedState();
+    }
+
+    @Override
+    public boolean canNext() {
+        return false;
+    }
+
+    @Override
+    public boolean canCancel() {
+        return false;
+    }
+
+    @Override
+    public boolean canRequestRefund() {
+        return false;
+    }
+
+    @Override
+    public boolean canApproveRefund() {
+        return true;
+    }
+
+    @Override
+    public boolean canDenyRefund() {
+        return true;
+    }
+
+    @Override
+    public boolean canReview() {
+        return true;
     }
 }

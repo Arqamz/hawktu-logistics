@@ -13,7 +13,7 @@ public class RefundApprovedState implements OrderItemState {
     }
 
     @Override
-    public OrderItemState refund() {
+    public OrderItemState requestRefund() {
         throw new IllegalStateException("Refund has already been processed.");
     }
 
@@ -25,5 +25,35 @@ public class RefundApprovedState implements OrderItemState {
     @Override
     public OrderItemState denyRefund() {
         throw new IllegalStateException("Cannot deny an already approved refund.");
+    }
+
+    @Override
+    public boolean canNext() {
+        return false;
+    }
+
+    @Override
+    public boolean canCancel() {
+        return false;
+    }
+
+    @Override
+    public boolean canRequestRefund() {
+        return false;
+    }
+
+    @Override
+    public boolean canApproveRefund() {
+        return false;
+    }
+
+    @Override
+    public boolean canDenyRefund() {
+        return false;
+    }
+
+    @Override
+    public boolean canReview() {
+        return true;
     }
 }

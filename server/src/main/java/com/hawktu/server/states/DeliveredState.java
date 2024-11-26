@@ -12,7 +12,7 @@ public class DeliveredState implements OrderItemState {
     }
 
     @Override
-    public OrderItemState refund() {
+    public OrderItemState requestRefund() {
         return new RefundRequestedState();
     }
 
@@ -24,5 +24,35 @@ public class DeliveredState implements OrderItemState {
     @Override
     public OrderItemState denyRefund() {
         throw new IllegalStateException("Cannot deny refund in Delivered state.");
+    }
+
+    @Override
+    public boolean canNext() {
+        return false;
+    }
+
+    @Override
+    public boolean canCancel() {
+        return false;
+    }
+
+    @Override
+    public boolean canRequestRefund() {
+        return true;
+    }
+
+    @Override
+    public boolean canApproveRefund() {
+        return false;
+    }
+
+    @Override
+    public boolean canDenyRefund() {
+        return false;
+    }
+
+    @Override
+    public boolean canReview() {
+        return true;
     }
 }
