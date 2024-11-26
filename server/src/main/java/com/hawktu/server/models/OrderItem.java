@@ -25,9 +25,6 @@ public class OrderItem {
     private int quantity;
 
     @Column(nullable = false)
-    private BigDecimal unitPrice;
-
-    @Column(nullable = false)
     private BigDecimal totalPrice;
 
     @ManyToOne
@@ -38,6 +35,12 @@ public class OrderItem {
     @Column(nullable = false)
     private OrderItemState state;
 
+    @Column(length = 500)
+    private String refundMessage;
+
+    @Column(length = 500)
+    private String refundResponse;
+
     public OrderItem() {
         this.state = new ProcessingState();
     }
@@ -46,7 +49,6 @@ public class OrderItem {
         this.order = order;
         this.product = product;
         this.quantity = quantity;
-        this.unitPrice = unitPrice;
         this.deliveryAddress = deliveryAddress;
         this.state = new ProcessingState();
         recalculateTotalPrice();
@@ -81,15 +83,6 @@ public class OrderItem {
         recalculateTotalPrice();
     }
 
-    public BigDecimal getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(BigDecimal unitPrice) {
-        this.unitPrice = unitPrice;
-        recalculateTotalPrice();
-    }
-
     public BigDecimal getTotalPrice() {
         return totalPrice;
     }
@@ -111,8 +104,25 @@ public class OrderItem {
     }
 
     private void recalculateTotalPrice() {
-        this.totalPrice = this.unitPrice.multiply(BigDecimal.valueOf(this.quantity));
+        this.totalPrice = this.product.getPrice().multiply(BigDecimal.valueOf(this.quantity));
     }
+
+    public String getRefundMessage() {
+        return refundMessage;
+    }
+
+    public void setRefundMessage(String refundMessage) {
+        this.refundMessage = refundMessage;
+    }
+
+    public String getRefundResponse() {
+        return refundResponse;
+    }
+
+    public void setRefundResponse(String refundResponse) {
+        this.refundResponse = refundResponse;
+    }
+
 
     @Override
     public boolean equals(Object o) {

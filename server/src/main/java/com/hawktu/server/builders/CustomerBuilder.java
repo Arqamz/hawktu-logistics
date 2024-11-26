@@ -1,26 +1,24 @@
 package com.hawktu.server.builders;
 
-import com.hawktu.server.models.Seller;
-
-
 import java.time.LocalDateTime;
+import com.hawktu.server.models.Customer;
 
-public class SellerBuilder extends UserBuilder<Seller, SellerBuilder> {
-    private String businessName;
+public class CustomerBuilder extends UserBuilder<Customer, CustomerBuilder> {
+    private Integer loyaltyPoints = 0;
 
-    public SellerBuilder businessName(String businessName) {
-        this.businessName = businessName;
+    public CustomerBuilder loyaltyPoints(Integer loyaltyPoints) {
+        this.loyaltyPoints = loyaltyPoints;
         return this;
     }
 
     @Override
-    public Seller build() {
+    public Customer build() {
         // Use default values if not set
         if (registeredAt == null) {
             registeredAt = LocalDateTime.now();
         }
         
-        return new Seller(
+        return new Customer(
             password, 
             email, 
             firstName, 
@@ -28,7 +26,7 @@ public class SellerBuilder extends UserBuilder<Seller, SellerBuilder> {
             phoneNumber, 
             registeredAt, 
             wallet, 
-            businessName
+            loyaltyPoints
         );
     }
 }
