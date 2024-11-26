@@ -16,6 +16,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     // Find a category by name (could be useful for querying by name)
     Optional<Category> findByName(String name);
 
-    // Fetch all categories including nested ones (recursively if needed, but could require a custom query)
+    // Fetch all categories including nested ones (recursively _ if needed, but could require a custom query)
     List<Category> findByParentCategory(Category parentCategory);
 }
