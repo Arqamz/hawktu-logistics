@@ -1,7 +1,5 @@
 package com.hawktu.server.factories;
 
-import java.time.LocalDateTime;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hawktu.server.builders.CustomerBuilder;
@@ -21,9 +19,6 @@ public class CustomerFactory {
             .firstName(firstName)
             .lastName(lastName)
             .phoneNumber(phoneNumber)
-            .registeredAt(LocalDateTime.now())
-            .wallet(0.0)
-            .loyaltyPoints(0)
             .build();
 
         customerRepository.save(customer);
