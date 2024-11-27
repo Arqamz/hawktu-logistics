@@ -6,7 +6,14 @@ import java.util.List;
 
 import com.hawktu.server.interfaces.IOrder;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "orders")
@@ -37,14 +44,14 @@ public class Order implements IOrder {
 
     @Override
     public void addOrderItem(OrderItem item) {
-        item.setOrder(this);
+        item.setOrderId(this.id);
         items.add(item);
     }
 
     @Override
     public void removeOrderItem(OrderItem item) {
         items.remove(item);
-        item.setOrder(null);
+        item.setOrderId(null);
     }
 
     @Override

@@ -1,7 +1,12 @@
 package com.hawktu.server.models;
 
 import java.time.LocalDateTime;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public abstract class User {
@@ -25,20 +30,18 @@ public abstract class User {
     @Column(nullable = false)
     private String phoneNumber;
 
+    @Column(nullable = true)
+    private String addressString;
+
     @Column(nullable = false)
     private final LocalDateTime registeredAt;
 
     @Column(nullable = false)
     private Double wallet = 0.0;
 
-    public User(String password, String email, String firstName, String lastName, String phoneNumber, LocalDateTime registeredAt, Double wallet) {
-        this.password = password;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-        this.registeredAt = registeredAt;
-        this.wallet = wallet;
+    public User() {
+        this.registeredAt = LocalDateTime.now();
+        this.wallet = 0.0;
     }
 
     public Long getId() {
@@ -83,6 +86,19 @@ public abstract class User {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Address getAddress() {
+        if (addressString != null) {
+            return Address.fromStringRepresentation(addressString);
+        }
+        return null;
+    }
+    
+    public void setAddress(Address address) {
+        if (address != null) {
+            this.addressString = address.toStringRepresentation();
+        }
     }
 
     public LocalDateTime getRegisteredAt() {

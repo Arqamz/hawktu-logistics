@@ -1,10 +1,18 @@
 package com.hawktu.server.models;
 
+import java.math.BigDecimal;
+
 import com.hawktu.server.states.OrderItemState;
 import com.hawktu.server.states.ProcessingState;
 
-import jakarta.persistence.*;
-import java.math.BigDecimal;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "order_items")
@@ -13,13 +21,11 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
+    @Column(name = "order_id", nullable = false)
+    private Long orderId;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    @Column(name = "product_id", nullable = false)
+    private Long productId;
 
     @Column(nullable = false)
     private int quantity;
@@ -27,9 +33,10 @@ public class OrderItem {
     @Column(nullable = false)
     private BigDecimal totalPrice;
 
-    @ManyToOne
-    @JoinColumn(name = "delivery_address_id")
-    private Address deliveryAddress;
+    @Column(name = "delivery_address", length = 500)
+    private String deliveryAddressString;
+
+akdksajdskaldjaslkdjsald //NEEDS FIINX+ADSADA
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -45,33 +52,24 @@ public class OrderItem {
         this.state = new ProcessingState();
     }
 
-    public OrderItem(Order order, Product product, int quantity, BigDecimal unitPrice, Address deliveryAddress) {
-        this.order = order;
-        this.product = product;
-        this.quantity = quantity;
-        this.deliveryAddress = deliveryAddress;
-        this.state = new ProcessingState();
-        recalculateTotalPrice();
-    }
-
     public Long getId() {
         return id;
     }
 
-    public Order getOrder() {
-        return order;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
-    public Product getProduct() {
-        return product;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
     public int getQuantity() {
@@ -80,11 +78,14 @@ public class OrderItem {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-        recalculateTotalPrice();
     }
 
     public BigDecimal getTotalPrice() {
         return totalPrice;
+    }
+    
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public OrderItemState getState() {
@@ -96,15 +97,16 @@ public class OrderItem {
     }
 
     public Address getDeliveryAddress() {
-        return deliveryAddress;
+        if (deliveryAddressString != null) {
+            return Address.fromStringRepresentation(deliveryAddressString);
+        }
+        return null;
     }
-
+    
     public void setDeliveryAddress(Address deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
-
-    private void recalculateTotalPrice() {
-        this.totalPrice = this.product.getPrice().multiply(BigDecimal.valueOf(this.quantity));
+        if (deliveryAddress != null) {
+            this.deliveryAddressString = deliveryAddress.toStringRepresentation();
+        }
     }
 
     public String getRefundMessage() {

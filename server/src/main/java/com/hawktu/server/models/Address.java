@@ -1,92 +1,51 @@
 package com.hawktu.server.models;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "addresses")
 public class Address {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
     private String country;
-
-    @Column(nullable = false)
     private String city;
-
-    @Column(nullable = false)
     private String district;
-
-    @Column(nullable = true)
-    private String postalCode;
-
-    @Column(nullable = true)
+    private String addressLineOne;
+    private String addressLineTwo;
     private String additionalInfo;
 
-    // Constructor, getters, and setters
     public Address() {}
 
-    public Address(String country, String city, String district, String postalCode, String additionalInfo) {
+    public Address(String country, String city, String district, String addressLineOne, String addressLineTwo, String additionalInfo) {
         this.country = country;
         this.city = city;
         this.district = district;
-        this.postalCode = postalCode;
+        this.addressLineOne = addressLineOne;
+        this.addressLineTwo = addressLineTwo;
         this.additionalInfo = additionalInfo;
     }
 
-    public Long getId() {
-        return id;
+    // Convert Address to String representation with separator %#.
+    public String toStringRepresentation() {
+        return String.join("%#", country, city, district, addressLineOne, addressLineTwo != null ? addressLineTwo : "", additionalInfo != null ? additionalInfo : "");
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    // Convert String representation back to Address object.
+    public static Address fromStringRepresentation(String addressString) {
+        String[] parts = addressString.split("%#");
 
-    public String getCountry() {
-        return country;
-    }
+        if (parts.length < 4) {
+            throw new IllegalArgumentException("Invalid address string format");
+        }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
+        String country = parts[0];
+        String city = parts[1];
+        String district = parts[2];
+        String addressLineOne = parts[3];
+        String addressLineTwo = (parts.length > 4 && !parts[4].isEmpty()) ? parts[4] : null;
+        String additionalInfo = (parts.length > 5 && !parts[5].isEmpty()) ? parts[5] : null;
 
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(String district) {
-        this.district = district;
-    }
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-
-    public String getAdditionalInfo() {
-        return additionalInfo;
-    }
-
-    public void setAdditionalInfo(String additionalInfo) {
-        this.additionalInfo = additionalInfo;
+        return new Address(country, city, district, addressLineOne, addressLineTwo, additionalInfo);
     }
 
     @Override
     public String toString() {
-        return String.format("Address[country=%s, city=%s, district=%s, street=%s, postalCode=%s]",
-                country, city, district, additionalInfo, postalCode);
+        return String.format("Address[country=%s, city=%s, district=%s, addressLineOne=%s, addressLineTwo=%s, additionalInfo=%s]",
+                country, city, district, addressLineOne, addressLineTwo, additionalInfo);
     }
 }
