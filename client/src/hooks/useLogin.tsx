@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { login } from '@/api/auth';
 import { LoginRequest } from '@/types/auth/LoginTypes';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 
 export const useLogin = () => {
-  // React state to track loading, error, and any other states
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
@@ -12,12 +11,13 @@ export const useLogin = () => {
   const loginUser = async (data: LoginRequest) => {
     setIsLoading(true);
     setError(null);
-    setIsSuccess(false);
+    setIsSuccess(false);  // Reset the success flag before login attempt
 
     try {
-      const response = await login(data); 
+      const response = await login(data);  // Directly login
       localStorage.setItem('token', response.token);
       setIsSuccess(true);
+      return response;  // Return the response to be used directly in the form submit
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || 'Login failed');
@@ -30,8 +30,8 @@ export const useLogin = () => {
   };
 
   return {
-    login: loginUser, 
-    isLoading, 
+    login: loginUser,
+    isLoading,
     error,
     isSuccess,
   };

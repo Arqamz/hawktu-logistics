@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
-import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from "@/components/ui/navigation-menu"
-import { Truck, Box, ShoppingBag } from "lucide-react"
+import { Truck, Box, ShoppingBag,Locate } from "lucide-react"
 
 export default function Component() {
   return (
@@ -12,6 +11,11 @@ export default function Component() {
             <span className="text-2xl font-bold">HawkTU</span>
           </Link>
         </div>
+        <Link to="/order-tracking">
+        <button>
+          <Locate/>
+        </button>
+        </Link>
       </header>
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">

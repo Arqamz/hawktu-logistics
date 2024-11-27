@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,6 +11,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useLogin } from '@/hooks/useLogin';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useNavigate } from 'react-router-dom';
 
 // Validation schema with zod
 const formSchema = z.object({
@@ -18,7 +23,11 @@ const formSchema = z.object({
     .regex(/[a-zA-Z0-9]/, { message: 'Password must be alphanumeric' }),
 });
 
+type accountType = 'seller' | 'customer';
+
 export default function LoginPreview() {
+  const [accountType, setaccountType] = useState<accountType>('customer');
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -26,17 +35,16 @@ export default function LoginPreview() {
       password: '',
     },
   });
-
+  const navigate=useNavigate
   const { login, isLoading, error, isSuccess } = useLogin();
 
   // Handle form submission
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await login(values);
-      if (isSuccess) {
+      const response=await login({ ...values, accountType });
+      if (response) {
         toast.success('Login successful!');
-        // Redirect to shop
-        window.location.href = '/shop';
+        window.location.href = accountType === 'seller' ? '/seller-dashboard' : '/shop';
       }
     } catch (err) {
       toast.error(error || 'Login failed');
@@ -56,70 +64,98 @@ export default function LoginPreview() {
       </header>
       <div className="flex-1 flex items-center justify-center">
         <Card className="mx-auto max-w-sm">
-          <CardHeader>
-            <CardTitle className="text-2xl">Login</CardTitle>
-            <CardDescription>
-              Enter your email and password to log in to your account.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <div className="grid gap-4">
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem className="grid gap-2">
-                        <FormLabel htmlFor="email">Email</FormLabel>
-                        <FormControl>
-                          <Input
-                            id="email"
-                            placeholder="johndoe@mail.com"
-                            type="email"
-                            autoComplete="email"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem className="grid gap-2">
-                        <FormLabel htmlFor="password">Password</FormLabel>
-                        <FormControl>
-                          <Input
-                            id="password"
-                            placeholder="******"
-                            autoComplete="current-password"
-                            type="password"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? 'Logging in...' : 'Login'}
-                  </Button>
-                </div>
-              </form>
-            </Form>
-            {error && <p className="text-red-500 text-sm mt-2">{error}</p>} {/* Display error */}
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{' '}
-              <Link to="/registration" className="underline">
-                Sign up
-              </Link>
-            </div>
-          </CardContent>
+          <Tabs defaultValue="customer" onValueChange={(value) => setaccountType(value as accountType)}>
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="customer">Customer</TabsTrigger>
+              <TabsTrigger value="seller">Seller</TabsTrigger>
+            </TabsList>
+            <TabsContent value="customer">
+              <LoginForm accountType="customer" form={form} onSubmit={onSubmit} isLoading={isLoading} error={error} />
+            </TabsContent>
+            <TabsContent value="seller">
+              <LoginForm accountType="seller" form={form} onSubmit={onSubmit} isLoading={isLoading} error={error} />
+            </TabsContent>
+          </Tabs>
         </Card>
       </div>
     </div>
   );
 }
+
+interface LoginFormProps {
+  accountType: accountType;
+  form: ReturnType<typeof useForm<z.infer<typeof formSchema>>>;
+  onSubmit: (values: z.infer<typeof formSchema>) => Promise<void>;
+  isLoading: boolean;
+  error: string | null;
+}
+
+function LoginForm({ accountType, form, onSubmit, isLoading, error }: LoginFormProps) {
+  return (
+    <>
+      <CardHeader>
+        <CardTitle className="text-2xl">Login as {accountType}</CardTitle>
+        <CardDescription>
+          Enter your email and password to log in to your {accountType} account.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <div className="grid gap-4">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem className="grid gap-2">
+                    <FormLabel htmlFor="email">Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        id="email"
+                        placeholder="johndoe@mail.com"
+                        type="email"
+                        autoComplete="email"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem className="grid gap-2">
+                    <FormLabel htmlFor="password">Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        id="password"
+                        placeholder="******"
+                        autoComplete="current-password"
+                        type="password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? 'Logging in...' : 'Login'}
+              </Button>
+            </div>
+          </form>
+        </Form>
+        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+        <div className="mt-4 text-center text-sm">
+          Don&apos;t have an account?{' '}
+          <Link to="/registration" className="underline">
+            Sign up
+          </Link>
+        </div>
+      </CardContent>
+    </>
+  );
+}
+

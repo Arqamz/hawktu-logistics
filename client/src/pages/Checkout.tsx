@@ -18,18 +18,20 @@ export default function CheckoutPage() {
     const [expiryDate, setExpiryDate] = useState('')
     const [cvv, setCvv] = useState('')
     const [showSuccessPopup, setShowSuccessPopup] = useState(false)
+    const [deliveryAddress, setDeliveryAddress] = useState('') // Delivery address state
     const navigate = useNavigate()
     const location = useLocation()
     const cartItems = location.state?.cartItems || []
 
-    const totalAmount = cartItems.reduce((sum, item) => sum + item.price, 0)
+    const taxAmount = (cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0) * 0.1)
+    const totalAmount = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + taxAmount
 
     const handlePayment = () => {
         // Implement payment logic here
         setShowSuccessPopup(true)
         setTimeout(() => {
             setShowSuccessPopup(false)
-            navigate('/')
+            navigate('/shop')
         }, 3000)
     }
 
@@ -42,17 +44,31 @@ export default function CheckoutPage() {
                     <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
                     {cartItems.map((item) => (
                         <div key={item.id} className="flex justify-between items-center mb-2">
-                            <span>{item.name}</span>
-                            <span>${item.price.toFixed(2)}</span>
+                            <span>{item.name}x{item.quantity}</span>
+                            <span>${(item.price * item.quantity).toFixed(2)}</span>
                         </div>
                     ))}
                     <div className="border-t pt-2 mt-2">
+                        <div className="flex justify-between items-center font-bold">
+                            <span>Tax:</span>
+                            <span>${taxAmount.toFixed(2)}</span>
+                        </div>
                         <div className="flex justify-between items-center font-bold">
                             <span>Total:</span>
                             <span>${totalAmount.toFixed(2)}</span>
                         </div>
                     </div>
+                    <div className="flex mt-4 items-center">
+                        <div className="mr-3 font-extrabold">Delivery Address</div>
+                        <Input className="flex-1"
+                            id="delivery-address"
+                            placeholder="Enter your Delivery Address"
+                            value={deliveryAddress}
+                            onChange={(e) => setDeliveryAddress(e.target.value)}
+                        />
+                    </div>
                 </div>
+                
 
                 <div>
                     <h2 className="text-xl font-semibold mb-4">Payment Method</h2>
@@ -141,12 +157,15 @@ export default function CheckoutPage() {
                         </div>
                     )}
 
+                    
+
                     <Button 
                         className="mt-6 w-full" 
                         onClick={handlePayment} 
                         disabled={
                             (paymentMethod === 'wallet' && walletBalance < totalAmount) ||
-                            (paymentMethod === 'credit-card' && (!cardNumber || !cardName || !expiryDate || !cvv))
+                            (paymentMethod === 'credit-card' && (!cardNumber || !cardName || !expiryDate || !cvv)) ||
+                            !deliveryAddress
                         }
                     >
                         Pay ${totalAmount.toFixed(2)}

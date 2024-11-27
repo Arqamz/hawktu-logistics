@@ -1,0 +1,67 @@
+Add Product Listing: {
+    label: "Add Product Listing"
+  
+    "": {
+      shape: sequence_diagram
+  
+      Seller.t1: actor
+      ProductListingSystem.t1: actor
+      Database.t1: actor
+  
+      Seller.t1 -> ProductListingSystem.t1: navigateToProductListing()
+      ProductListingSystem.t1 -> Database.t1: fetchSellerProducts(sellerId)
+      ProductListingSystem.t1 <- Database.t1: sellerProductList {
+        style.stroke-dash: 5
+      }
+      Seller.t1 <- ProductListingSystem.t1: displayProductListingTab() {
+        style.stroke-dash: 5
+      }
+  
+      Seller.t1 -> ProductListingSystem.t2: selectAddNewListing()
+      ProductListingSystem.t2 -> Seller.t1: displayProductForm() {
+        style.stroke-dash: 5
+      }
+  
+      Seller.t1 -> ProductListingSystem.t3: submitProductDetails(name, description, category, price, quantity, image)
+  
+      alt label: "Product Details Validation" {
+        style.stroke-width: 5
+  
+        if label: "Invalid Details" {
+          style.fill: firebrick
+          ProductListingSystem.t3 -> Seller.t1: notifyValidationError("Invalid product details. Please correct and resubmit.") {
+            style.stroke-dash: 5
+          }
+        }
+        else label: "Valid Details" {
+          ProductListingSystem.t3 -> Database.t2: addProductToDatabase(sellerId, productDetails) {
+            style.stroke-dash: 5
+          }
+  
+          alt1 label: "Database Update Confirmation" {
+            style.stroke-width: 5
+  
+            if label: "Database Failure" {
+              style.fill: firebrick
+              Database.t2 -> ProductListingSystem.t3: notifyUpdateFailure("Failed to add product.") {
+                style.stroke-dash: 5
+              }
+              ProductListingSystem.t3 -> Seller.t1: notifyError("Product addition unsuccessful. Please try again.") {
+                style.stroke-dash: 5
+              }
+            }
+            else label: "Database Success" {
+              style.fill: green
+              Database.t2 -> ProductListingSystem.t3: confirmProductAdded {
+                style.stroke-dash: 5
+              }
+              ProductListingSystem.t3 -> Seller.t1: notifySuccess("Product successfully added and displayed in shop.") {
+                style.stroke-dash: 5
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  

@@ -1,9 +1,7 @@
 Loyalty Points: {
-    
   label: "Loyalty Points"
 
-  "" : {
-
+  "": {
     shape: sequence_diagram
 
     Customer.t1: actor
@@ -27,23 +25,29 @@ Loyalty Points: {
 
       if label: "Insufficient Points" {
         style.fill: firebrick
-        LoyaltySystem.t2 -> Customer.t1: notifyInsufficientPoints("Not enough points to redeem") 
+        LoyaltySystem.t2 -> Customer.t1: notifyInsufficientPoints("Not enough points to redeem")
       }
       else label: "Sufficient Points" {
         LoyaltySystem.t2 -> Database.t2: deductPoints(customerId, points)
-        
+
         alt1 label: "Points Deduction Confirmation" {
           style.stroke-width: 5
 
           if label: "Deduction Failure" {
             style.fill: firebrick
-            Database.t2 -> LoyaltySystem.t2: notifyDeductionFailure("Failed to redeem points")
+            Database.t2 -> LoyaltySystem.t2: notifyDeductionFailure("Failed to redeem points") {
+              style.stroke-dash: 5
+            }
             LoyaltySystem.t2 -> CustomerNotification.t2: notifyCustomer("Redemption unsuccessful, please try again.")
           }
           else label: "Deduction Success" {
             style.fill: green
-            Database.t2 <- LoyaltySystem.t2: confirmPointsDeduction
-            CustomerNotification.t2 -> LoyaltySystem.t2: notifyCustomer("Points redeemed successfully") {
+            Database.t3 -> LoyaltySystem.t2: confirmPointsDeduction()==bool {
+              style.stroke-dash: 5
+            }
+            LoyaltySystem.t2 -> LoyaltySystem.t2: generateCouponCode(customerId)==CouponCode
+            CustomerNotification.t4 <- LoyaltySystem.t2: AlertUser()
+            CustomerNotification.t2 -> Customer.t2: notifyCustomer("Points redeemed successfully. Coupon code: ADWADWAD") {
               style.stroke-dash: 5
             }
           }

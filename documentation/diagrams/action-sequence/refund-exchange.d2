@@ -1,0 +1,67 @@
+Product Refund and Exchange: {
+    label: "Product Refund and Exchange"
+  
+    "": {
+      shape: sequence_diagram
+  
+      Customer.t1: actor
+      RefundExchangeSystem.t1: actor
+      Database.t1: actor
+  
+      Customer.t1 -> RefundExchangeSystem.t1: navigateToOrderHistory()
+      RefundExchangeSystem.t1 -> Database.t1: fetchOrderHistory(customerId)
+      RefundExchangeSystem.t1 <- Database.t1: orderHistoryDetails {
+        style.stroke-dash: 5
+      }
+      Customer.t1 <- RefundExchangeSystem.t1: displayOrderHistory() {
+        style.stroke-dash: 5
+      }
+  
+      Customer.t1 -> RefundExchangeSystem.t2: selectDeliveredOrderAndProduct(orderId, productId)
+      RefundExchangeSystem.t2 -> Customer.t1: displayRefundExchangeForm() {
+        style.stroke-dash: 5
+      }
+  
+      Customer.t1 -> RefundExchangeSystem.t3: submitRefundExchangeRequest(productId, description)
+  
+      alt label: "Request Validation" {
+        style.stroke-width: 5
+  
+        if label: "Invalid Description" {
+          style.fill: firebrick
+          RefundExchangeSystem.t3 -> Customer.t1: notifyValidationError("Invalid or missing description.") {
+            style.stroke-dash: 5
+          }
+        }
+        else label: "Valid Request" {
+          RefundExchangeSystem.t3 -> Database.t2: createRefundExchangeRequest(customerId, productId, description) {
+            style.stroke-dash: 5
+          }
+  
+          alt1 label: "Database Update Confirmation" {
+            style.stroke-width: 5
+  
+            if label: "Database Failure" {
+              style.fill: firebrick
+              Database.t2 -> RefundExchangeSystem.t3: notifyUpdateFailure("Failed to create refund/exchange request.") {
+                style.stroke-dash: 5
+              }
+              RefundExchangeSystem.t3 -> Customer.t1: notifyError("Request submission unsuccessful. Please try again.") {
+                style.stroke-dash: 5
+              }
+            }
+            else label: "Database Success" {
+              style.fill: green
+              Database.t2 -> RefundExchangeSystem.t3: confirmRequestCreated {
+                style.stroke-dash: 5
+              }
+              RefundExchangeSystem.t3 -> Customer.t1: notifySuccess("Refund/Exchange request successfully created.") {
+                style.stroke-dash: 5
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  

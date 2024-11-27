@@ -1,33 +1,27 @@
+'use client'
+
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+
+// Import the useRegistration hook and the request types
+import { useRegistration } from '@/hooks/useRegistration';
+import { CustomerRegisterRequest, SellerRegisterRequest } from '@/types/auth/RegistrationTypes';
 
 // Define validation schemas using Zod
 const baseSchema = z.object({
-  name: z.string().min(2, { message: 'Name must be at least 2 characters long' }),
+  firstName: z.string().min(2, { message: 'First name must be at least 2 characters long' }),
+  lastName: z.string().min(2, { message: 'Last name must be at least 2 characters long' }),
   email: z.string().email({ message: 'Invalid email address' }),
-  phone: z.string().min(10, { message: 'Phone number must be valid' }),
+  phoneNumber: z.string().min(10, { message: 'Phone number must be valid' }),
   password: z
     .string()
     .min(6, { message: 'Password must be at least 6 characters long' })
@@ -36,11 +30,27 @@ const baseSchema = z.object({
 });
 
 const sellerSchema = baseSchema.extend({
-  address: z.string().min(1, { message: 'Address is required' }),
   businessName: z.string().min(1, { message: 'Business name is required' }),
+  address: z.object({
+    country: z.string().min(1, { message: 'Country is required' }),
+    city: z.string().min(1, { message: 'City is required' }),
+    district: z.string().min(1, { message: 'District is required' }),
+    addressLineOne: z.string().min(1, { message: 'Address Line One is required' }),
+    addressLineTwo: z.string().optional(),
+    additionalInfo: z.string().optional(),
+  }),
 });
 
-const customerSchema = baseSchema;
+const customerSchema = baseSchema.extend({
+  address: z.object({
+    country: z.string().min(1, { message: 'Country is required' }),
+    city: z.string().min(1, { message: 'City is required' }),
+    district: z.string().min(1, { message: 'District is required' }),
+    addressLineOne: z.string().min(1, { message: 'Address Line One is required' }),
+    addressLineTwo: z.string().optional(),
+    additionalInfo: z.string().optional(),
+  }),
+});
 
 export default function RegisterPage() {
   const [activeTab, setActiveTab] = useState<'customer' | 'seller'>('customer');
@@ -50,26 +60,58 @@ export default function RegisterPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
+      firstName: '',
+      lastName: '',
       email: '',
-      phone: '',
+      phoneNumber: '',
       password: '',
       confirmPassword: '',
-      address: '',
       businessName: '',
+      address: {
+        country: '',
+        city: '',
+        district: '',
+        addressLineOne: '',
+        addressLineTwo: '',
+        additionalInfo: '',
+      },
     },
   });
 
+  // Use the custom hook for registration
+  const { registerCustomer, registerSeller, loading, error, successMessage } = useRegistration();
+
+  const navigate = useNavigate(); // For redirection
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      console.log(values);
-      toast(
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      );
-    } catch (error) {
-      console.error('Form submission error', error);
+      const requestData = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        phoneNumber: values.phoneNumber,
+        password: values.password,
+        confirmPassword: values.confirmPassword,
+        address: values.address,
+      };
+
+      let response;
+      if (isSeller) {
+        const sellerData: SellerRegisterRequest = {
+          ...requestData,
+          businessName: values.businessName,
+        };
+        response = await registerSeller(sellerData);
+      } else {
+        const customerData: CustomerRegisterRequest = requestData;
+        response = await registerCustomer(customerData);
+      }
+
+      // Show success toast and redirect to login page
+      toast.success('Registration successful! Please log in.');
+      navigate('/login'); // Redirect to login page
+    } catch (err) {
+      console.error('Form submission error', err);
       toast.error('Failed to submit the form. Please try again.');
     }
   }
@@ -89,21 +131,13 @@ export default function RegisterPage() {
         <div className="flex border-b border-border">
           <button
             onClick={() => setActiveTab('customer')}
-            className={`flex-1 py-2 text-center ${
-              activeTab === 'customer'
-                ? 'border-b-2 border-primary text-primary'
-                : 'text-gray-500'
-            }`}
+            className={`flex-1 py-2 text-center ${activeTab === 'customer' ? 'border-b-2 border-primary text-primary' : 'text-gray-500'}`}
           >
             Customer
           </button>
           <button
             onClick={() => setActiveTab('seller')}
-            className={`flex-1 py-2 text-center ${
-              activeTab === 'seller'
-                ? 'border-b-2 border-primary text-primary'
-                : 'text-gray-500'
-            }`}
+            className={`flex-1 py-2 text-center ${activeTab === 'seller' ? 'border-b-2 border-primary text-primary' : 'text-gray-500'}`}
           >
             Seller
           </button>
@@ -118,20 +152,33 @@ export default function RegisterPage() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <div className="grid gap-4">
+                {/* Form Fields */}
                 <FormField
                   control={form.control}
-                  name="name"
+                  name="firstName"
                   render={({ field }) => (
                     <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="name">Full Name</FormLabel>
+                      <FormLabel htmlFor="firstName">First Name</FormLabel>
                       <FormControl>
-                        <Input id="name" placeholder="John Doe" {...field} />
+                        <Input id="firstName" placeholder="Jane" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem className="grid gap-2">
+                      <FormLabel htmlFor="lastName">Last Name</FormLabel>
+                      <FormControl>
+                        <Input id="lastName" placeholder="Allen" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="email"
@@ -139,32 +186,20 @@ export default function RegisterPage() {
                     <FormItem className="grid gap-2">
                       <FormLabel htmlFor="email">Email</FormLabel>
                       <FormControl>
-                        <Input
-                          id="email"
-                          placeholder="johndoe@mail.com"
-                          type="email"
-                          autoComplete="email"
-                          {...field}
-                        />
+                        <Input id="email" placeholder="janeallen@example.com" type="email" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   control={form.control}
-                  name="phone"
+                  name="phoneNumber"
                   render={({ field }) => (
                     <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="phone">Phone Number</FormLabel>
+                      <FormLabel htmlFor="phoneNumber">Phone Number</FormLabel>
                       <FormControl>
-                        <Input
-                          id="phone"
-                          placeholder="555-123-4567"
-                          type="tel"
-                          {...field}
-                        />
+                        <Input id="phoneNumber" placeholder="+1234567891" type="tel" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -172,45 +207,107 @@ export default function RegisterPage() {
                 />
 
                 {isSeller && (
-                  <>
-                    <FormField
-                      control={form.control}
-                      name="address"
-                      render={({ field }) => (
-                        <FormItem className="grid gap-2">
-                          <FormLabel htmlFor="address">Address</FormLabel>
-                          <FormControl>
-                            <Input
-                              id="address"
-                              placeholder="123 Main St, City, Country"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="businessName"
-                      render={({ field }) => (
-                        <FormItem className="grid gap-2">
-                          <FormLabel htmlFor="businessName">Business Name</FormLabel>
-                          <FormControl>
-                            <Input
-                              id="businessName"
-                              placeholder="Your Business Name"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </>
+                  <FormField
+                    control={form.control}
+                    name="businessName"
+                    render={({ field }) => (
+                      <FormItem className="grid gap-2">
+                        <FormLabel htmlFor="businessName">Business Name</FormLabel>
+                        <FormControl>
+                          <Input id="businessName" placeholder="Acme Inc" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 )}
 
+                {/* Address Fields */}
+                <FormField
+                  control={form.control}
+                  name="address.country"
+                  render={({ field }) => (
+                    <FormItem className="grid gap-2">
+                      <FormLabel htmlFor="address.country">Country</FormLabel>
+                      <FormControl>
+                        <Input id="address.country" placeholder="USA" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="address.city"
+                  render={({ field }) => (
+                    <FormItem className="grid gap-2">
+                      <FormLabel htmlFor="address.city">City</FormLabel>
+                      <FormControl>
+                        <Input id="address.city" placeholder="New York" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="address.district"
+                  render={({ field }) => (
+                    <FormItem className="grid gap-2">
+                      <FormLabel htmlFor="address.district">District</FormLabel>
+                      <FormControl>
+                        <Input id="address.district" placeholder="Manhattan" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="address.addressLineOne"
+                  render={({ field }) => (
+                    <FormItem className="grid gap-2">
+                      <FormLabel htmlFor="address.addressLineOne">Address Line One</FormLabel>
+                      <FormControl>
+                        <Input id="address.addressLineOne" placeholder="123 Main Street" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="address.addressLineTwo"
+                  render={({ field }) => (
+                    <FormItem className="grid gap-2">
+                      <FormLabel htmlFor="address.addressLineTwo">Address Line Two (Optional)</FormLabel>
+                      <FormControl>
+                        <Input id="address.addressLineTwo" placeholder="Apartment 4C" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="address.additionalInfo"
+                  render={({ field }) => (
+                    <FormItem className="grid gap-2">
+                      <FormLabel htmlFor="address.additionalInfo">Additional Info (Optional)</FormLabel>
+                      <FormControl>
+                        <Input id="address.additionalInfo" placeholder="Near Central Park" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Password Fields */}
                 <FormField
                   control={form.control}
                   name="password"
@@ -218,13 +315,7 @@ export default function RegisterPage() {
                     <FormItem className="grid gap-2">
                       <FormLabel htmlFor="password">Password</FormLabel>
                       <FormControl>
-                        <Input
-                          id="password"
-                          placeholder="******"
-                          autoComplete="new-password"
-                          type="password"
-                          {...field}
-                        />
+                        <Input id="password" type="password" placeholder="******" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -236,25 +327,17 @@ export default function RegisterPage() {
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="confirmPassword">
-                        Confirm Password
-                      </FormLabel>
+                      <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
                       <FormControl>
-                        <Input
-                          id="confirmPassword"
-                          placeholder="******"
-                          autoComplete="new-password"
-                          type="password"
-                          {...field}
-                        />
+                        <Input id="confirmPassword" type="password" placeholder="******" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                <Button type="submit" className="w-full">
-                  Register
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? 'Registering...' : 'Register'}
                 </Button>
               </div>
             </form>

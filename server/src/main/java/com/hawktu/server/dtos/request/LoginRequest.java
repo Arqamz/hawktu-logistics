@@ -5,7 +5,6 @@ public class LoginRequest {
     private String password;
     private String accountType;
 
-    // Getters and Setters
     public String getEmail() {
         return email;
     }
