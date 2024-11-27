@@ -1,14 +1,17 @@
 package com.hawktu.server.services;
 
-import com.hawktu.server.models.Customer;
-import com.hawktu.server.repositories.CustomerRepository;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.hawktu.server.factories.CustomerFactory;
-import com.hawktu.server.dtos.request.CustomerRegisterRequest;
 
-import java.util.Optional;
+import com.hawktu.server.dtos.request.ChangePasswordRequest;
+import com.hawktu.server.dtos.request.CustomerRegisterRequest;
+import com.hawktu.server.dtos.request.UpdateCustomerInfoRequest;
+import com.hawktu.server.factories.CustomerFactory;
+import com.hawktu.server.models.Customer;
+import com.hawktu.server.repositories.CustomerRepository;
 
 @Service
 public class CustomerService {
@@ -47,6 +50,29 @@ public class CustomerService {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Customer customer = customerFactory.createCustomer(user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getPhoneNumber(), user.getAddress());
+        customerRepository.save(customer);
+        return true;
+    }
+
+    public void updateCustomerInfo(String email, UpdateCustomerInfoRequest request) {
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Customer not found."));
+        customer.setFirstName(request.getFirstName());
+        customer.setLastName(request.getLastName());
+        customer.setPhoneNumber(request.getPhoneNumber());
+        customer.setAddress(request.getAddress());
+        customerRepository.save(customer);
+    }
+
+    public boolean changePassword(String email, ChangePasswordRequest request) {
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Customer not found."));
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(), customer.getPassword())) {
+            return false;
+        }
+
+        customer.setPassword(passwordEncoder.encode(request.getNewPassword()));
         customerRepository.save(customer);
         return true;
     }
