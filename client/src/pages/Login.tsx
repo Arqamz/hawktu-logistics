@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useLogin } from '@/hooks/useLogin';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useNavigate } from 'react-router-dom';
 
 // Validation schema with zod
 const formSchema = z.object({
@@ -22,10 +23,10 @@ const formSchema = z.object({
     .regex(/[a-zA-Z0-9]/, { message: 'Password must be alphanumeric' }),
 });
 
-type UserType = 'seller' | 'customer';
+type accountType = 'seller' | 'customer';
 
 export default function LoginPreview() {
-  const [userType, setUserType] = useState<UserType>('customer');
+  const [accountType, setaccountType] = useState<accountType>('customer');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -34,17 +35,16 @@ export default function LoginPreview() {
       password: '',
     },
   });
-
+  const navigate=useNavigate
   const { login, isLoading, error, isSuccess } = useLogin();
 
   // Handle form submission
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await login({ ...values, userType });
-      if (isSuccess) {
+      const response=await login({ ...values, accountType });
+      if (response) {
         toast.success('Login successful!');
-        // Redirect based on user type
-        window.location.href = userType === 'seller' ? '/seller-dashboard' : '/shop';
+        window.location.href = accountType === 'seller' ? '/seller-dashboard' : '/shop';
       }
     } catch (err) {
       toast.error(error || 'Login failed');
@@ -64,16 +64,16 @@ export default function LoginPreview() {
       </header>
       <div className="flex-1 flex items-center justify-center">
         <Card className="mx-auto max-w-sm">
-          <Tabs defaultValue="customer" onValueChange={(value) => setUserType(value as UserType)}>
+          <Tabs defaultValue="customer" onValueChange={(value) => setaccountType(value as accountType)}>
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="customer">Customer</TabsTrigger>
               <TabsTrigger value="seller">Seller</TabsTrigger>
             </TabsList>
             <TabsContent value="customer">
-              <LoginForm userType="customer" form={form} onSubmit={onSubmit} isLoading={isLoading} error={error} />
+              <LoginForm accountType="customer" form={form} onSubmit={onSubmit} isLoading={isLoading} error={error} />
             </TabsContent>
             <TabsContent value="seller">
-              <LoginForm userType="seller" form={form} onSubmit={onSubmit} isLoading={isLoading} error={error} />
+              <LoginForm accountType="seller" form={form} onSubmit={onSubmit} isLoading={isLoading} error={error} />
             </TabsContent>
           </Tabs>
         </Card>
@@ -83,20 +83,20 @@ export default function LoginPreview() {
 }
 
 interface LoginFormProps {
-  userType: UserType;
+  accountType: accountType;
   form: ReturnType<typeof useForm<z.infer<typeof formSchema>>>;
   onSubmit: (values: z.infer<typeof formSchema>) => Promise<void>;
   isLoading: boolean;
   error: string | null;
 }
 
-function LoginForm({ userType, form, onSubmit, isLoading, error }: LoginFormProps) {
+function LoginForm({ accountType, form, onSubmit, isLoading, error }: LoginFormProps) {
   return (
     <>
       <CardHeader>
-        <CardTitle className="text-2xl">Login as {userType}</CardTitle>
+        <CardTitle className="text-2xl">Login as {accountType}</CardTitle>
         <CardDescription>
-          Enter your email and password to log in to your {userType} account.
+          Enter your email and password to log in to your {accountType} account.
         </CardDescription>
       </CardHeader>
       <CardContent>

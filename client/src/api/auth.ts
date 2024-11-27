@@ -8,15 +8,9 @@ import { LoginRequest, LoginResponse } from '@/types/auth/LoginTypes';
  */
 export const login = async (data: LoginRequest): Promise<LoginResponse> => {
   try {
+    console.log('Sending login request:', data);
 
-    const loginRequestWithAccountType = { 
-      ...data,
-      account_type: 'customer'  // Temporary hardcoded account type for testing
-    };
-
-    console.log('Sending login request:', loginRequestWithAccountType);
-
-    const response = await axiosInstance.post('/auth/login', loginRequestWithAccountType);
+    const response = await axiosInstance.post('/auth/login', data);
   
     // Debug: Log the response data
     console.log('Login response:', response.data);
