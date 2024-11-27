@@ -1,6 +1,5 @@
 package com.hawktu.server.builders;
 
-import java.time.LocalDateTime;
 import com.hawktu.server.models.Customer;
 
 public class CustomerBuilder extends UserBuilder<Customer, CustomerBuilder> {
@@ -13,20 +12,14 @@ public class CustomerBuilder extends UserBuilder<Customer, CustomerBuilder> {
 
     @Override
     public Customer build() {
-        // Use default values if not set
-        if (registeredAt == null) {
-            registeredAt = LocalDateTime.now();
-        }
-        
-        return new Customer(
-            password, 
-            email, 
-            firstName, 
-            lastName, 
-            phoneNumber, 
-            registeredAt, 
-            wallet, 
-            loyaltyPoints
-        );
+        Customer customer = new Customer();
+        customer.setPassword(password);
+        customer.setEmail(email);
+        customer.setFirstName(firstName);
+        customer.setLastName(lastName);
+        customer.setPhoneNumber(phoneNumber);
+        customer.setAddress(address);
+        customer.setLoyaltyPoints(loyaltyPoints);
+        return customer;
     }
 }

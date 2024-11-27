@@ -1,6 +1,8 @@
 package com.hawktu.server.builders;
 
 import java.time.LocalDateTime;
+
+import com.hawktu.server.models.Address;
 import com.hawktu.server.models.User;
 
 public abstract class UserBuilder<T extends User, B extends UserBuilder<T, B>> {
@@ -10,6 +12,7 @@ public abstract class UserBuilder<T extends User, B extends UserBuilder<T, B>> {
     protected String lastName;
     protected String phoneNumber;
     protected LocalDateTime registeredAt;
+    protected Address address;
     protected Double wallet = 0.0;
 
     // Use generics to enable method chaining for subclasses
@@ -45,6 +48,11 @@ public abstract class UserBuilder<T extends User, B extends UserBuilder<T, B>> {
 
     public B registeredAt(LocalDateTime registeredAt) {
         this.registeredAt = registeredAt;
+        return self();
+    }
+
+    public B address(Address address) {
+        this.address = address;
         return self();
     }
 

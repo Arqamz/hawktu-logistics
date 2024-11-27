@@ -1,37 +1,34 @@
 package com.hawktu.server.builders;
 
-import com.hawktu.server.states.OrderItemState;
-import com.hawktu.server.states.ProcessingState;
-import com.hawktu.server.models.Order;
-import com.hawktu.server.models.OrderItem;
-import com.hawktu.server.models.Product;
-import com.hawktu.server.models.Address;
-
-
 import java.math.BigDecimal;
 
+import com.hawktu.server.models.Address;
+import com.hawktu.server.models.OrderItem;
+import com.hawktu.server.states.OrderItemState;
+import com.hawktu.server.states.ProcessingState;
+
+
 public class OrderItemBuilder {
-    private Order order;
-    private Product product;
+    private Long orderId;
+    private Long productId;
     private int quantity;
-    private BigDecimal unitPrice;
     private Address deliveryAddress;
     private OrderItemState state;
     private String refundMessage;
     private String refundResponse;
+    private BigDecimal unitPrice;
 
     public OrderItemBuilder() {
-        // Default state is Processing
         this.state = new ProcessingState();
     }
 
-    public OrderItemBuilder withOrder(Order order) {
-        this.order = order;
+    public OrderItemBuilder withOrderId(Long orderId) {
+        this.orderId = orderId;
         return this;
     }
 
-    public OrderItemBuilder withProduct(Product product) {
-        this.product = product;
+    public OrderItemBuilder withProductId(Long productId) {
+        this.productId = productId;
         return this;
     }
 
@@ -40,13 +37,13 @@ public class OrderItemBuilder {
         return this;
     }
 
-    public OrderItemBuilder withUnitPrice(BigDecimal unitPrice) {
-        this.unitPrice = unitPrice;
+    public OrderItemBuilder withDeliveryAddress(Address deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
         return this;
     }
 
-    public OrderItemBuilder withDeliveryAddress(Address deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
+    public OrderItemBuilder withUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
         return this;
     }
 
@@ -67,23 +64,26 @@ public class OrderItemBuilder {
 
     public OrderItem build() {
         // Validate required fields
-        if (order == null) {
-            throw new IllegalStateException("Order is required");
+        if (orderId == null) {
+            throw new IllegalStateException("Order ID is required");
         }
-        if (product == null) {
-            throw new IllegalStateException("Product is required");
+        if (productId == null) {
+            throw new IllegalStateException("Product ID is required");
+        }
+        if (unitPrice == null) {
+            throw new IllegalStateException("Unit price is required");
         }
         if (quantity <= 0) {
             throw new IllegalStateException("Quantity must be positive");
         }
-        if (unitPrice == null || unitPrice.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalStateException("Unit price must be positive");
-        }
 
-        // Create the OrderItem
-        OrderItem orderItem = new OrderItem(order, product, quantity, unitPrice, deliveryAddress);
-        
-        // Set additional fields if they were provided
+        OrderItem orderItem = new OrderItem();
+        orderItem.setOrderId(orderId);
+        orderItem.setProductId(productId);
+        orderItem.setQuantity(quantity);
+        orderItem.setTotalPrice(unitPrice.multiply(BigDecimal.valueOf(this.quantity)));
+        orderItem.setDeliveryAddress(deliveryAddress);
+
         if (state != null) {
             orderItem.setState(state);
         }
