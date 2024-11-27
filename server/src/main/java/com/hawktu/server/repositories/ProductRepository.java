@@ -1,55 +1,40 @@
-// SHOULD BE IMPLEMENTED AS JPA REPOSITORY
-
 package com.hawktu.server.repositories;
 
-
-import com.hawktu.server.models.Product;
-
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
+import com.hawktu.server.models.Product;
 
-@Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    // Find products by name (partial match)
-    List<Product> findByNameContainingIgnoreCase(String name);
 
-    // Find products by seller ID
-    List<Product> findBySellerId(Long sellerId);
+    // Fetch all products by a specific seller
+    @Query("SELECT p FROM Product p WHERE p.sellerId = :sellerId")
+    List<Product> findAllBySellerId(@Param("sellerId") Long sellerId);
 
-    // Find products by category ID
-    List<Product> findByCategoryId(Long categoryId);
+    // Calculate the average rating of all products
+    @Query("SELECT AVG(p.averageRating) FROM Product p")
+    Double calculateAverageRating();
 
-    // Find listed products
-    List<Product> findByUnlistedFalse();
+    // Fetch all products by category ID
+    @Query("SELECT p FROM Product p WHERE p.categoryId = :categoryId")
+    List<Product> findAllByCategoryId(@Param("categoryId") Long categoryId);
 
-    // Find unlisted products
-    List<Product> findByUnlistedTrue();
+    // Fetch only listed products
+    @Query("SELECT p FROM Product p WHERE p.unlisted = false")
+    List<Product> findListedProducts();
 
-    // Find products within a price range
-    List<Product> findByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice);
+    // Fetch only unlisted products
+    @Query("SELECT p FROM Product p WHERE p.unlisted = true")
+    List<Product> findUnlistedProducts();
 
-    // Find products with stock above a certain threshold
-    List<Product> findByStockGreaterThan(int minStock);
+    // Fetch products based on stock availability (e.g., in stock only)
+    @Query("SELECT p FROM Product p WHERE p.stock > 0")
+    List<Product> findProductsInStock();
 
-    // Find products by seller ID and category ID
-    List<Product> findBySellerIdAndCategoryId(Long sellerId, Long categoryId);
-
-    // Custom query to find products with average rating above a certain value
-    @Query("SELECT p FROM Product p WHERE p.averageRating > :minRating AND p.unlisted = false")
-    List<Product> findHighlyRatedProducts(@Param("minRating") Double minRating);
-
-    // Check if a product exists by name
-    boolean existsByName(String name);
-
-    // Find products sorted by price (low to high)
-    List<Product> findByOrderByPriceAsc();
-
-    // Find products sorted by average rating (high to low)
-    List<Product> findByOrderByAverageRatingDesc();
+    // Fetch products based on stock level threshold
+    @Query("SELECT p FROM Product p WHERE p.stock <= :stockThreshold")
+    List<Product> findProductsBelowStockThreshold(@Param("stockThreshold") int stockThreshold);
 }
