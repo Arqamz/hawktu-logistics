@@ -22,4 +22,3 @@ public class Customer extends User {
         this.loyaltyPoints = loyaltyPoints;
     }
 }
-
