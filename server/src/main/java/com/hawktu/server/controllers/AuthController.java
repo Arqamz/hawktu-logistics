@@ -87,7 +87,6 @@ public class AuthController {
         try {
             String refreshToken = request.getRefreshToken();
             
-            // Validate refresh token
             if (!jwtUtil.isRefreshToken(refreshToken)) {
                 logger.error("Invalid refresh token type");
                 return ResponseEntity.status(401).body(new ErrorResponse("Invalid refresh token", 401));
@@ -99,7 +98,6 @@ public class AuthController {
                 return ResponseEntity.status(401).body(new ErrorResponse("Invalid or expired refresh token", 401));
             }
 
-            // Generate new access token
             String newAccessToken = jwtUtil.generateAccessToken(email);
             
             logger.debug("New access token generated for user: {}", email);
@@ -111,13 +109,11 @@ public class AuthController {
         }
     }
 
-    
     @PostMapping("/register/seller")
     public ResponseEntity<?> registerSeller(@RequestBody SellerRegisterRequest registerRequest) {
         logger.debug("Received seller registration request for email: {}", registerRequest.getEmail());
 
         try {
-            // Call seller service to create seller using factory method
             boolean registrationResult = sellerService.register(registerRequest);
 
             if (registrationResult) {
@@ -138,7 +134,6 @@ public class AuthController {
         logger.debug("Received customer registration request for email: {}", registerRequest.getEmail());
 
         try {
-            // Call customer service to create customer using factory method
             boolean registrationResult = customerService.register(registerRequest);
 
             if (registrationResult) {

@@ -20,12 +20,59 @@ public class Address {
         this.additionalInfo = additionalInfo;
     }
 
-    // Convert Address to String representation with separator %#.
+        public String getCountry() {
+            return country;
+        }
+    
+        public void setCountry(String country) {
+            this.country = country;
+        }
+    
+        public String getCity() {
+            return city;
+        }
+    
+        public void setCity(String city) {
+            this.city = city;
+        }
+    
+        public String getDistrict() {
+            return district;
+        }
+    
+        public void setDistrict(String district) {
+            this.district = district;
+        }
+    
+        public String getAddressLineOne() {
+            return addressLineOne;
+        }
+    
+        public void setAddressLineOne(String addressLineOne) {
+            this.addressLineOne = addressLineOne;
+        }
+    
+        public String getAddressLineTwo() {
+            return addressLineTwo;
+        }
+    
+        public void setAddressLineTwo(String addressLineTwo) {
+            this.addressLineTwo = addressLineTwo;
+        }
+    
+        public String getAdditionalInfo() {
+            return additionalInfo;
+        }
+    
+        public void setAdditionalInfo(String additionalInfo) {
+            this.additionalInfo = additionalInfo;
+        }
+
+
     public String toStringRepresentation() {
         return String.join("%#", country, city, district, addressLineOne, addressLineTwo != null ? addressLineTwo : "", additionalInfo != null ? additionalInfo : "");
     }
 
-    // Convert String representation back to Address object.
     public static Address fromStringRepresentation(String addressString) {
         String[] parts = addressString.split("%#");
 

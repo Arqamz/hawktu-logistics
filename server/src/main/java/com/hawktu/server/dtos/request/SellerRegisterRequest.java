@@ -1,12 +1,14 @@
 package com.hawktu.server.dtos.request;
 
+import com.hawktu.server.models.Address;
+
 public class SellerRegisterRequest {
     private String email;
     private String firstName;
     private String lastName;
     private String password;
     private String name;
-    private String address;
+    private Address address;
     private String phoneNumber;
     private String businessName;
 
@@ -30,7 +32,7 @@ public class SellerRegisterRequest {
         return name;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
@@ -58,7 +60,7 @@ public class SellerRegisterRequest {
         this.name = name;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 

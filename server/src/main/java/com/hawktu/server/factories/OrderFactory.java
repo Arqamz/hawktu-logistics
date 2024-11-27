@@ -3,13 +3,14 @@ package com.hawktu.server.factories;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.hawktu.server.dtos.request.OrderItemDTO;
 import com.hawktu.server.models.Order;
 import com.hawktu.server.models.OrderItem;
 import com.hawktu.server.repositories.OrderRepository;
 
-
+@Component
 public class OrderFactory {
     
     @Autowired

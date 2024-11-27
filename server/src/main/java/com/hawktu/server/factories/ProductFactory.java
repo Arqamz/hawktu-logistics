@@ -3,11 +3,13 @@ package com.hawktu.server.factories;
 import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.hawktu.server.builders.ProductBuilder;
 import com.hawktu.server.models.Product;
 import com.hawktu.server.repositories.ProductRepository;
 
+@Component
 public class ProductFactory {
 
     @Autowired
