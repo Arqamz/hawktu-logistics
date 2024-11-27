@@ -1,19 +1,30 @@
 package com.hawktu.server.dtos.request;
 
+import java.math.BigDecimal;
+
 import com.hawktu.server.models.Address;
 
 public class OrderItemDTO {
     
-    private Long id;
+    private Long productId;
+    private BigDecimal unitPrice;
     private int quantity;
     private Address deliveryAddress;
 
-    public Long getId() {
-        return id;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
     }
 
     public int getQuantity() {
@@ -31,8 +42,4 @@ public class OrderItemDTO {
     public void setDeliveryAddress(Address deliveryAddress) {
         this.deliveryAddress = deliveryAddress;
     }
-    
-     
 }
-
-//service will get list of these dtos,
