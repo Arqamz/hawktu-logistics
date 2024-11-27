@@ -142,5 +142,4 @@ public class AuthController extends BaseController {
             return internalServerError("Internal Server Error");
         }
     }
-
 }

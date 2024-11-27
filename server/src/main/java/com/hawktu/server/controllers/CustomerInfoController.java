@@ -40,7 +40,7 @@ public class CustomerInfoController extends BaseController {
             }
 
             customerService.updateCustomerInfo(email, request);
-            return okResponse("Customer info updated successfully.");
+            return ResponseEntity.ok("Customer info updated successfully.");
         } catch (Exception e) {
             logger.error("Error updating customer info: ", e);
             return internalServerError("Error updating customer info: " + e.getMessage());
@@ -62,7 +62,7 @@ public class CustomerInfoController extends BaseController {
 
             boolean passwordChanged = customerService.changePassword(email, request);
             if (passwordChanged) {
-                return okResponse("Password changed successfully.");
+                return ResponseEntity.ok("Password changed successfully.");
             } else {
                 return badRequestError("Current password is incorrect.");
             }

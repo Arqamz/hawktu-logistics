@@ -35,8 +35,4 @@ public class BaseController {
         ErrorResponse errorResponse = new ErrorResponse(message, status.value());
         return ResponseEntity.status(status).body(errorResponse);
     }
-    
-    protected ResponseEntity<?> okResponse(String message) {
-        return ResponseEntity.ok(message);
-    }
 }
