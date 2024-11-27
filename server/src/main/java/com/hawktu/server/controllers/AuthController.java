@@ -1,64 +1,78 @@
 package com.hawktu.server.controllers;
 
-import com.hawktu.server.dtos.request.*;
-import com.hawktu.server.dtos.response.*;
-import com.hawktu.server.models.Customer;
-import com.hawktu.server.repositories.CustomerRepository;
+import com.hawktu.server.dtos.request.CustomerRegisterRequest;
+import com.hawktu.server.dtos.request.LoginRequest;
+import com.hawktu.server.dtos.request.RefreshTokenRequest;
+import com.hawktu.server.dtos.request.SellerRegisterRequest;
+import com.hawktu.server.dtos.response.LoginResponse;
+import com.hawktu.server.dtos.response.ErrorResponse;
+import com.hawktu.server.dtos.response.TokenRefreshResponse;
+import com.hawktu.server.services.CustomerService;
+import com.hawktu.server.services.SellerService;
 import com.hawktu.server.utils.JwtUtil;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
-    private final CustomerRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final CustomerService customerService;
+    private final SellerService sellerService;
     private final JwtUtil jwtUtil;
     private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-    public AuthController(CustomerRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    @Autowired
+    public AuthController(CustomerService customerService, 
+                          SellerService sellerService, 
+                          JwtUtil jwtUtil) {
+        this.customerService = customerService;
+        this.sellerService = sellerService;
         this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        logger.debug("Received login request for email: {}", request.getEmail());
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        logger.debug("Received login request for email: {}", loginRequest.getEmail());
 
         try {
-            Optional<Customer> userOptional = userRepository.findByEmail(request.getEmail());
-            if (userOptional.isEmpty()) {
-                logger.error("User not found: {}", request.getEmail());
-                return ResponseEntity.status(401).body(new ErrorResponse("Invalid email or password", 401));
-            }
-            
-            Customer user = userOptional.get();
-            if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-                logger.error("Password mismatch for user: {}", user.getEmail());
-                return ResponseEntity.status(401).body(new ErrorResponse("Invalid email or password", 401));
+            boolean isAuthenticated;
+            String userEmail = loginRequest.getEmail();
+            String password = loginRequest.getPassword();
+
+            switch (loginRequest.getAccountType().toLowerCase()) {
+                case "customer":
+                    isAuthenticated = customerService.authenticate(userEmail, password);
+                    break;
+                case "seller":
+                    isAuthenticated = sellerService.authenticate(userEmail, password);
+                    break;
+                default:
+                    logger.error("Invalid account type: {}", loginRequest.getAccountType());
+                    return ResponseEntity.badRequest().body(new ErrorResponse("Invalid account type", 400));
             }
 
-            String accessToken = jwtUtil.generateAccessToken(user.getEmail());
-            String refreshToken = jwtUtil.generateRefreshToken(user.getEmail());
-            
-            logger.debug("Tokens generated for user: {}", user.getEmail());
+            if (isAuthenticated) {
+                String accessToken = jwtUtil.generateAccessToken(userEmail);
+                String refreshToken = jwtUtil.generateRefreshToken(userEmail);
+                
+                logger.debug("Tokens generated for user: {}", userEmail);
 
-            LoginResponse response = new LoginResponse(
-                accessToken,
-                refreshToken,
-                user.getEmail(),
-                user.getFirstName()
-            );
-            
-            return ResponseEntity.ok(response);
+                LoginResponse response = new LoginResponse(
+                    accessToken,
+                    refreshToken,
+                    userEmail,
+                    loginRequest.getAccountType()
+                );
+                
+                return ResponseEntity.ok(response);
+            } else {
+                logger.error("Authentication failed for email: {}", userEmail);
+                return ResponseEntity.status(401).body(new ErrorResponse("Invalid credentials", 401));
+            }
         } catch (Exception e) {
             logger.error("Unexpected error during login: ", e);
             return ResponseEntity.status(500).body(new ErrorResponse("Internal Server Error", 500));
@@ -95,4 +109,48 @@ public class AuthController {
             return ResponseEntity.status(500).body(new ErrorResponse("Internal Server Error", 500));
         }
     }
+
+    
+    @PostMapping("/register/seller")
+    public ResponseEntity<?> registerSeller(@RequestBody SellerRegisterRequest registerRequest) {
+        logger.debug("Received seller registration request for email: {}", registerRequest.getEmail());
+
+        try {
+            // Call seller service to create seller using factory method
+            boolean registrationResult = sellerService.register(registerRequest);
+
+            if (registrationResult) {
+                logger.info("Seller registered successfully: {}", registerRequest.getEmail());
+                return ResponseEntity.ok("Seller registered successfully");
+            } else {
+                logger.error("Seller registration failed: {}", registerRequest.getEmail());
+                return ResponseEntity.badRequest().body(new ErrorResponse("Registration failed", 400));
+            }
+        } catch (Exception e) {
+            logger.error("Unexpected error during seller registration: ", e);
+            return ResponseEntity.status(500).body(new ErrorResponse("Internal Server Error", 500));
+        }
+    }
+
+    @PostMapping("/register/customer")
+    public ResponseEntity<?> registerCustomer(@RequestBody CustomerRegisterRequest registerRequest) {
+        logger.debug("Received customer registration request for email: {}", registerRequest.getEmail());
+
+        try {
+            // Call customer service to create customer using factory method
+            boolean registrationResult = customerService.register(registerRequest);
+
+            if (registrationResult) {
+                logger.info("Customer registered successfully: {}", registerRequest.getEmail());
+                return ResponseEntity.ok("Customer registered successfully");
+            } else {
+                logger.error("Customer registration failed: {}", registerRequest.getEmail());
+                return ResponseEntity.badRequest().body(new ErrorResponse("Registration failed", 400));
+            }
+        } catch (Exception e) {
+            logger.error("Unexpected error during customer registration: ", e);
+            return ResponseEntity.status(500).body(new ErrorResponse("Internal Server Error", 500));
+        }
+    }
+
 }
