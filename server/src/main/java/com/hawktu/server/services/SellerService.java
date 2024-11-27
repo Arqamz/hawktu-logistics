@@ -49,7 +49,7 @@ public class SellerService {
 
         // Encrypt the password and save the seller
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Seller seller = sellerFactory.createDefaultSeller(user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getPhoneNumber(), user.getBusinessName());
+        Seller seller = sellerFactory.createSeller(user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getPhoneNumber(), user.getBusinessName());
         sellerRepository.save(seller);
         return true;
     }

@@ -49,7 +49,7 @@ public class CustomerService {
 
         // Encrypt the password and save the customer
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Customer customer = customerFactory.createCustomerWithDTO(user);
+        Customer customer = customerFactory.createCustomer(user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getPhoneNumber());
         customerRepository.save(customer);
         return true;
     }
