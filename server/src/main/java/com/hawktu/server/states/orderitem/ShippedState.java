@@ -1,40 +1,41 @@
-package com.hawktu.server.states;
+package com.hawktu.server.states.orderitem;
 
-public class RefundDeniedState implements OrderItemState {
+import com.hawktu.server.states.OrderItemState;
 
+public class ShippedState implements OrderItemState {
     @Override
     public OrderItemState nextState() {
-        throw new IllegalStateException("Refund process is complete; no further state transitions.");
+        return new DeliveredState();
     }
 
     @Override
     public OrderItemState cancel() {
-        throw new IllegalStateException("Cannot cancel an order which has been delivered.");
+        return new CancelledState();
     }
 
     @Override
     public OrderItemState requestRefund() {
-        throw new IllegalStateException("Refund has been denied.");
+        throw new IllegalStateException("Cannot request refund before order has been delivered.");
     }
 
     @Override
     public OrderItemState approveRefund() {
-        throw new IllegalStateException("Cannot approve refund after it has been denied.");
+        throw new IllegalStateException("Cannot approve refund from Shipped state.");
     }
 
     @Override
     public OrderItemState denyRefund() {
-        throw new IllegalStateException("Refund is already denied.");
+        throw new IllegalStateException("Cannot deny refund from Shipped state.");
     }
 
     @Override
     public boolean canNext() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean canCancel() {
-        return false;
+        return true;
     }
 
     @Override
@@ -54,6 +55,6 @@ public class RefundDeniedState implements OrderItemState {
 
     @Override
     public boolean canReview() {
-        return true;
+        return false;
     }
 }

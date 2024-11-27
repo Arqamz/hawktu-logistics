@@ -1,4 +1,6 @@
-package com.hawktu.server.states;
+package com.hawktu.server.states.orderitem;
+
+import com.hawktu.server.states.OrderItemState;
 
 public class ProcessingState implements OrderItemState {
     @Override
