@@ -10,10 +10,10 @@ public class ReviewFactory {
     
     public Review createReview(Long productId, int rating, String comment) {
         Review review =  new ReviewBuilder()
-                .withProductId(productId)
-                .withRating(rating)
-                .withComment(comment)
-                .build();
+            .withProductId(productId)
+            .withRating(rating)
+            .withComment(comment)
+            .build();
         
         reviewRepository.save(review);
         return review;
