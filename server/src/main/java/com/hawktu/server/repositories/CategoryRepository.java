@@ -1,21 +1,27 @@
 package com.hawktu.server.repositories;
 
-import com.hawktu.server.models.Category;
-import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
-import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.hawktu.server.models.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    // Fetch categories with no parent (root categories)
-    List<Category> findByParentCategoryIsNull();
+    // Recursive query to fetch the entire category tree
+    @Query("SELECT c FROM Category c LEFT JOIN FETCH c.parentCategory")
+    List<Category> findAllWithHierarchy();
 
-    // Fetch subcategories of a specific parent category
-    List<Category> findByParentCategoryId(Long parentCategoryId);
+    // Fetch all categories
+    @Query("SELECT c FROM Category c")
+    List<Category> findAllCategories();
 
-    // Find a category by name (could be useful for querying by name)
-    Optional<Category> findByName(String name);
+    // Fetch all parent categories (categories that are parents to other categories)
+    @Query("SELECT DISTINCT c FROM Category c WHERE EXISTS (SELECT 1 FROM Category child WHERE child.parentCategory = c)")
+    List<Category> findAllParentCategories();
 
-    // Fetch all categories including nested ones (recursively _ if needed, but could require a custom query)
-    List<Category> findByParentCategory(Category parentCategory);
+    // Fetch all non-parent categories (categories that are not parents to any other categories)
+    @Query("SELECT c FROM Category c WHERE NOT EXISTS (SELECT 1 FROM Category child WHERE child.parentCategory = c)")
+    List<Category> findAllLeafCategories();
 }

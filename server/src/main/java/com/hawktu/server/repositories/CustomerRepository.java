@@ -1,21 +1,20 @@
 package com.hawktu.server.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.hawktu.server.models.Customer;
 
-@Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
-    // Find a customer by email
+
+    // Find by email
     Optional<Customer> findByEmail(String email);
 
-    // Check if a customer exists with a given email
-    boolean existsByEmail(String email);
-
-    // Optional: Find customers by first name or last name
-    Optional<Customer> findByFirstName(String firstName);
-    Optional<Customer> findByLastName(String lastName);
+    // Find customers registered in the current month
+    @Query("SELECT c FROM Customer c WHERE YEAR(c.registeredAt) = :year AND MONTH(c.registeredAt) = :month")
+    List<Customer> findCustomersRegisteredInCurrentMonth(@Param("year") int year, @Param("month") int month);
 }
