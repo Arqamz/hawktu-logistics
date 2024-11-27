@@ -12,6 +12,7 @@ public class SellerBuilder extends UserBuilder<Seller, SellerBuilder> {
 
     @Override
     public Seller build() {
+        validateSeller();
         Seller seller = new Seller();
         seller.setPassword(password);
         seller.setEmail(email);
@@ -24,4 +25,10 @@ public class SellerBuilder extends UserBuilder<Seller, SellerBuilder> {
         return seller;
     }
 
+    private void validateSeller() {
+        super.validateUser();
+        if (businessName == null || businessName.isEmpty()) {
+            throw new IllegalStateException("Business name is required for Seller");
+        }
+    }
 }

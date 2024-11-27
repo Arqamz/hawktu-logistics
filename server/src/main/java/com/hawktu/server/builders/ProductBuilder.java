@@ -1,9 +1,8 @@
 package com.hawktu.server.builders;
 
-import com.hawktu.server.models.Product;
-
-
 import java.math.BigDecimal;
+
+import com.hawktu.server.models.Product;
 
 public class ProductBuilder {
     private String name;
@@ -11,7 +10,6 @@ public class ProductBuilder {
     private BigDecimal price;
     private String imageLink;
     private boolean unlisted = false;
-    private Double averageRating = 0.0;
     private Long categoryId;
     private int stock = 0;
     private Long sellerId;
@@ -41,11 +39,6 @@ public class ProductBuilder {
         return this;
     }
 
-    public ProductBuilder averageRating(Double averageRating) {
-        this.averageRating = averageRating;
-        return this;
-    }
-
     public ProductBuilder categoryId(Long categoryId) {
         this.categoryId = categoryId;
         return this;
@@ -62,20 +55,18 @@ public class ProductBuilder {
     }
 
     public Product build() {
-        // Validate required fields
         validateProduct();
         
-        return new Product(
-            name, 
-            description, 
-            price, 
-            imageLink, 
-            unlisted, 
-            averageRating, 
-            categoryId, 
-            stock, 
-            sellerId
-        );
+        Product product = new Product();
+        product.setName(name);
+        product.setDescription(description);
+        product.setPrice(price);
+        product.setImageLink(imageLink);
+        product.setUnlisted(unlisted);
+        product.setCategoryId(categoryId);
+        product.setStock(stock);
+        product.setSellerId(sellerId);
+        return product;
     }
 
     private void validateProduct() {
@@ -105,6 +96,10 @@ public class ProductBuilder {
         
         if (stock < 0) {
             throw new IllegalArgumentException("Stock cannot be negative");
+        }
+
+        if (stock < 5 && unlisted==true) {
+            throw new IllegalArgumentException("To list your product for the first time, you must have at least 6 in stock");
         }
     }
 }
