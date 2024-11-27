@@ -3,6 +3,8 @@
 \usepackage{longtable}
 \usepackage{array}
 \usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{adjustbox}
 
 \geometry{a4paper, margin=1in}
 
@@ -11,7 +13,7 @@
 \begin{titlepage}
     \centering
     % Add a logo
-    {\Large \textbf{HawkTU Logistics Management System}} \\[8cm]
+    {\Large \textbf{HawkTU Inventory Management System}} \\[8cm]
     
     {\huge \textbf{Fully Dressed Use Cases Document}} \\[6cm]
 
@@ -20,23 +22,20 @@
     \begin{minipage}{0.3\textwidth}
         \centering
         {\large Danish Haroon} \\[0.5cm]
-        {\large Backend Developer}
     \end{minipage} &
     \begin{minipage}{0.3\textwidth}
         \centering
         {\large Arqam} \\[0.5cm]
-        {\large Lead Developer}
     \end{minipage} &
     \begin{minipage}{0.3\textwidth}
         \centering
         {\large Tabish Noman} \\[0.5cm]
-        {\large Frontend Developer}
     \end{minipage} \\
     \end{tabular}
 
     \vspace*{90px}
 
-    {\large \textbf{Course:} CS3004 Software Development and Analysis} \\[0.5cm]
+    {\large \textbf{Course:} Software Development and Analysis} \\[0.5cm]
     {\large \textbf{Instructor:} Basharat Hussain} \\[0.5cm]
 
     \vfill
@@ -109,7 +108,7 @@
 
 \newpage
 
-\section*{Manage Product Listings}
+\section*{Add Product Listings}
 
 \renewcommand{\arraystretch}{1.5}
 \renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
@@ -117,7 +116,7 @@
 
 \begin{longtable}{|>{\raggedright\arraybackslash}m{0.25\linewidth}|m{0.75\linewidth}|}
 \hline
-\textbf{Use Case Name} & Manage Product Listings \\
+\textbf{Use Case Name} & Add Product Listings \\
 \hline
 \textbf{Scope} & HawkTU Logistics and Delivery Management System \\
 \hline
@@ -172,6 +171,73 @@
 
 \newpage
 
+\section*{Delete and Edit Product Listings}
+
+\renewcommand{\arraystretch}{1.5}
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\setlist[itemize]{leftmargin=*}
+
+\begin{longtable}{|>{\raggedright\arraybackslash}m{0.25\linewidth}|m{0.75\linewidth}|}
+\hline
+\textbf{Use Case Name} & Delete and Edit Product Listings \\
+\hline
+\textbf{Scope} & HawkTU Logistics and Delivery Management System \\
+\hline
+\textbf{Level} & User Goal \\
+\hline
+\textbf{Primary Actor} & Seller \\
+\hline
+\textbf{Stakeholders and Interests} & 
+\begin{itemize}
+    \item Seller: Wants to efficiently manage product listings by removing unavailable products and updating product details to maintain accuracy.
+    \item Customer: Expects an accurate and updated product catalogue to make informed purchasing decisions.
+    \item System Administrator: Ensures data integrity and prevents errors in the product catalogue.
+\end{itemize} \\
+\hline
+\textbf{Preconditions} & 
+\begin{itemize}
+    \item The seller is logged into the system.
+    \item The seller has access to the product management interface.
+    \item The product exists in the catalogue for deletion or editing.
+\end{itemize} \\
+\hline
+\textbf{Postconditions} & 
+\begin{itemize}
+    \item The product listing is either updated or removed from the system.
+    \item Changes are saved securely in the database and reflected in the catalogue.
+\end{itemize} \\
+\hline
+\end{longtable}
+
+\vspace{-2.45em}
+
+\begin{longtable}{|m{0.5\linewidth}|m{0.5\linewidth}|}
+\hline
+\multicolumn{2}{|c|}{\textbf{Main Success Scenario}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+1. Seller navigates to the product management section. & 2. System displays the product listings interface with available options. \\
+\hline
+3. Seller selects a product to delete or edit. & 4. System displays the product details. \\
+\hline
+\textbf{For Deletion:} Seller confirms the deletion action. & \textbf{For Deletion:} System removes the product from the database and updates the catalogue. \\
+\hline
+\textbf{For Editing:} Seller updates relevant product details. & \textbf{For Editing:} System validates the new details and updates the product in the database. \\
+\hline
+\multicolumn{2}{|c|}{\textbf{Extensions}} \\
+\hline
+\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
+\hline
+\textbf{3a.} If the seller selects a non-existent product for deletion or editing. & \textbf{3a.} System displays an error message stating "Product not found." \\
+\hline
+\textbf{4a.} If the product details entered during editing are incomplete or invalid. & \textbf{4a.} System prompts the seller to provide complete and valid details. \\
+\hline
+\textbf{4b.} If the system fails to update or delete due to server issues. & \textbf{4b.} System notifies the seller of the failure and advises retrying later. \\
+\hline
+\end{longtable}
+
+\newpage
 \section*{Earn and Redeem Loyalty Points}
 
 \renewcommand{\arraystretch}{1.5}
@@ -204,7 +270,7 @@
 \textbf{Postconditions} & 
 \begin{itemize}
     \item Loyalty points are updated in the customer’s account after a purchase.
-    \item Points are redeemed for rewards or discounts, and the customer's point balance is adjusted.
+    \item Points are redeemed, generating a coupon code that can be applied during future checkouts.
 \end{itemize} \\
 \hline
 \end{longtable}
@@ -221,7 +287,9 @@
 \hline
 3. Customer views their loyalty points balance. & 4. System displays the current balance of earned points. \\
 \hline
-5. Customer chooses to redeem points for a reward or discount. & 6. System validates the redemption request and deducts the appropriate number of points. \\
+5. Customer chooses to redeem points. & 6. System validates the redemption request and deducts the appropriate number of points. \\
+\hline
+7. Customer receives a coupon code. & 8. System generates a unique coupon code and stores it in the customer’s account for future use. \\
 \hline
 \multicolumn{2}{|c|}{\textbf{Extensions}} \\
 \hline
@@ -231,13 +299,17 @@
 \hline
 \textbf{5a.} If the customer tries to redeem more points than available, they enter a valid amount. & \textbf{5a.} System prompts the customer to enter a valid redemption amount. \\
 \hline
-\textbf{6a.} Discount Application Fails and Customer retries. & \textbf{6a.} System notifies the customer of the failure and advises retrying. \\
+\textbf{6a.} Points deduction fails. & \textbf{6a.} System notifies the customer of the failure and advises retrying. \\
+\hline
+\textbf{7a.} Coupon generation fails. & \textbf{7a.} System logs the failure and notifies the customer to contact support. \\
+\hline
+\textbf{8a.} Customer attempts to use an invalid coupon code at checkout. & \textbf{8a.} System notifies the customer of the invalid code and prompts them to try again or contact support. \\
 \hline
 \end{longtable}
 
 \newpage
 
-\section*{Submit Product and Seller Reviews}
+\section*{Submit Product Reviews and Ratings}
 
 \renewcommand{\arraystretch}{1.5}
 \renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
@@ -245,7 +317,7 @@
 
 \begin{longtable}{|>{\raggedright\arraybackslash}m{0.25\linewidth}|m{0.75\linewidth}|}
 \hline
-\textbf{Use Case Name} & Submit Product and Seller Reviews \\
+\textbf{Use Case Name} & Submit Product Reviews and Ratings \\
 \hline
 \textbf{Scope} & HawkTU Logistics and Delivery Management System \\
 \hline
@@ -255,22 +327,22 @@
 \hline
 \textbf{Stakeholders and Interests} & 
 \begin{itemize}
-    \item Customer: Wants to provide feedback on products and sellers to help others make informed decisions and influence the quality of service.
-    \item Seller: Wants to receive feedback to improve service quality and customer trust.
-    \item Other Customers: Rely on honest reviews to evaluate products and sellers before purchasing.
-    \item System Administrator: Ensures reviews are moderated and do not contain inappropriate content.
+    \item Customer: Wants to provide honest feedback on products, helping others make informed decisions and ensuring quality products are highlighted.
+    \item Seller: Gains insights into customer satisfaction and areas for improvement, enhancing product quality and reputation.
+    \item Other Customers: Depend on reviews and ratings to evaluate product quality before purchasing.
+    \item System Administrator: Monitors reviews to ensure compliance with community standards and prevents inappropriate content.
 \end{itemize} \\
 \hline
 \textbf{Preconditions} & 
 \begin{itemize}
     \item The customer is logged into the system.
-    \item The customer has made a purchase or interacted with a seller.
+    \item The customer has purchased or received the product being reviewed.
 \end{itemize} \\
 \hline
 \textbf{Postconditions} & 
 \begin{itemize}
-    \item The review is submitted and stored in the database.
-    \item The seller may view and respond to the review.
+    \item The product review and rating are submitted, stored in the database, and displayed under the respective product.
+    \item The seller and other customers can view the review and rating.
 \end{itemize} \\
 \hline
 \end{longtable}
@@ -283,24 +355,27 @@
 \hline
 \multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
 \hline
-1. Customer navigates to the product or seller review section. & 2. System displays the review submission form. \\
+1. Customer navigates to the product review section for a purchased product. & 2. System displays the product review submission form. \\
 \hline
-3. Customer writes feedback and provides a rating. & 4. System validates the input and ensures all required fields are completed. \\
+3. Customer writes a review and assigns a rating (e.g., 1-5 stars). & 4. System validates the input to ensure the review is within acceptable length and rating is within range. \\
 \hline
-5. Customer submits the review. & 6. System saves the review to the database and displays a confirmation message. \\
+5. Customer submits the review and rating. & 6. System saves the review and rating in the database and displays a success message. \\
+\hline
+7. Customer views the submitted review under the product details. & 8. System updates the product’s overall rating and adds the new review to the product’s review list. \\
 \hline
 \multicolumn{2}{|c|}{\textbf{Extensions}} \\
 \hline
 \multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
 \hline
-\textbf{3a.} If the review contains inappropriate content, the customer revises it. & \textbf{3a.} System detects inappropriate content and prompts the customer to edit. \\
+\textbf{3a.} If the review contains inappropriate content, the customer revises it. & \textbf{3a.} System detects inappropriate content using filters and prompts the customer to edit. \\
 \hline
-\textbf{5a.} If the system fails to save the review due to server issues, the customer tries again later. & \textbf{5a.} System notifies the customer of the failure and advises retrying. \\
+\textbf{5a.} If the customer tries to submit without a rating, they are prompted to provide one. & \textbf{5a.} System alerts the customer that a rating is mandatory. \\
+\hline
+\textbf{5b.} If the system fails to save the review due to server issues, the customer tries again later. & \textbf{5b.} System notifies the customer of the failure and advises retrying. \\
 \hline
 \end{longtable}
 
 \newpage
-
 \section*{Place Order}
 
 \renewcommand{\arraystretch}{1.5}
@@ -623,69 +698,6 @@
 
 \newpage
 
-\section*{Oversee Fleet Operations}
-
-\renewcommand{\arraystretch}{1.5}
-\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
-\setlist[itemize]{leftmargin=*}
-
-\begin{longtable}{|>{\raggedright\arraybackslash}m{0.25\linewidth}|m{0.75\linewidth}|}
-\hline
-\textbf{Use Case Name} & Oversee Fleet Operations \\
-\hline
-\textbf{Scope} & HawkTU Logistics and Delivery Management System \\
-\hline
-\textbf{Level} & User Goal \\
-\hline
-\textbf{Primary Actor} & Fleet Manager \\
-\hline
-\textbf{Stakeholders and Interests} & 
-\begin{itemize}
-    \item Fleet Manager: Wants to ensure efficient allocation of resources and timely deliveries.
-    \item Driver: Needs to be informed of assignments and routes.
-    \item System Administrator: Ensures the fleet management system is functional and secure.
-\end{itemize} \\
-\hline
-\textbf{Preconditions} & 
-\begin{itemize}
-    \item The fleet manager is logged into the system.
-    \item The fleet data is available and up-to-date.
-\end{itemize} \\
-\hline
-\textbf{Postconditions} & 
-\begin{itemize}
-    \item Fleet operations are monitored, and vehicle locations are tracked.
-    \item Updates on resource allocation are available to the fleet manager.
-\end{itemize} \\
-\hline
-\end{longtable}
-
-\vspace{-2.45em}
-
-\begin{longtable}{|m{0.5\linewidth}|m{0.5\linewidth}|}
-\hline
-\multicolumn{2}{|c|}{\textbf{Main Success Scenario}} \\
-\hline
-\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
-\hline
-1. Fleet manager views the current fleet status and vehicle locations. & 2. System displays real-time vehicle locations and operational status. \\
-\hline
-3. Fleet manager assigns vehicles to deliveries based on availability. & 4. System updates the assignment and informs relevant drivers. \\
-\hline
-&5. System tracks delivery progress and notifies the manager of any delays.  \\
-\hline
-\multicolumn{2}{|c|}{\textbf{Extensions}} \\
-\hline
-\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
-\hline
-\textbf{1a.} If a vehicle is unavailable, the fleet manager is notified. & \textbf{1a.} System alerts the fleet manager of vehicle status and availability. \\
-\hline
-\textbf{3a.} If an assignment fails, the fleet manager is informed. & \textbf{3a.} System notifies the fleet manager of the failure and suggests alternatives. \\
-\hline
-\end{longtable}
-
-\newpage
-
 \section*{Track Orders by ID}
 
 \renewcommand{\arraystretch}{1.5}
@@ -745,68 +757,8 @@
 \end{longtable}
 
 \newpage
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{UseCaseDiagram.png}
 
-\section*{Ship Items Door-to-Door}
 
-\renewcommand{\arraystretch}{1.5}
-\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
-\setlist[itemize]{leftmargin=*}
 
-\begin{longtable}{|>{\raggedright\arraybackslash}m{0.25\linewidth}|m{0.75\linewidth}|}
-\hline
-\textbf{Use Case Name} & Ship Items Door-to-Door \\
-\hline
-\textbf{Scope} & HawkTU Logistics and Delivery Management System \\
-\hline
-\textbf{Level} & User Goal \\
-\hline
-\textbf{Primary Actor} & Customer \\ 
-\hline
-\textbf{Stakeholders and Interests} & 
-\begin{itemize}
-    \item Customer: Wants to send items directly to others with reliable tracking.
-    \item Recipient: Expects to receive items securely and track their shipment.
-    \item System Administrator: Ensures the shipping process is efficient and secure.
-\end{itemize} \\
-\hline
-\textbf{Preconditions} & 
-\begin{itemize}
-    \item The customer is logged into the system.
-    \item The items to be shipped are prepared for shipment.
-\end{itemize} \\
-\hline
-\textbf{Postconditions} & 
-\begin{itemize}
-    \item The item is shipped, and both parties receive tracking information.
-\end{itemize} \\
-\hline
-\end{longtable}
-
-\vspace{-2.45em}
-
-\begin{longtable}{|m{0.5\linewidth}|m{0.5\linewidth}|}
-\hline
-\multicolumn{2}{|c|}{\textbf{Main Success Scenario}} \\
-\hline
-\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
-\hline
- & 1. System asks for delivery details (Drop off, Pickup Address, Item Type) \\
-\hline
-2. Customer provides relevant information.&3. System validates information and asks for a confirmation\\
-\hline
-4. Customer confirms the shipment details and chooses a payment method. & 5. System processes the payment and prepares the shipment. \\
-\hline
-&6. System generates a unique tracking number for the shipment.\\
-\hline
-& 7. System sends tracking information to both the customer and recipient. \\
-\hline
-\multicolumn{2}{|c|}{\textbf{Extensions}} \\
-\hline
-\multicolumn{1}{|>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{Actor Action (or Intention)}} & \multicolumn{1}{>{\centering\arraybackslash}m{0.5\linewidth}|}{\textbf{System Responsibility}} \\
-\hline
-\textbf{3a.} Customer re-enters details. & \textbf{3a.} System alerts customer that details are invalid/incomplete and asks to retry. \\
-\hline
-\textbf{5a.} If payment fails, the customer is notified to retry. & \textbf{5a.} System displays an error message indicating the payment failure. \\
-\hline
-\end{longtable}
-\end{document}
+\end{document}'
