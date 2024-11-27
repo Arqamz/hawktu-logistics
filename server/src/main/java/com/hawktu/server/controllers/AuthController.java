@@ -1,20 +1,24 @@
 package com.hawktu.server.controllers;
 
-import com.hawktu.server.dtos.request.CustomerRegisterRequest;
-import com.hawktu.server.dtos.request.LoginRequest;
-import com.hawktu.server.dtos.request.RefreshTokenRequest;
-import com.hawktu.server.dtos.request.SellerRegisterRequest;
-import com.hawktu.server.dtos.response.LoginResponse;
-import com.hawktu.server.dtos.response.ErrorResponse;
-import com.hawktu.server.dtos.response.TokenRefreshResponse;
-import com.hawktu.server.services.CustomerService;
-import com.hawktu.server.services.SellerService;
-import com.hawktu.server.utils.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.hawktu.server.dtos.request.CustomerRegisterRequest;
+import com.hawktu.server.dtos.request.LoginRequest;
+import com.hawktu.server.dtos.request.RefreshTokenRequest;
+import com.hawktu.server.dtos.request.SellerRegisterRequest;
+import com.hawktu.server.dtos.response.ErrorResponse;
+import com.hawktu.server.dtos.response.LoginResponse;
+import com.hawktu.server.dtos.response.TokenRefreshResponse;
+import com.hawktu.server.services.CustomerService;
+import com.hawktu.server.services.SellerService;
+import com.hawktu.server.utils.JwtUtil;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -44,15 +48,12 @@ public class AuthController {
             String password = loginRequest.getPassword();
 
             switch (loginRequest.getAccountType().toLowerCase()) {
-                case "customer":
-                    isAuthenticated = customerService.authenticate(userEmail, password);
-                    break;
-                case "seller":
-                    isAuthenticated = sellerService.authenticate(userEmail, password);
-                    break;
-                default:
+                case "customer" -> isAuthenticated = customerService.authenticate(userEmail, password);
+                case "seller" -> isAuthenticated = sellerService.authenticate(userEmail, password);
+                default -> {
                     logger.error("Invalid account type: {}", loginRequest.getAccountType());
                     return ResponseEntity.badRequest().body(new ErrorResponse("Invalid account type", 400));
+                }
             }
 
             if (isAuthenticated) {
