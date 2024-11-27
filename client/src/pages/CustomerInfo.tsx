@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { NotificationButton, useNotifications } from '@/components/notification-system'
 import { Link } from 'react-router-dom'
-
+import { useNavigate } from 'react-router-dom'
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -44,9 +44,15 @@ export default function UserDashboard() {
   const [activePage, setActivePage] = useState("Edit Profile")
   const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false)
   const { addNotification } = useNotifications();
+  const navigate = useNavigate();
   useEffect(() => {
-    console.log('UserDashboard mounted')
-  }, [])
+    // Check if the user is logged in
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      // If no token is found, redirect to the landing page (login page)
+      navigate('/landing');
+    }
+  }, [navigate]);
 
   const renderPageContent = () => {
     switch (activePage) {
