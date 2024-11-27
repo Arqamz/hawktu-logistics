@@ -7,10 +7,11 @@ import jakarta.persistence.Entity;
 public class Customer extends User {
 
     @Column(nullable = false)
-    private Integer loyaltyPoints = 0;
+    private Integer loyaltyPoints;
 
     public Customer() {
         super();
+        loyaltyPoints = 10;
     }
 
     public Integer getLoyaltyPoints() {

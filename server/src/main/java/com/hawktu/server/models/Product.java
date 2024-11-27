@@ -2,7 +2,12 @@ package com.hawktu.server.models;
 
 import java.math.BigDecimal;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "products")
@@ -38,18 +43,8 @@ public class Product {
     @Column(nullable = false)
     private Long sellerId;
 
-    public Product() {}
-
-    public Product(String name, String description, BigDecimal price, String imageLink, boolean unlisted, Double averageRating, Long categoryId, int stock, Long sellerId) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.imageLink = imageLink;
-        this.unlisted = unlisted;
-        this.averageRating = averageRating;
-        this.categoryId = categoryId;
-        this.stock = stock;
-        this.sellerId = sellerId;
+    public Product() {
+        this.averageRating = 0.0;
     }
 
     public Long getId() {

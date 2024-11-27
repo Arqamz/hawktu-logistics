@@ -3,7 +3,7 @@ package com.hawktu.server.models;
 import java.math.BigDecimal;
 
 import com.hawktu.server.states.OrderItemState;
-import com.hawktu.server.states.ProcessingState;
+import com.hawktu.server.states.orderitem.OrderItemStateEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "order_items")
@@ -36,11 +37,9 @@ public class OrderItem {
     @Column(name = "delivery_address", length = 500)
     private String deliveryAddressString;
 
-akdksajdskaldjaslkdjsald //NEEDS FIINX+ADSADA
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private OrderItemState state;
+    private OrderItemStateEnum state;
 
     @Column(length = 500)
     private String refundMessage;
@@ -49,7 +48,7 @@ akdksajdskaldjaslkdjsald //NEEDS FIINX+ADSADA
     private String refundResponse;
 
     public OrderItem() {
-        this.state = new ProcessingState();
+        this.state = OrderItemStateEnum.PROCESSING;
     }
 
     public Long getId() {
@@ -88,11 +87,16 @@ akdksajdskaldjaslkdjsald //NEEDS FIINX+ADSADA
         this.totalPrice = totalPrice;
     }
 
-    public OrderItemState getState() {
+    @Transient  // Don't persist this method
+    public OrderItemState getCurrentState() {
+        return state.getStateInstance();
+    }
+
+    public OrderItemStateEnum getState() {
         return state;
     }
 
-    public void setState(OrderItemState state) {
+    public void setState(OrderItemStateEnum state) {
         this.state = state;
     }
 
@@ -124,7 +128,6 @@ akdksajdskaldjaslkdjsald //NEEDS FIINX+ADSADA
     public void setRefundResponse(String refundResponse) {
         this.refundResponse = refundResponse;
     }
-
 
     @Override
     public boolean equals(Object o) {

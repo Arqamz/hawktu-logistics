@@ -1,7 +1,13 @@
 package com.hawktu.server.models;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "reviews")
@@ -11,8 +17,6 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Store only the product ID as a foreign key reference instead of the entire Product
-    // We will have to verify that the product ID exists in the database by ourselves
     @Column(name = "product_id", nullable = false)
     private Long productId;
 
@@ -25,12 +29,7 @@ public class Review {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    public Review() {}
-
-    public Review(Long productId, int rating, String comment) {
-        this.productId = productId;
-        this.rating = rating;
-        this.comment = comment;
+    public Review() {
         this.createdAt = LocalDateTime.now();
     }
 
