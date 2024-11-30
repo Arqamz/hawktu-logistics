@@ -1,7 +1,10 @@
 package com.hawktu.server.repositories;
 
+import java.math.BigDecimal;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,7 +39,18 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE p.stock > 0")
     List<Product> findProductsInStock();
 
-    // Fetch products based on stock level threshold
     @Query("SELECT p FROM Product p WHERE p.stock <= :stockThreshold")
     List<Product> findProductsBelowStockThreshold(@Param("stockThreshold") int stockThreshold);
+
+    @Query("SELECT p FROM Product p WHERE "
+     + "(:minPrice IS NULL OR p.price >= :minPrice) AND "
+     + "(:maxPrice IS NULL OR p.price <= :maxPrice) AND "
+     + "(:rating IS NULL OR p.averageRating >= :rating) AND "
+     + "(:categoryId IS NULL OR p.categoryId = :categoryId)")
+    Page<Product> findByDynamicFilter(@Param("minPrice") BigDecimal minPrice,
+                                  @Param("maxPrice") BigDecimal maxPrice,
+                                  @Param("rating") Double rating,
+                                  @Param("categoryId") Long categoryId,
+                                  Pageable pageable);
+
 }

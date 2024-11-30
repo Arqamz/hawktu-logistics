@@ -1,5 +1,6 @@
 package com.hawktu.server.services;
 
+import com.hawktu.server.dtos.request.ProductFilterRequest;
 import com.hawktu.server.dtos.response.ProductDTO;
 import com.hawktu.server.dtos.response.ProductListResponse;
 import com.hawktu.server.models.Product;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class ShopService {
     private static final int PAGE_SIZE = 24;
 
+    @Autowired
     private final ProductRepository productRepository;
 
     @Autowired
@@ -47,6 +50,58 @@ public class ShopService {
             productPage.getTotalElements()
         );
     }
+
+
+    public ProductListResponse getFilteredProducts(ProductFilterRequest filterRequest) {
+        // Prepare sorting
+        Sort sort = prepareSorting(filterRequest.getSortBy());
+        
+        // Prepare pagination
+        Pageable pageable = PageRequest.of(
+            filterRequest.getPage(), 
+            PAGE_SIZE, 
+            sort
+        );
+
+        // Perform dynamic filtering
+        Page<Product> productPage = productRepository.findByDynamicFilter(
+            filterRequest.getMinPrice(), 
+            filterRequest.getMaxPrice(), 
+            filterRequest.getMinRating(), 
+            filterRequest.getCategoryId(), 
+            pageable
+        );
+
+        // Convert to DTOs
+        List<ProductDTO> productDTOs = productPage.getContent().stream()
+            .map(this::convertToProductDTO)
+            .collect(Collectors.toList());
+
+        // Construct response
+        ProductListResponse response = new ProductListResponse();
+        response.setProducts(productDTOs);
+        response.setNumOfPages(productPage.getTotalPages());
+        response.setCurrentPage(productPage.getNumber());
+        response.setTotalProducts((int) productPage.getTotalElements());
+
+        return response;
+    }
+
+    private Sort prepareSorting(ProductFilterRequest.SortOption sortOption) {
+        switch (sortOption) {
+            case PRICE_LOW_TO_HIGH:
+                return Sort.by("price").ascending();
+            case PRICE_HIGH_TO_LOW:
+                return Sort.by("price").descending();
+            case RATING_HIGH_TO_LOW:
+                return Sort.by("rating").descending();
+            default:
+                return Sort.unsorted();
+        }
+    }
+
+
+
 
     private ProductDTO convertToProductDTO(Product product) {
         return new ProductDTO(
