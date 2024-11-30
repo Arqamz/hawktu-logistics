@@ -47,9 +47,8 @@ export default function UserDashboard() {
   const navigate = useNavigate();
   useEffect(() => {
     // Check if the user is logged in
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('token');
     if (!token) {
-      // If no token is found, redirect to the landing page (login page)
       navigate('/landing');
     }
   }, [navigate]);

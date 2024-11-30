@@ -112,7 +112,7 @@ export default function RegisterPage() {
       navigate('/login'); // Redirect to login page
     } catch (err) {
       console.error('Form submission error', err);
-      toast.error('Failed to submit the form. Please try again.');
+      toast.error('Failed to Register.');
     }
   }
 
