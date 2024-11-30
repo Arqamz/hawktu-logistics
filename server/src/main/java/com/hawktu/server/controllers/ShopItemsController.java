@@ -1,14 +1,18 @@
 package com.hawktu.server.controllers;
 
 import com.hawktu.server.dtos.response.ProductListResponse;
+import com.hawktu.server.models.Review;
 import com.hawktu.server.dtos.request.ProductFilterRequest;
 import com.hawktu.server.services.ShopService;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 
 
 @RestController
@@ -61,4 +65,23 @@ public class ShopItemsController extends BaseController {
         }
     }
 
+    @GetMapping("/reviews")
+    public ResponseEntity<?> getProductReviews(@RequestParam Long productId) {
+        try {
+            if (productId == null || productId <= 0) {
+                return badRequestError("Invalid product ID");
+            }
+
+            List<Review> reviews = shopService.getReviewsByProductId(productId);
+            
+            if (reviews.isEmpty()) {
+                return notFoundError("No reviews found for the specified product");
+            }
+
+            return ResponseEntity.ok(reviews);
+        } catch (Exception e) {
+            logger.error("Error fetching reviews for product ID: " + productId, e);
+            return internalServerError("An error occurred while fetching product reviews");
+        }
+    }
 }

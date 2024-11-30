@@ -3,7 +3,9 @@ package com.hawktu.server.services;
 import com.hawktu.server.dtos.request.ProductFilterRequest;
 import com.hawktu.server.dtos.response.ProductDTO;
 import com.hawktu.server.dtos.response.ProductListResponse;
+import com.hawktu.server.repositories.ReviewRepository;
 import com.hawktu.server.models.Product;
+import com.hawktu.server.models.Review;
 import com.hawktu.server.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,8 +25,12 @@ public class ShopService {
     private final ProductRepository productRepository;
 
     @Autowired
-    public ShopService(ProductRepository productRepository) {
+    private ReviewRepository reviewRepository;
+
+    @Autowired
+    public ShopService(ProductRepository productRepository, ReviewRepository reviewRepository) {
         this.productRepository = productRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     public ProductListResponse getProductsByPage(int page) {
@@ -100,9 +106,6 @@ public class ShopService {
         }
     }
 
-
-
-
     private ProductDTO convertToProductDTO(Product product) {
         return new ProductDTO(
             product.getId(),
@@ -112,5 +115,9 @@ public class ShopService {
             product.getCategoryId().toString(), 
             product.getImageLink()     
         );
+    }
+
+    public List<Review> getReviewsByProductId(Long productId) {
+        return reviewRepository.findAllByProductId(productId);
     }
 }
