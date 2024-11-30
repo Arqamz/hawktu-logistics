@@ -46,7 +46,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
      + "(:minPrice IS NULL OR p.price >= :minPrice) AND "
      + "(:maxPrice IS NULL OR p.price <= :maxPrice) AND "
      + "(:rating IS NULL OR p.averageRating >= :rating) AND "
-     + "(:categoryId IS NULL OR p.categoryId = :categoryId)")
+     + "(:categoryId IS NULL OR p.categoryId = :categoryId) AND p.stock>=1")
     Page<Product> findByDynamicFilter(@Param("minPrice") BigDecimal minPrice,
                                   @Param("maxPrice") BigDecimal maxPrice,
                                   @Param("rating") Double rating,
