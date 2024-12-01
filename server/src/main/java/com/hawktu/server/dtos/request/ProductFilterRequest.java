@@ -7,6 +7,7 @@ public class ProductFilterRequest {
     private BigDecimal minPrice;
     private BigDecimal maxPrice;
     private Double minRating;
+    private Double maxRating;
     private Long categoryId;
     private SortOption sortBy = SortOption.DEFAULT;
 
@@ -52,6 +53,14 @@ public class ProductFilterRequest {
 
     public void setMinRating(Double minRating) {
         this.minRating = minRating;
+    }
+
+    public Double getMaxRating() {
+        return maxRating;
+    }
+
+    public void setMaxRating(Double maxRating) {
+        this.maxRating = maxRating;
     }
 
     public Long getCategoryId() {

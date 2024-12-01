@@ -74,7 +74,8 @@ public class ShopService {
         Page<Product> productPage = productRepository.findByDynamicFilter(
             filterRequest.getMinPrice(), 
             filterRequest.getMaxPrice(), 
-            filterRequest.getMinRating(), 
+            filterRequest.getMinRating(),
+            filterRequest.getMaxRating(), 
             filterRequest.getCategoryId(), 
             pageable
         );
