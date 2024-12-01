@@ -163,6 +163,9 @@ function EditProfilePage() {
     },
   });
 
+  // Retrieve email from localStorage
+  const email = localStorage.getItem('email');
+
   useEffect(() => {
     if (customerInfo) {
       setUser({
@@ -243,6 +246,7 @@ function EditProfilePage() {
             <div className="space-y-2">
               <p><strong>First Name:</strong> {user.firstName}</p>
               <p><strong>Last Name:</strong> {user.lastName}</p>
+              <p><strong>Email:</strong> {email}</p> {/* Display the email, not editable */}
               <p><strong>Phone:</strong> {user.phoneNumber}</p>
               <Button onClick={handleEditPersonalInfo} className="mt-4">Edit Profile</Button>
             </div>
@@ -255,6 +259,10 @@ function EditProfilePage() {
               <div className="space-y-2">
                 <Label htmlFor="lastName">Last Name</Label>
                 <Input id="lastName" name="lastName" value={user.lastName} onChange={handleChange} className="w-full" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" name="email" value={email} disabled className="w-full" /> {/* Non-editable Email */}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="phoneNumber">Phone</Label>

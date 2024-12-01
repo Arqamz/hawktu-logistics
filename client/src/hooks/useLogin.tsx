@@ -15,8 +15,10 @@ export const useLogin = () => {
 
     try {
       const response = await login(data);  // Directly login
-      localStorage.setItem('token', response.token);
+      localStorage.setItem('token', response.accessToken);
+      localStorage.setItem('email',response.user.email)
       setIsSuccess(true);
+      console.log(response);
       return response;  // Return the response to be used directly in the form submit
     } catch (err) {
       if (axios.isAxiosError(err)) {
