@@ -33,7 +33,7 @@ public class ShopController extends BaseController {
         @RequestParam(value = "minPrice", required = false) BigDecimal minPrice,
         @RequestParam(value = "maxPrice", required = false) BigDecimal maxPrice,
         @RequestParam(value = "minRating", required = false) Double minRating,
-        @RequestParam(value = "minRating", required = false) Double maxRating,
+        @RequestParam(value = "maxRating", required = false) Double maxRating,
         @RequestParam(value = "categoryId", required = false) Long categoryId,
         @RequestParam(value = "sortBy", defaultValue = "DEFAULT") ProductFilterRequest.SortOption sortBy
     ) {
