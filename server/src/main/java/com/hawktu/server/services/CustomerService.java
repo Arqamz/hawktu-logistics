@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 import com.hawktu.server.dtos.request.ChangePasswordRequest;
 import com.hawktu.server.dtos.request.CustomerRegisterRequest;
 import com.hawktu.server.dtos.request.UpdateCustomerInfoRequest;
+import com.hawktu.server.dtos.response.CustomerInfoResponse;
 import com.hawktu.server.factories.CustomerFactory;
 import com.hawktu.server.models.Customer;
-import com.hawktu.server.dtos.response.CustomerInfoResponse;
 import com.hawktu.server.repositories.CustomerRepository;
 
 @Service

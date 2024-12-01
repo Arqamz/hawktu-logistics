@@ -1,10 +1,12 @@
 package com.hawktu.server.dtos.response;
 
+import com.hawktu.server.models.Address;
+
 public class CustomerInfoResponse {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private String address;
+    private Address address;
 
     public String getFirstName() {
         return firstName;
@@ -30,11 +32,18 @@ public class CustomerInfoResponse {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public CustomerInfoResponse(String firstName, String lastName, String phoneNumber, Address address) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
         this.address = address;
     }
 }
