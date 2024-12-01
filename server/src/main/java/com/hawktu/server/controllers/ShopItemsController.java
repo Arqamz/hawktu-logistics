@@ -1,6 +1,7 @@
 package com.hawktu.server.controllers;
 
 import com.hawktu.server.dtos.response.ProductListResponse;
+import com.hawktu.server.models.Category;
 import com.hawktu.server.models.Review;
 import com.hawktu.server.dtos.request.ProductFilterRequest;
 import com.hawktu.server.services.ShopService;
@@ -11,7 +12,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 
 
@@ -33,6 +33,7 @@ public class ShopItemsController extends BaseController {
         @RequestParam(value = "minPrice", required = false) BigDecimal minPrice,
         @RequestParam(value = "maxPrice", required = false) BigDecimal maxPrice,
         @RequestParam(value = "minRating", required = false) Double minRating,
+        @RequestParam(value = "minRating", required = false) Double maxRating,
         @RequestParam(value = "categoryId", required = false) Long categoryId,
         @RequestParam(value = "sortBy", defaultValue = "DEFAULT") ProductFilterRequest.SortOption sortBy
     ) {
@@ -47,6 +48,7 @@ public class ShopItemsController extends BaseController {
             filterRequest.setMinPrice(minPrice);
             filterRequest.setMaxPrice(maxPrice);
             filterRequest.setMinRating(minRating);
+            filterRequest.setMaxRating(maxRating);
             filterRequest.setCategoryId(categoryId);
             filterRequest.setSortBy(sortBy);
 
@@ -84,4 +86,22 @@ public class ShopItemsController extends BaseController {
             return internalServerError("An error occurred while fetching product reviews");
         }
     }
+
+    @GetMapping("/categories")
+    public ResponseEntity<?> getAllCategories() {
+        try {
+        List<Category> categories = shopService.getAllCategories();
+       
+       // Check if categories list is empty
+       if (categories.isEmpty()) {
+           return notFoundError("No categories found");
+       }
+
+       return ResponseEntity.ok(categories);
+   } catch (Exception e) {
+       logger.error("Error fetching categories", e);
+       return internalServerError("An error occurred while fetching categories");
+   }
+}
+
 }

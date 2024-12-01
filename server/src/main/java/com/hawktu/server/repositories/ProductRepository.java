@@ -15,27 +15,21 @@ import com.hawktu.server.models.Product;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    // Fetch all products by a specific seller
     @Query("SELECT p FROM Product p WHERE p.sellerId = :sellerId")
     List<Product> findAllBySellerId(@Param("sellerId") Long sellerId);
 
-    // Calculate the average rating of all products
     @Query("SELECT AVG(p.averageRating) FROM Product p")
     Double calculateAverageRating();
 
-    // Fetch all products by category ID
     @Query("SELECT p FROM Product p WHERE p.categoryId = :categoryId")
     List<Product> findAllByCategoryId(@Param("categoryId") Long categoryId);
 
-    // Fetch only listed products
     @Query("SELECT p FROM Product p WHERE p.unlisted = false")
     List<Product> findListedProducts();
 
-    // Fetch only unlisted products
     @Query("SELECT p FROM Product p WHERE p.unlisted = true")
     List<Product> findUnlistedProducts();
 
-    // Fetch products based on stock availability (e.g., in stock only)
     @Query("SELECT p FROM Product p WHERE p.stock > 0")
     List<Product> findProductsInStock();
 
@@ -43,14 +37,16 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findProductsBelowStockThreshold(@Param("stockThreshold") int stockThreshold);
 
     @Query("SELECT p FROM Product p WHERE "
-     + "(:minPrice IS NULL OR p.price >= :minPrice) AND "
-     + "(:maxPrice IS NULL OR p.price <= :maxPrice) AND "
-     + "(:rating IS NULL OR p.averageRating >= :rating) AND "
-     + "(:categoryId IS NULL OR p.categoryId = :categoryId) AND p.stock>=1")
+    + "(:minPrice IS NULL OR p.price >= :minPrice) AND "
+    + "(:maxPrice IS NULL OR p.price <= :maxPrice) AND "
+    + "(:minRating IS NULL OR p.averageRating >= :minRating) AND "
+    + "(:maxRating IS NULL OR p.averageRating <= :maxRating) AND "
+    + "(:categoryId IS NULL OR p.categoryId = :categoryId) AND p.stock >= 1 and p.unlisted = false")
     Page<Product> findByDynamicFilter(@Param("minPrice") BigDecimal minPrice,
-                                  @Param("maxPrice") BigDecimal maxPrice,
-                                  @Param("rating") Double rating,
-                                  @Param("categoryId") Long categoryId,
-                                  Pageable pageable);
+                                 @Param("maxPrice") BigDecimal maxPrice,
+                                 @Param("minRating") Double minRating,
+                                 @Param("maxRating") Double maxRating,
+                                 @Param("categoryId") Long categoryId,
+                                 Pageable pageable);
 
 }

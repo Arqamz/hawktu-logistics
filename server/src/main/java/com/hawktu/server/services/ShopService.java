@@ -4,9 +4,11 @@ import com.hawktu.server.dtos.request.ProductFilterRequest;
 import com.hawktu.server.dtos.response.ProductDTO;
 import com.hawktu.server.dtos.response.ProductListResponse;
 import com.hawktu.server.repositories.ReviewRepository;
+import com.hawktu.server.repositories.ProductRepository;
+import com.hawktu.server.repositories.CategoryRepository;
+import com.hawktu.server.models.Category;
 import com.hawktu.server.models.Product;
 import com.hawktu.server.models.Review;
-import com.hawktu.server.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,33 +24,32 @@ public class ShopService {
     private static final int PAGE_SIZE = 24;
 
     @Autowired
+    private final CategoryRepository categoryRepository;
+
+    @Autowired
     private final ProductRepository productRepository;
 
     @Autowired
     private ReviewRepository reviewRepository;
 
     @Autowired
-    public ShopService(ProductRepository productRepository, ReviewRepository reviewRepository) {
+    public ShopService(ProductRepository productRepository, ReviewRepository reviewRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.reviewRepository = reviewRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public ProductListResponse getProductsByPage(int page) {
-        // Create a pageable request with the current page and fixed page size
         Pageable pageRequest = PageRequest.of(page, PAGE_SIZE);
 
-        // Fetch the page of products
         Page<Product> productPage = productRepository.findAll(pageRequest);
 
-        // Convert Product entities to ProductDTOs
         List<ProductDTO> productDTOs = productPage.getContent().stream()
             .map(this::convertToProductDTO)
             .collect(Collectors.toList());
 
-        // Calculate total number of pages
         int totalPages = productPage.getTotalPages();
 
-        // Create and return the response DTO
         return new ProductListResponse(
             productDTOs, 
             totalPages, 
@@ -73,7 +74,8 @@ public class ShopService {
         Page<Product> productPage = productRepository.findByDynamicFilter(
             filterRequest.getMinPrice(), 
             filterRequest.getMaxPrice(), 
-            filterRequest.getMinRating(), 
+            filterRequest.getMinRating(),
+            filterRequest.getMaxRating(), 
             filterRequest.getCategoryId(), 
             pageable
         );
@@ -120,4 +122,8 @@ public class ShopService {
     public List<Review> getReviewsByProductId(Long productId) {
         return reviewRepository.findAllByProductId(productId);
     }
+
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAllCategories();
+     }
 }
