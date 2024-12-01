@@ -338,7 +338,7 @@ function ChangePasswordPage() {
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: "",
-    confirmNewPassword: "",
+    confirmNewPassword: "", // New field for re-entering the password
   });
 
   const handleSubmit = async (e) => {
@@ -350,30 +350,23 @@ function ChangePasswordPage() {
       return;
     }
 
+    // If passwords match, proceed to change password
+    const changePasswordPayload = {
+      currentPassword: passwordData.currentPassword,
+      newPassword: passwordData.newPassword,
+    };
+
     try {
-      // Prepare the payload for password change
-      const changePasswordPayload = {
-        currentPassword: passwordData.currentPassword,
-        newPassword: passwordData.newPassword,
-      };
-
-      // Call the change password function
       await changePwd(changePasswordPayload);
-
-      // If successful, notify the user
       toast.success("Password changed successfully");
-    } catch (err) {
-      // Handle error if something goes wrong
-      toast.error("Failed to change password");
+    } catch (error) {
+      // If there is an error, display the error message
+      toast.error(error || "Failed to change password.");
     }
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setPasswordData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setPasswordData({ ...passwordData, [e.target.name]: e.target.value });
   };
 
   return (
@@ -420,16 +413,17 @@ function ChangePasswordPage() {
               />
             </div>
 
-            <Button type="submit" disabled={loading} className="mt-4 w-full">
+            <Button type="submit" disabled={loading}>
               {loading ? "Changing..." : "Change Password"}
             </Button>
-            {error && <p className="text-red-500 mt-2">{error}</p>}
+            {error && <p className="text-red-500">{error}</p>}
           </form>
         </CardContent>
       </Card>
     </div>
   );
 }
+
 
 
 
