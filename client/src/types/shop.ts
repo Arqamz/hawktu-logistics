@@ -20,6 +20,7 @@ export interface Product {
     minPrice?: number;
     maxPrice?: number;
     minRating?: number;
+    maxRating?: number;
     categoryId?: number;
     sortBy: 'DEFAULT' | 'PRICE_LOW_TO_HIGH' | 'PRICE_HIGH_TO_LOW' | 'RATING_HIGH_TO_LOW';
   }

@@ -40,6 +40,7 @@ export default function Shop() {
     minPrice: priceRange[0],
     maxPrice: priceRange[1],
     minRating: ratingRange[0],
+    maxRating: ratingRange[1],
   }
 
   const { products, categories, loading, error, setFilter, totalPages, totalProducts, getReviews } = useProducts(initialFilter)
@@ -51,11 +52,12 @@ export default function Shop() {
       minPrice: priceRange[0],
       maxPrice: priceRange[1],
       minRating: ratingRange[0],
+      maxRating: ratingRange[1],
       categoryId: selectedCategory ? parseInt(selectedCategory) : undefined,
     })
   }, [currentPage, sortBy, priceRange, ratingRange, selectedCategory, setFilter])
 
-  const filteredProducts = products.filter(product => 
+  const filteredProducts = products.filter(product =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
@@ -192,13 +194,14 @@ export default function Shop() {
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
+                  <SelectItem value={null}>All Categories</SelectItem>
                   {categories.map(category => (
                     <SelectItem key={category.id} value={category.id.toString()}>
                       {category.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
+
               </Select>
             </div>
 
