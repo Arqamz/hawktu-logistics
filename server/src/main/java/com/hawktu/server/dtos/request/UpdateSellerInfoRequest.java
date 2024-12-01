@@ -2,17 +2,19 @@ package com.hawktu.server.dtos.request;
 
 import com.hawktu.server.models.Address;
 
-public class UpdateCustomerInfoRequest {
+public class UpdateSellerInfoRequest {
     private String firstName;
     private String lastName;
     private String phoneNumber;
     private Address address;
+    private String businessName;
 
-    public UpdateCustomerInfoRequest(String firstName, String lastName, String phoneNumber, Address address) {
+    public UpdateSellerInfoRequest(String firstName, String lastName, String phoneNumber, Address address, String businessName) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.address = address;
+        this.businessName = businessName;
     }
 
     public String getFirstName() {
@@ -45,5 +47,13 @@ public class UpdateCustomerInfoRequest {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public String getBusinessName() {
+        return businessName;
+    }
+
+    public void setBusinessName(String businessName) {
+        this.businessName = businessName;
     }
 }
