@@ -334,15 +334,47 @@ function EditProfilePage() {
 
 
 function ChangePasswordPage() {
-  const { changePassword, loading, error } = useChangePassword();
-  const [passwordData, setPasswordData] = useState({ currentPassword: "", newPassword: "" });
+  const { changePwd, loading, error } = useChangePassword();
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
+  });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    changePassword(passwordData);
+
+    // Validate that new password and confirm new password match
+    if (passwordData.newPassword !== passwordData.confirmNewPassword) {
+      toast.error("New passwords do not match.");
+      return;
+    }
+
+    try {
+      // Prepare the payload for password change
+      const changePasswordPayload = {
+        currentPassword: passwordData.currentPassword,
+        newPassword: passwordData.newPassword,
+      };
+
+      // Call the change password function
+      await changePwd(changePasswordPayload);
+
+      // If successful, notify the user
+      toast.success("Password changed successfully");
+    } catch (err) {
+      // Handle error if something goes wrong
+      toast.error("Failed to change password");
+    }
   };
 
-  const handleChange = (e) => setPasswordData({ ...passwordData, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setPasswordData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   return (
     <div className="space-y-6 max-w-2xl">
@@ -354,20 +386,51 @@ function ChangePasswordPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="currentPassword">Current Password</Label>
-              <Input type="password" id="currentPassword" name="currentPassword" value={passwordData.currentPassword} onChange={handleChange} />
+              <Input
+                type="password"
+                id="currentPassword"
+                name="currentPassword"
+                value={passwordData.currentPassword}
+                onChange={handleChange}
+                required
+              />
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="newPassword">New Password</Label>
-              <Input type="password" id="newPassword" name="newPassword" value={passwordData.newPassword} onChange={handleChange} />
+              <Input
+                type="password"
+                id="newPassword"
+                name="newPassword"
+                value={passwordData.newPassword}
+                onChange={handleChange}
+                required
+              />
             </div>
-            <Button type="submit" disabled={loading}>Change Password</Button>
-            {error && <p className="text-red-500">{error}</p>}
+
+            <div className="space-y-2">
+              <Label htmlFor="confirmNewPassword">Re-enter New Password</Label>
+              <Input
+                type="password"
+                id="confirmNewPassword"
+                name="confirmNewPassword"
+                value={passwordData.confirmNewPassword}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <Button type="submit" disabled={loading} className="mt-4 w-full">
+              {loading ? "Changing..." : "Change Password"}
+            </Button>
+            {error && <p className="text-red-500 mt-2">{error}</p>}
           </form>
         </CardContent>
       </Card>
     </div>
   );
 }
+
 
 
 function HelpSupportPage() {
