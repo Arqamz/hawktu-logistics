@@ -60,17 +60,14 @@ public class ShopService {
 
 
     public ProductListResponse getFilteredProducts(ProductFilterRequest filterRequest) {
-        // Prepare sorting
         Sort sort = prepareSorting(filterRequest.getSortBy());
         
-        // Prepare pagination
         Pageable pageable = PageRequest.of(
             filterRequest.getPage(), 
             PAGE_SIZE, 
             sort
         );
 
-        // Perform dynamic filtering
         Page<Product> productPage = productRepository.findByDynamicFilter(
             filterRequest.getMinPrice(), 
             filterRequest.getMaxPrice(), 

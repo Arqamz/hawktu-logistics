@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/shop")
 @CrossOrigin(origins = "http://localhost:5173") // Adjust frontend URL as needed
-public class ShopItemsController extends BaseController {
+public class ShopController extends BaseController {
 
     private final ShopService shopService;
 
     @Autowired
-    public ShopItemsController(ShopService shopService) {
+    public ShopController(ShopService shopService) {
         this.shopService = shopService;
     }
 
@@ -92,7 +92,6 @@ public class ShopItemsController extends BaseController {
         try {
         List<Category> categories = shopService.getAllCategories();
        
-       // Check if categories list is empty
        if (categories.isEmpty()) {
            return notFoundError("No categories found");
        }
