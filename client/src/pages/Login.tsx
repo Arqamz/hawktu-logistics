@@ -158,4 +158,3 @@ function LoginForm({ accountType, form, onSubmit, isLoading, error }: LoginFormP
     </>
   );
 }
-

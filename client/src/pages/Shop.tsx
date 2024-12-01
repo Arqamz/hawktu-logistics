@@ -7,91 +7,63 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Star, ShoppingCart, ChevronLeft, ChevronRight, Plus, Minus } from 'lucide-react'
+import { Star, ShoppingCart, ChevronLeft, ChevronRight, Plus, Minus, MessageSquare } from 'lucide-react'
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { NotificationButton, useNotifications } from '@/components/notification-system'
 import { LayoutDashboard, Bell, User, LogOut } from 'lucide-react'
 import { Link } from "react-router-dom"
 import { Toaster, toast } from 'sonner'
+import { useProducts } from '../hooks/useProducts'
+import { Product, ProductFilterRequest, Review } from '../types/shop'
 
 
-
-// Mock data (unchanged)
-const categories = ["All", "Electronics", "Clothing", "Books", "Home & Garden"]
-const mockItems = Array.from({ length: 100 }, (_, i) => ({
-  id: i + 1,
-  name: `Item ${i + 1}`,
-  category: categories[Math.floor(Math.random() * categories.length)],
-  price: Math.floor(Math.random() * 100) + 1,
-  rating: Math.floor(Math.random() * 5) + 1,
-  description: `This is a description for Item ${i + 1}. It's a great product that you'll love!`,
-  sellerName: `Seller ${Math.floor(Math.random() * 10) + 1}`,
-  reviews: Array.from({ length: Math.floor(Math.random() * 20) + 1 }, (_, j) => ({
-    id: j + 1,
-    user: `User ${j + 1}`,
-    rating: Math.floor(Math.random() * 5) + 1,
-    comment: `This is a review for Item ${i + 1}. It's ${['great', 'good', 'okay', 'not bad', 'excellent'][Math.floor(Math.random() * 5)]}.`
-  })),
-}))
-
-export default function AppComponent() {
-  const [items, setItems] = useState(mockItems)
-  const [filteredItems, setFilteredItems] = useState(mockItems)
-  const [selectedCategory, setSelectedCategory] = useState("All")
-  const [sortBy, setSortBy] = useState("default")
+export default function Shop() {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [sortBy, setSortBy] = useState<ProductFilterRequest['sortBy']>('DEFAULT')
   const [searchTerm, setSearchTerm] = useState("")
-  const [cartItems, setCartItems] = useState([])
-  const [selectedItem, setSelectedItem] = useState(null)
+  const [cartItems, setCartItems] = useState<(Product & { quantity: number })[]>([])
+  const [selectedItem, setSelectedItem] = useState<Product | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
-  const [priceRange, setPriceRange] = useState([0, 100])
-  const [ratingRange, setRatingRange] = useState([1, 5])
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000])
+  const [ratingRange, setRatingRange] = useState<[number, number]>([1, 5])
   const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false)
+  const [reviews, setReviews] = useState<Review[]>([])
+  const [isLoadingReviews, setIsLoadingReviews] = useState(false)
+  const [isReviewSheetOpen, setIsReviewSheetOpen] = useState(false)
   const { addNotification } = useNotifications();
-  const itemsPerPage = 20
+  const navigate = useNavigate()
+
+  const initialFilter: ProductFilterRequest = {
+    page: currentPage - 1,
+    sortBy: sortBy,
+    minPrice: priceRange[0],
+    maxPrice: priceRange[1],
+    minRating: ratingRange[0],
+  }
+
+  const { products, categories, loading, error, setFilter, totalPages, totalProducts, getReviews } = useProducts(initialFilter)
+
+  useEffect(() => {
+    setFilter({
+      page: currentPage - 1,
+      sortBy: sortBy,
+      minPrice: priceRange[0],
+      maxPrice: priceRange[1],
+      minRating: ratingRange[0],
+      categoryId: selectedCategory ? parseInt(selectedCategory) : undefined,
+    })
+  }, [currentPage, sortBy, priceRange, ratingRange, selectedCategory, setFilter])
+
+  const filteredProducts = products.filter(product => 
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
-  useEffect(() => {
-    let result = items
-
-    // Filter by Category
-    if (selectedCategory !== "All") {
-      result = result.filter(item => item.category === selectedCategory)
-    }
-
-    // Filter by Search Term
-    if (searchTerm) {
-      result = result.filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()))
-    }
-
-    // Filter by Price Range
-    result = result.filter(item => item.price >= priceRange[0] && item.price <= priceRange[1])
-
-    // Filter by Rating Range
-    result = result.filter(item => item.rating >= ratingRange[0] && item.rating <= ratingRange[1])
-
-    // Sort items
-    switch (sortBy) {
-      case "priceAsc":
-        result.sort((a, b) => a.price - b.price)
-        break
-      case "priceDesc":
-        result.sort((a, b) => b.price - a.price)
-        break
-      case "rating":
-        result.sort((a, b) => b.rating - a.rating)
-        break
-    }
-
-    setFilteredItems(result)
-  }, [items, selectedCategory, sortBy, searchTerm, priceRange, ratingRange])
-
-  const navigate = useNavigate()
-
-  const addToCart = (item, quantity = 1) => {
+  const addToCart = (item: Product, quantity = 1) => {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(cartItem => cartItem.id === item.id)
       if (existingItem) {
@@ -104,7 +76,7 @@ export default function AppComponent() {
     })
   }
 
-  const removeFromCart = (item) => {
+  const removeFromCart = (item: Product) => {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(cartItem => cartItem.id === item.id)
       if (existingItem && existingItem.quantity > 1) {
@@ -117,7 +89,7 @@ export default function AppComponent() {
     })
   }
 
-  const updateCartItemQuantity = (item, newQuantity) => {
+  const updateCartItemQuantity = (item: Product, newQuantity: number) => {
     if (newQuantity === 0) {
       setCartItems(prevItems => prevItems.filter(cartItem => cartItem.id !== item.id))
     } else {
@@ -140,8 +112,40 @@ export default function AppComponent() {
     navigate('/checkout', { state: { cartItems } });
   };
 
+  const loadReviews = async (productId: number) => {
+    setIsLoadingReviews(true);
+    try {
+      const fetchedReviews = await getReviews(productId);
+      setReviews(fetchedReviews);
+    } catch (error) {
+      console.error('Failed to fetch reviews:', error);
+      toast.error('Failed to load reviews. Please try again.');
+    } finally {
+      setIsLoadingReviews(false);
+    }
+  };
 
-  const paginatedItems = filteredItems.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>Loading products...</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4">Error</h2>
+          <p className="text-red-500">{error}</p>
+          <Button className="mt-4" onClick={() => window.location.reload()}>
+            Try Again
+          </Button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -149,21 +153,22 @@ export default function AppComponent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold">HawkTU</h1>
           <div className="flex items-center space-x-4">
-
             <Link to="/customer-dashboard">
               <Button
                 variant="outline"
                 className="border-gray-500"
               >
                 <LayoutDashboard className="h-5 w-5" />
-              </Button></Link>
+              </Button>
+            </Link>
             <Link to="/customer-info">
               <Button
                 variant="outline"
                 className="border-gray-500"
               >
                 <User className="h-5 w-5" />
-              </Button></Link>
+              </Button>
+            </Link>
             <NotificationButton />
             <Button
               variant="outline"
@@ -172,11 +177,6 @@ export default function AppComponent() {
             >
               <LogOut className="h-5 w-5" />
             </Button>
-            <Button onClick={() => addNotification({
-              title: 'Action Completed',
-              description: 'Your action has been successfully completed.',
-              time: new Date().toLocaleTimeString(),
-            })}>Noti</Button>
           </div>
         </div>
       </header>
@@ -187,16 +187,19 @@ export default function AppComponent() {
           <div className="space-y-4">
             <div>
               <h3 className="font-medium mb-2">Categories</h3>
-              {categories.map(category => (
-                <button
-                  key={category}
-                  className={`block w-full text-left px-2 py-1 rounded ${selectedCategory === category ? "bg-primary text-primary-foreground" : "hover:bg-secondary"
-                    }`}
-                  onClick={() => setSelectedCategory(category)}
-                >
-                  {category}
-                </button>
-              ))}
+              <Select onValueChange={setSelectedCategory} value={selectedCategory || undefined}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Categories</SelectItem>
+                  {categories.map(category => (
+                    <SelectItem key={category.id} value={category.id.toString()}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div>
@@ -243,15 +246,15 @@ export default function AppComponent() {
 
             <div>
               <h3 className="font-medium mb-2">Sort By</h3>
-              <Select onValueChange={setSortBy}>
+              <Select onValueChange={(value) => setSortBy(value as ProductFilterRequest['sortBy'])} value={sortBy}>
                 <SelectTrigger>
                   <SelectValue placeholder="Sort by..." />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="default">Default</SelectItem>
-                  <SelectItem value="priceAsc">Price: Low to High</SelectItem>
-                  <SelectItem value="priceDesc">Price: High to Low</SelectItem>
-                  <SelectItem value="rating">Rating</SelectItem>
+                  <SelectItem value="DEFAULT">Default</SelectItem>
+                  <SelectItem value="PRICE_LOW_TO_HIGH">Price: Low to High</SelectItem>
+                  <SelectItem value="PRICE_HIGH_TO_LOW">Price: High to Low</SelectItem>
+                  <SelectItem value="RATING_HIGH_TO_LOW">Rating</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -294,7 +297,7 @@ export default function AppComponent() {
                             <tr key={item.id} className="border-b hover:bg-gray-100">
                               <td className="hidden pb-4 md:table-cell">
                                 <img
-                                  src="/placeholder.svg"
+                                  src={'https://api.imgbb.com/1/upload' || "/placeholder.svg"}
                                   className="w-20 rounded"
                                   alt="Thumbnail"
                                 />
@@ -412,64 +415,58 @@ export default function AppComponent() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {paginatedItems.map((item) => (
+            {filteredProducts.map((item) => (
               <Card key={item.id} className="overflow-hidden">
                 <CardHeader>
                   <CardTitle>{item.name}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <img
-                    src={`/placeholder.svg?height=200&width=300`}
+                    src={`` || `/placeholder.svg?height=200&width=300`}
                     alt={item.name}
                     className="w-full h-48 object-cover mb-4"
                   />
-                  <p className="text-2xl font-bold">${item.price}</p>
+                  <p className="text-2xl font-bold">${item.price.toFixed(2)}</p>
                   <div className="flex items-center mt-2">
                     {Array.from({ length: 5 }).map((_, index) => (
                       <Star
                         key={index}
-                        className={`h-5 w-5 ${index < item.rating ? "text-yellow-400 fill-current" : "text-gray-300"
-                          }`}
+                        className={`h-5 w-5 ${index < (item.rating || 0) ? "text-yellow-400 fill-current" : "text-gray-300"}`}
                       />
                     ))}
-                    <span className="ml-2 text-sm text-gray-600">({item.reviews.length} reviews)</span>
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button onClick={() => setSelectedItem(item)}>View Details</Button>
+                      <Button onClick={() => {
+                        setSelectedItem(item);
+                        loadReviews(item.id);
+                      }}>View Details</Button>
                     </DialogTrigger>
                     <DialogContent className="max-w-3xl">
                       <DialogHeader>
                         <DialogTitle>{selectedItem?.name}</DialogTitle>
-                        <DialogDescription>By {selectedItem?.sellerName}</DialogDescription>
+                        <DialogDescription>Product Details</DialogDescription>
                       </DialogHeader>
                       <div className="grid grid-cols-2 gap-4">
                         <div className="relative h-64">
                           <img
-                            src={`/placeholder.svg?height=300&width=400`}
+                            src={selectedItem?.image || `/placeholder.svg?height=300&width=400`}
                             alt={selectedItem?.name}
                             className="w-full h-full object-cover"
                           />
-                          <Button className="absolute top-1/2 left-2 transform -translate-y-1/2">
-                            <ChevronLeft className="h-6 w-6" />
-                          </Button>
-                          <Button className="absolute top-1/2 right-2 transform -translate-y-1/2">
-                            <ChevronRight className="h-6 w-6" />
-                          </Button>
                         </div>
                         <div>
                           <p className="text-lg mb-2">{selectedItem?.description}</p>
-                          <p className="text-2xl font-bold mb-2">${selectedItem?.price}</p>
+                          <p className="text-2xl font-bold mb-2">${selectedItem?.price.toFixed(2)}</p>
                           <div className="flex items-center mb-4">
                             {Array.from({ length: 5 }).map((_, index) => (
                               <Star
                                 key={index}
-                                className={`h-5 w-5 ${index < selectedItem?.rating ? "text-yellow-400 fill-current" : "text-gray-300"}`}
+                                className={`h-5 w-5 ${index < (selectedItem?.rating || 0) ? "text-yellow-400 fill-current" : "text-gray-300"}`}
                               />
                             ))}
-                            <span className="ml-2 text-sm text-gray-600">({selectedItem?.reviews.length} reviews)</span>
                           </div>
                           <div className="mb-4">
                             {cartItems.find(cartItem => cartItem.id === selectedItem?.id) ? (
@@ -477,60 +474,37 @@ export default function AppComponent() {
                                 <Button
                                   variant="outline"
                                   size="icon"
-                                  onClick={() => updateCartItemQuantity(selectedItem, Math.max(0, cartItems.find(cartItem => cartItem.id === selectedItem.id).quantity - 1))}
+                                  onClick={() => updateCartItemQuantity(selectedItem!, Math.max(0, cartItems.find(cartItem => cartItem.id === selectedItem!.id)!.quantity - 1))}
                                 >
                                   <Minus className="h-4 w-4" />
                                 </Button>
                                 <span className="mx-2">
-                                  {cartItems.find(cartItem => cartItem.id === selectedItem.id).quantity}
+                                  {cartItems.find(cartItem => cartItem.id === selectedItem!.id)!.quantity}
                                 </span>
                                 <Button
                                   variant="outline"
                                   size="icon"
-                                  onClick={() => updateCartItemQuantity(selectedItem, cartItems.find(cartItem => cartItem.id === selectedItem.id).quantity + 1)}
+                                  onClick={() => updateCartItemQuantity(selectedItem!, cartItems.find(cartItem => cartItem.id === selectedItem!.id)!.quantity + 1)}
                                 >
                                   <Plus className="h-4 w-4" />
                                 </Button>
                               </div>
                             ) : (
-                              <Button onClick={() => addToCart(selectedItem)}>Add to Cart</Button>
+                              <Button onClick={() => addToCart(selectedItem!)}>Add to Cart</Button>
                             )}
                           </div>
+                          <Button
+                            onClick={() => {
+                              setIsReviewSheetOpen(true);
+                              loadReviews(selectedItem!.id);
+                            }}
+                            className="flex items-center"
+                          >
+                            <MessageSquare className="mr-2 h-4 w-4" />
+                            Reviews and Ratings
+                          </Button>
                         </div>
                       </div>
-                      <DialogFooter>
-                        <Sheet>
-                          <SheetTrigger asChild>
-                            <Button variant="outline">View All Reviews</Button>
-                          </SheetTrigger>
-                          <SheetContent side="right" className="w-[400px] sm:w-[540px]">
-                            <SheetHeader>
-                              <SheetTitle>Customer Reviews for {selectedItem?.name}</SheetTitle>
-                              <SheetDescription>
-                                {selectedItem?.reviews.length} reviews in total
-                              </SheetDescription>
-                            </SheetHeader>
-                            <div className="mt-4 space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
-                              {selectedItem?.reviews.map((review) => (
-                                <div key={review.id} className="border-b pb-4">
-                                  <div className="flex items-center mb-2">
-                                    <span className="font-bold mr-2">{review.user}</span>
-                                    <div className="flex">
-                                      {Array.from({ length: 5 }).map((_, index) => (
-                                        <Star
-                                          key={index}
-                                          className={`h-4 w-4 ${index < review.rating ? "text-yellow-400 fill-current" : "text-gray-300"}`}
-                                        />
-                                      ))}
-                                    </div>
-                                  </div>
-                                  <p>{review.comment}</p>
-                                </div>
-                              ))}
-                            </div>
-                          </SheetContent>
-                        </Sheet>
-                      </DialogFooter>
                     </DialogContent>
                   </Dialog>
                   {cartItems.find(cartItem => cartItem.id === item.id) ? (
@@ -543,7 +517,7 @@ export default function AppComponent() {
                         <Minus className="h-4 w-4" />
                       </Button>
                       <span className="mx-2">
-                        {cartItems.find(cartItem => cartItem.id === item.id).quantity}
+                        {cartItems.find(cartItem => cartItem.id === item.id)?.quantity}
                       </span>
                       <Button
                         variant="outline"
@@ -568,49 +542,83 @@ export default function AppComponent() {
               Previous
             </Button>
             <span className="mx-4">
-              Page {currentPage} of {Math.ceil(filteredItems.length / itemsPerPage)}
+              Page {currentPage} of {totalPages}
             </span>
             <Button
               onClick={() => {
-                setCurrentPage(Math.min(currentPage + 1, Math.ceil(filteredItems.length / itemsPerPage)));
+                setCurrentPage(Math.min(currentPage + 1, totalPages));
                 scrollToTop();
               }}
-              disabled={currentPage === Math.ceil(filteredItems.length / itemsPerPage)}
+              disabled={currentPage === totalPages}
             >
               Next
             </Button>
-
           </div>
         </div>
       </div>
-      {
-        isLogoutPopupOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="p-6 rounded-lg shadow-lg w-96">
-              <h2 className="text-lg font-semibold mb-4">Are you sure you want to logout?</h2>
-              <div className="flex justify-end space-x-4">
+      {isLogoutPopupOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-lg font-semibold mb-4">Are you sure you want to logout?</h2>
+            <div className="flex justify-end space-x-4">
+              <Button
+                variant="outline"
+                onClick={() => setIsLogoutPopupOpen(false)}
+                className="border-gray-400 text-gray-600"
+              >
+                Cancel
+              </Button>
+              <Link to="/landing">
                 <Button
                   variant="outline"
-                  onClick={() => setIsLogoutPopupOpen(false)}
-                  className="border-gray-400 text-gray-600"
+                  className="bg-red-500 text-white border-red-500"
                 >
-                  Cancel
+                  Logout
                 </Button>
-                <Link to="/landing">
-                  <Button
-                    variant="outline"
-                    className="bg-red-500 text-white border-red-500"
-                  >
-                    Logout
-                  </Button>
-                </Link>
-              </div>
+              </Link>
             </div>
           </div>
-        )
-      }
+        </div>
+      )}
+      <Sheet open={isReviewSheetOpen} onOpenChange={setIsReviewSheetOpen}>
+        <SheetContent side="right" className="w-[400px] sm:w-[540px]">
+          <SheetHeader>
+            <SheetTitle>Reviews and Ratings</SheetTitle>
+            <SheetDescription>
+              See what others are saying about this product
+            </SheetDescription>
+          </SheetHeader>
+          <div className="mt-6">
+            {isLoadingReviews ? (
+              <p>Loading reviews...</p>
+            ) : reviews.length > 0 ? (
+              <ul className="space-y-4">
+                {reviews.map((review) => (
+                  <li key={review.id} className="border-b pb-4">
+                    <div className="flex items-center justify-between">
+                      <p className="font-semibold">{review.userName}</p>
+                      <p className="text-sm text-gray-500">{new Date(review.createdAt).toLocaleDateString()}</p>
+                    </div>
+                    <div className="flex items-center mt-1">
+                      {Array.from({ length: 5 }).map((_, index) => (
+                        <Star
+                          key={index}
+                          className={`h-4 w-4 ${index < review.rating ? "text-yellow-400 fill-current" : "text-gray-300"}`}
+                        />
+                      ))}
+                    </div>
+                    <p className="mt-2">{review.comment}</p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No reviews yet.</p>
+            )}
+          </div>
+        </SheetContent>
+      </Sheet>
       <Toaster position="bottom-right" />
-
     </div>
   )
 }
+
