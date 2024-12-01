@@ -112,7 +112,8 @@ public class ShopService {
             product.getDescription(),
             product.getPrice(),
             product.getCategoryId().toString(), 
-            product.getImageLink()     
+            product.getImageLink(), 
+            product.getAverageRating()    
         );
     }
 

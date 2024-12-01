@@ -9,14 +9,16 @@ public class ProductDTO {
     private BigDecimal price;
     private String category;
     private String image;
+    private double rating;
 
-    public ProductDTO(long id,String name, String description, BigDecimal price, String category, String image) {
+    public ProductDTO(long id,String name, String description, BigDecimal price, String category, String image, double rating) {
         this.id=id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.category = category;
         this.image = image;
+        this.rating = rating;
     }
     
     public long getId() {
@@ -65,5 +67,13 @@ public class ProductDTO {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 }
