@@ -11,6 +11,7 @@ import com.hawktu.server.dtos.request.CustomerRegisterRequest;
 import com.hawktu.server.dtos.request.UpdateCustomerInfoRequest;
 import com.hawktu.server.factories.CustomerFactory;
 import com.hawktu.server.models.Customer;
+import com.hawktu.server.dtos.response.CustomerInfoResponse;
 import com.hawktu.server.repositories.CustomerRepository;
 
 @Service
@@ -53,6 +54,18 @@ public class CustomerService {
         customerRepository.save(customer);
         return true;
     }
+
+    public CustomerInfoResponse getCustomerInfo(String email) {
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Customer not found."));
+    
+        return new CustomerInfoResponse(
+                customer.getFirstName(),
+                customer.getLastName(),
+                customer.getPhoneNumber(),
+                customer.getAddress()
+        );
+    }    
 
     public void updateCustomerInfo(String email, UpdateCustomerInfoRequest request) {
         Customer customer = customerRepository.findByEmail(email)
