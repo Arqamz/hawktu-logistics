@@ -15,27 +15,35 @@ import com.hawktu.server.models.Product;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+    // Find all products by seller ID
     @Query("SELECT p FROM Product p WHERE p.sellerId = :sellerId")
     List<Product> findAllBySellerId(@Param("sellerId") Long sellerId);
 
+    // Calculate the average rating of all products
     @Query("SELECT AVG(p.averageRating) FROM Product p")
     Double calculateAverageRating();
 
+    // Find all products by category ID
     @Query("SELECT p FROM Product p WHERE p.categoryId = :categoryId")
     List<Product> findAllByCategoryId(@Param("categoryId") Long categoryId);
 
+    // Find all listed products
     @Query("SELECT p FROM Product p WHERE p.unlisted = false")
     List<Product> findListedProducts();
 
+    // Find all unlisted products
     @Query("SELECT p FROM Product p WHERE p.unlisted = true")
     List<Product> findUnlistedProducts();
 
+    // Find all products in stock
     @Query("SELECT p FROM Product p WHERE p.stock > 0")
     List<Product> findProductsInStock();
 
+    // Find products below a given stock threshold
     @Query("SELECT p FROM Product p WHERE p.stock <= :stockThreshold")
     List<Product> findProductsBelowStockThreshold(@Param("stockThreshold") int stockThreshold);
 
+    // Find products based on dynamic filters
     @Query("SELECT p FROM Product p WHERE "
     + "(:minPrice IS NULL OR p.price >= :minPrice) AND "
     + "(:maxPrice IS NULL OR p.price <= :maxPrice) AND "
@@ -49,4 +57,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                  @Param("categoryId") Long categoryId,
                                  Pageable pageable);
 
+    // Find active products (listed and in-stock) by seller ID
+    @Query("SELECT p FROM Product p WHERE p.sellerId = :sellerId AND p.unlisted = false AND p.stock > 0")
+    List<Product> findActiveProductsBySeller(@Param("sellerId") String sellerId);
 }
