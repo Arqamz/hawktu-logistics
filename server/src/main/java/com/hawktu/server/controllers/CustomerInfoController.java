@@ -2,16 +2,16 @@ package com.hawktu.server.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hawktu.server.dtos.request.ChangePasswordRequest;
-import com.hawktu.server.dtos.response.CustomerInfoResponse;
 import com.hawktu.server.dtos.request.UpdateCustomerInfoRequest;
+import com.hawktu.server.dtos.response.CustomerInfoResponse;
 import com.hawktu.server.services.CustomerService;
 import com.hawktu.server.utils.JwtUtil;
 
@@ -42,7 +42,7 @@ public class CustomerInfoController extends BaseController {
             CustomerInfoResponse response = customerService.getCustomerInfo(email);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return internalServerError("Invalid or expired token.");
+            return internalServerError("Couldn't get customer info");
         }
     }
     
