@@ -1,21 +1,31 @@
 package com.hawktu.server.services;
 
+import com.hawktu.server.dtos.request.CartDTO;
+import com.hawktu.server.dtos.request.CartProductDTO;
+import com.hawktu.server.dtos.request.OrderItemDTO;
 import com.hawktu.server.dtos.request.ProductFilterRequest;
 import com.hawktu.server.dtos.response.ProductDTO;
 import com.hawktu.server.dtos.response.ProductListResponse;
+import com.hawktu.server.factories.OrderFactory;
 import com.hawktu.server.repositories.ReviewRepository;
 import com.hawktu.server.repositories.ProductRepository;
 import com.hawktu.server.repositories.CategoryRepository;
 import com.hawktu.server.models.Category;
+import com.hawktu.server.models.Customer;
 import com.hawktu.server.models.Product;
 import com.hawktu.server.models.Review;
+import com.hawktu.server.models.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,12 +41,25 @@ public class ShopService {
 
     @Autowired
     private ReviewRepository reviewRepository;
+    
+    @Autowired
+    private final ProductService productService;
+    
+    @Autowired
+    private final CustomerService customerService;
+    
+    @Autowired
+    private final OrderFactory orderFactory;
+
 
     @Autowired
-    public ShopService(ProductRepository productRepository, ReviewRepository reviewRepository, CategoryRepository categoryRepository) {
+    public ShopService(ProductRepository productRepository, ReviewRepository reviewRepository, CategoryRepository categoryRepository, ProductService productService, CustomerService customerService, OrderFactory orderFactory) {
         this.productRepository = productRepository;
         this.reviewRepository = reviewRepository;
         this.categoryRepository = categoryRepository;
+        this.productService = productService;
+        this.customerService = customerService;
+        this.orderFactory = orderFactory;
     }
 
     public ProductListResponse getProductsByPage(int page) {
@@ -124,4 +147,43 @@ public class ShopService {
     public List<Category> getAllCategories() {
         return categoryRepository.findAllCategories();
      }
+
+    
+     @Transactional
+     public Order placeOrder(CartDTO cartDTO) {
+         Customer customer = customerService.getCustomerById(cartDTO.getUserId());
+ 
+         double total = 0.0;
+         List<OrderItemDTO> orderItemDTOs = new ArrayList<>();
+ 
+         for (CartProductDTO cartProduct : cartDTO.getCartProducts()) {
+             Product product = productService.getProductById(cartProduct.getProductId());
+ 
+             double productTotal = product.getPrice().multiply(BigDecimal.valueOf(cartProduct.getQuantity())).doubleValue();
+             total +=(productTotal);
+ 
+             OrderItemDTO orderItemDTO = new OrderItemDTO();
+             orderItemDTO.setProductId(product.getId());
+             orderItemDTO.setUnitPrice(product.getPrice());
+             orderItemDTO.setQuantity(cartProduct.getQuantity());
+             orderItemDTO.setDeliveryAddress(cartDTO.getDeliveryAddress());
+ 
+             orderItemDTOs.add(orderItemDTO);
+         }
+ 
+         int loyaltyPoints = ((int)(total*10));
+ 
+        for (CartProductDTO cartProduct : cartDTO.getCartProducts()) {
+             Product product = productService.getProductById(cartProduct.getProductId());
+             productService.updateProductStock(product, cartProduct.getQuantity());
+         }
+ 
+         customerService.updateCustomerWallet(customer, total);
+         customerService.updateCustomerLoyaltyPoints(customer, loyaltyPoints);
+ 
+         return orderFactory.createOrder(orderItemDTOs);
+     }
+
+
+
 }

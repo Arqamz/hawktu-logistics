@@ -1,5 +1,6 @@
 package com.hawktu.server.services;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,4 +90,26 @@ public class CustomerService {
         customerRepository.save(customer);
         return true;
     }
+
+    //placing order functions
+    public Customer getCustomerById(Long customerId) {
+        return customerRepository.findById(customerId)
+            .orElseThrow(() -> new RuntimeException("Customer not found"));
+    }
+
+    public void updateCustomerWallet(Customer customer, double amountToDeduct) {
+        if (customer.getWallet() < amountToDeduct) {
+            throw new RuntimeException("Insufficient wallet balance");
+        }
+        customer.setWallet(customer.getWallet() - amountToDeduct);
+        customerRepository.save(customer);
+    }
+
+    public void updateCustomerLoyaltyPoints(Customer customer, int loyaltyPointsToAdd) {
+        customer.setLoyaltyPoints(customer.getLoyaltyPoints() + loyaltyPointsToAdd);
+        customerRepository.save(customer);
+    }
+
+
+
 }
