@@ -74,16 +74,19 @@ export default function CheckoutPage() {
       })),
       deliveryAddress: deliveryAddress
     };
-
+  
     try {
-      const response = await placeOrder(cartDTO); // Create the order
-      if (response) {
+      const response = await placeOrder(cartDTO); // Create the order and get response
+  
+      if (response && response.orderItems) {
+        localStorage.removeItem("cartItems");
         setShowSuccessPopup(true);
         setTimeout(() => {
-          localStorage.removeItem("cartItems")
           setShowSuccessPopup(false);
-          navigate('/shop');
-        }, 3000);
+          navigate('/shop'); // Redirect to the shop
+        }, 9000);
+      } else {
+        alert('Order failed. Please try again.');
       }
     } catch (error) {
       console.error('Error during order creation:', error);

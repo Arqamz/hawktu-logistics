@@ -60,3 +60,22 @@ export interface CartDTO {
   cartProducts: CartProductDTO[];
   deliveryAddress: Address;
 }
+
+export interface OrderItem {
+  id: number;
+  orderId: number;
+  productId: number;
+  quantity: number;
+  totalPrice: number;
+  state: string;
+  refundMessage: string | null;
+  refundResponse: string | null;
+  deliveryAddress: Address;
+  currentState: object;
+}
+
+export interface OrderResponse {
+  id: number;
+  createdAt: string;
+  orderItems: OrderItem[];
+}
