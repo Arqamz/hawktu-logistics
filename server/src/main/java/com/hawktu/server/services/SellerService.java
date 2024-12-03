@@ -213,14 +213,19 @@ public class SellerService {
     }
 
     public ProductCountResponse getActiveProducts(String email) {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime startOfThisMonth = now.with(TemporalAdjusters.firstDayOfMonth()).withHour(0).withMinute(0).withSecond(0);
-        LocalDateTime startOfLastMonth = startOfThisMonth.minusMonths(1);
-        LocalDateTime endOfLastMonth = startOfThisMonth.minusSeconds(1);
+        // LocalDateTime now = LocalDateTime.now();
+        // LocalDateTime startOfThisMonth = now.with(TemporalAdjusters.firstDayOfMonth()).withHour(0).withMinute(0).withSecond(0);
+        // LocalDateTime startOfLastMonth = startOfThisMonth.minusMonths(1);
+        // LocalDateTime endOfLastMonth = startOfThisMonth.minusSeconds(1);
 
-        Long totalProducts = productRepository.countActiveProductsBySellerEmailAndDateRange(email, null, null);
-        Long thisMonthProducts = productRepository.countActiveProductsBySellerEmailAndDateRange(email, startOfThisMonth, now);
-        Long lastMonthProducts = productRepository.countActiveProductsBySellerEmailAndDateRange(email, startOfLastMonth, endOfLastMonth);
+
+        Long totalProducts = productRepository.countActiveProductsBySellerEmail(email);
+        Long thisMonthProducts = productRepository.countActiveProductsBySellerEmail(email);
+        Long lastMonthProducts = productRepository.countActiveProductsBySellerEmail(email);
+
+        // Long totalProducts = productRepository.countActiveProductsBySellerEmailAndDateRange(email, null, null);
+        // Long thisMonthProducts = productRepository.countActiveProductsBySellerEmailAndDateRange(email, startOfThisMonth, now);
+        // Long lastMonthProducts = productRepository.countActiveProductsBySellerEmailAndDateRange(email, startOfLastMonth, endOfLastMonth);
         return new ProductCountResponse(totalProducts, thisMonthProducts, lastMonthProducts);
     }
 

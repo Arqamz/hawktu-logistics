@@ -34,30 +34,32 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     @Query("SELECT SUM(oi.totalPrice) FROM OrderItem oi " +
     "JOIN Product p ON oi.productId = p.id " +
     "JOIN Seller s ON p.sellerId = s.id " +
+    "JOIN Order o ON oi.orderId = o.id " +
     "WHERE s.email = :email " +
     "AND oi.state = 'DELIVERED' " +
-    "AND (:startDate IS NULL OR oi.orderDate >= :startDate) " +
-    "AND (:endDate IS NULL OR oi.orderDate <= :endDate)")
-    BigDecimal calculateRevenueBySellerAndDateRange(@Param("email") String email,@Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate);
+    "AND (:startDate IS NULL OR o.createdAt >= :startDate) " +
+    "AND (:endDate IS NULL OR o.createdAt <= :endDate)")
+    BigDecimal calculateRevenueBySellerAndDateRange(@Param("email") String email, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
     
     @Query("SELECT oi FROM OrderItem oi " +
     "JOIN Product p ON oi.productId = p.id " +
     "JOIN Seller s ON p.sellerId = s.id " +
+    "JOIN Order o ON oi.orderId = o.id " +
     "WHERE s.email = :email " +
     "AND oi.state = 'DELIVERED' " +
-    "AND (:startDate IS NULL OR oi.orderDate >= :startDate) " +
-    "AND (:endDate IS NULL OR oi.orderDate <= :endDate)")
-    List<OrderItem> findOrdersBySellerAndDateRange(@Param("email") String email,@Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate);
+    "AND (:startDate IS NULL OR o.createdAt >= :startDate) " +
+    "AND (:endDate IS NULL OR o.createdAt <= :endDate)")
+    List<OrderItem> findOrdersBySellerAndDateRange(@Param("email") String email, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
     @Query("SELECT COUNT(oi) FROM OrderItem oi " +
     "JOIN Product p ON oi.productId = p.id " +
     "JOIN Seller s ON p.sellerId = s.id " +
+    "JOIN Order o ON oi.orderId = o.id " +
     "WHERE s.email = :email " +
     "AND oi.state = 'DELIVERED' " +
-    "AND (:startDate IS NULL OR oi.orderDate >= :startDate) " +
-    "AND (:endDate IS NULL OR oi.orderDate <= :endDate)")
-    Long countOrdersBySellerAndDateRange(@Param("email") String email,@Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate);
+    "AND (:startDate IS NULL OR o.createdAt >= :startDate) " +
+    "AND (:endDate IS NULL OR o.createdAt <= :endDate)")
+    Long countOrdersBySellerAndDateRange(@Param("email") String email, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
-    
 
 }

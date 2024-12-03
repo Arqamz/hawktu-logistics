@@ -1,7 +1,6 @@
 package com.hawktu.server.repositories;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -63,8 +62,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
        "JOIN Seller s ON p.sellerId = s.id " +
        "WHERE s.email = :email " +
        "AND p.unlisted = false " +
-       "AND p.stock > 0 " +
-       "AND (:startDate IS NULL OR p.createdDate >= :startDate) " +
-       "AND (:endDate IS NULL OR p.createdDate <= :endDate)")
-    Long countActiveProductsBySellerEmailAndDateRange(@Param("email") String email,@Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate);
+       "AND p.stock > 0 ")
+    Long countActiveProductsBySellerEmail(@Param("email") String email);
+    // Long countActiveProductsBySellerEmailAndDateRange(@Param("email") String email,@Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate);
 }
+
+// No date logic for now
+// +
+// "AND (:startDate IS NULL OR p.createdDate >= :startDate) " +
+// "AND (:endDate IS NULL OR p.createdDate <= :endDate)")

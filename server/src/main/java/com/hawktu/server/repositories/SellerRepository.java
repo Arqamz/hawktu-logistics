@@ -18,7 +18,7 @@ public interface SellerRepository extends JpaRepository<Seller, Long> {
     Optional<Seller> findByEmail(String email);
 
     // Find wallet balance by email
-    @Query("SELECT s.walletBalance FROM Seller s WHERE s.email = :email")
+    @Query("SELECT s.wallet FROM Seller s WHERE s.email = :email")
     BigDecimal findWalletBalanceByEmail(@Param("email") String email);
 
     // Find sellers registered in the current month
