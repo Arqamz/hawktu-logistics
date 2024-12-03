@@ -129,6 +129,8 @@ export default function UserDashboard() {
               <div className="flex justify-end space-x-4">
                 <Button variant="outline" onClick={() => setIsLogoutPopupOpen(false)} className="border-gray-400 text-gray-600">
                   Cancel
+                </Button>
+                <Link to="/landing">
                   <Button
                     variant="outline"
                     onClick={() => localStorage.clear()}
@@ -136,6 +138,7 @@ export default function UserDashboard() {
                   >
                     Logout
                   </Button>
+
                 </Link>
               </div>
             </div>

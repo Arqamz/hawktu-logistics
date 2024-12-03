@@ -11,77 +11,49 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Package, Truck, Calendar } from 'lucide-react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Package, Truck } from 'lucide-react'
 import { Link } from 'react-router-dom'
-interface OrderDetails {
-  id: string
-  status: string
-  items: { name: string; quantity: number; price: number }[]
-  total: number
-  shippingAddress: string
-  estimatedDelivery: string
-}
+import useOrderStatus from '@/hooks/useOrderStatus'
+import { OrderStatusDTO } from '@/types/shop'
 
-const mockOrders = {
-  '12345': {
-    id: '12345',
-    status: 'Shipped',
-    items: [
-      { name: 'Product A', quantity: 2, price: 19.99 },
-      { name: 'Product B', quantity: 1, price: 29.99 },
-    ],
-    total: 69.97,
-    shippingAddress: '123 Main St, Anytown, AN 12345',
-    estimatedDelivery: '2023-06-15',
-  },
-  '67890': {
-    id: '67890',
-    status: 'Processing',
-    items: [
-      { name: 'Product C', quantity: 1, price: 49.99 },
-    ],
-    total: 49.99,
-    shippingAddress: '456 Elm St, Othertown, OT 67890',
-    estimatedDelivery: '2023-06-20',
-  },
-}
-
-export default function OrderTracking() {
-  const [orderId, setOrderId] = useState('')
-  const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
+const OrderTracking = () => {
+  const [orderId, setOrderId] = useState<string>('')
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const { getOrderStatus, orderStatus, loading, error } = useOrderStatus()
 
-  const handleTrackOrder = () => {
-    setIsLoading(true)
-    setError('')
-    
-    // Simulate API call delay for tracking order
-    setTimeout(() => {
-      if (mockOrders[orderId as keyof typeof mockOrders]) {
-        setOrderDetails(mockOrders[orderId as keyof typeof mockOrders])
-        setIsDialogOpen(true)
-      } else {
-        setError('Order not found')
-      }
-      setIsLoading(false)
-    }, 1000)
+  const handleTrackOrder = async () => {
+    if (!orderId.trim() || isNaN(Number(orderId))) {
+      return
+    }
+
+    const status = await getOrderStatus(Number(orderId))
+    if (status) {
+      setIsDialogOpen(true)
+    }
+  }
+
+  const calculateOrderStatus = (orderItems: OrderStatusDTO['orderItems']) => {
+    const allDelivered = orderItems.every(item => item.state === 'DELIVERED' || item.state === 'REFUND_ACCEPTED' || item.state === 'REFUND_REQUESTED')
+    const allCancelled = orderItems.every(item => item.state === 'CANCELLED')
+    const anyProcessingOrShipped = orderItems.some(item => item.state === 'PROCESSING' || item.state === 'SHIPPED')
+
+    if (allDelivered) return 'Delivered'
+    if (allCancelled) return 'Cancelled'
+    if (anyProcessingOrShipped) return 'Processing'
+    return 'Unknown'
   }
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Header */}
-      <header className=" shadow-sm border-b">
+      <header className="shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <Link to="/landing">
-          <h1 className="text-2xl font-bold text-primary">HawkTU</h1>
+          <Link to="/landing">
+            <h1 className="text-2xl font-bold text-primary">HawkTU</h1>
           </Link>
         </div>
       </header>
 
-      {/* Main content */}
       <main className="flex-grow container mx-auto px-4 py-8 justify-center">
         <Card className="max-w-md mx-auto">
           <CardHeader>
@@ -99,15 +71,18 @@ export default function OrderTracking() {
                   placeholder="Enter your order ID"
                 />
               </div>
-              <Button onClick={handleTrackOrder} disabled={isLoading} className="w-full">
-                {isLoading ? 'Tracking...' : 'Track Order'}
+              <Button
+                onClick={handleTrackOrder}
+                disabled={!orderId.trim() || isNaN(Number(orderId)) || loading}
+                className="w-full"
+              >
+                {loading ? 'Tracking...' : 'Track Order'}
               </Button>
               {error && <p className="text-red-500 text-center">{error}</p>}
             </div>
           </CardContent>
         </Card>
 
-        {/* Dialog to show order details */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
@@ -116,50 +91,65 @@ export default function OrderTracking() {
                 Here are the details for your order:
               </DialogDescription>
             </DialogHeader>
-            {orderDetails && (
+            {orderStatus && (
               <div className="mt-4 space-y-4">
                 <div className="flex items-center space-x-2">
                   <Package className="text-primary" />
                   <div>
-                    <p className="font-semibold">Order ID: {orderDetails.id}</p>
-                    <p className="text-sm text-gray-500">Status: {orderDetails.status}</p>
+                    <p className="font-semibold">Order ID: {orderId}</p>
+                    <p className="text-sm text-gray-500">Status: {calculateOrderStatus(orderStatus.orderItems)}</p>
                   </div>
                 </div>
+
+                <div className="flex items-center space-x-2">
+                  <Truck className="text-primary" />
+                  <p className="text-sm">
+                    Shipping to: {orderStatus.orderItems[0]?.deliveryAddressString?.addressLineOne || ''} 
+                    {orderStatus.orderItems[0]?.deliveryAddressString?.addressLineTwo || ''},
+                    {orderStatus.orderItems[0]?.deliveryAddressString?.city || 'N/A'},
+                    {orderStatus.orderItems[0]?.deliveryAddressString?.district || 'N/A'},
+                    {orderStatus.orderItems[0]?.deliveryAddressString?.country || 'N/A'}                     
+                    {orderStatus.orderItems[0]?.deliveryAddressString?.additionalInfo || ''}
+                  </p>
+                </div>
+
                 <div>
                   <p className="font-semibold mb-2">Items:</p>
                   <ul className="list-disc list-inside space-y-1">
-                    {orderDetails.items.map((item, index) => (
+                    {orderStatus.orderItems.map((item, index) => (
                       <li key={index} className="text-sm">
-                        {item.name} - Quantity: {item.quantity}, Price: ${item.price.toFixed(2)}
+                        <p>{item.productName} - Quantity: {item.quantity}, Product ID: {item.productId}</p>
+                        <p className="text-gray-500">Price: ${item.totalPrice.toFixed(2)}</p>
+                        <p className="font-semibold">State: {item.state}</p>
+
+                        {(item.state === 'REFUND_REQUESTED' || item.state === 'REFUND_ACCEPTED' || item.state === 'REFUND_DENIED') && (
+                          <div>
+                            <p className="font-semibold">Refund Message:</p>
+                            <p>{item.refundMessage || 'No refund message'}</p>
+                            <p className="font-semibold">Refund Response:</p>
+                            <p>{item.refundResponse || 'No refund response'}</p>
+                          </div>
+                        )}
                       </li>
                     ))}
                   </ul>
                 </div>
-                <p className="font-semibold">Total: ${orderDetails.total.toFixed(2)}</p>
-                <div className="flex items-center space-x-2">
-                  <Truck className="text-primary" />
-                  <p className="text-sm">Shipping to: {orderDetails.shippingAddress}</p>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Calendar className="text-primary" />
-                  <p className="text-sm">Estimated Delivery: {orderDetails.estimatedDelivery}</p>
-                </div>
+
+                <p className="font-semibold">Total: ${orderStatus.orderItems.reduce((total, item) => total + parseFloat(item.totalPrice.toString()), 0).toFixed(2)}</p>
               </div>
             )}
           </DialogContent>
         </Dialog>
       </main>
 
-      {/* Footer */}
       <footer className="bg-gray-800 text-white py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p>&copy; 2024 HawkTU, All rights reserved.</p>
             <nav className="mt-4 md:mt-0">
               <ul className="flex space-x-4">
-                <li><a href="#" className="hover:text-primary-foreground">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-primary-foreground">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-primary-foreground">Contact Us</a></li>
+                <li><a href="/" className="text-white hover:text-primary">Home</a></li>
+                <li><a href="/shop" className="text-white hover:text-primary">Shop</a></li>
               </ul>
             </nav>
           </div>
@@ -168,4 +158,6 @@ export default function OrderTracking() {
     </div>
   )
 }
+
+export default OrderTracking
 

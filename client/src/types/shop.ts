@@ -79,3 +79,24 @@ export interface OrderResponse {
   createdAt: string;
   orderItems: OrderItem[];
 }
+export interface OrderItemStatus {
+  id: number;
+  productId: number;
+  quantity: number;
+  totalPrice: number;
+  deliveryAddress: Address;
+  state: string;
+  productName: string;
+  refundMessage: string | null;
+  refundResponse: string | null;
+}
+
+export interface OrderStatusDTO {
+  orderItems: OrderItemStatus[];
+}
+
+export interface OrderResponse {
+  id: number;
+  createdAt: string;
+  orderItems: OrderItem[];
+}

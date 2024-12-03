@@ -1,5 +1,5 @@
 import axiosInstance from '../config/axios';
-import { ProductFilterRequest, ProductListResponse, Category, Review, CartDTO } from '../types/shop';
+import { ProductFilterRequest, ProductListResponse, Category, Review, CartDTO, OrderResponse, OrderStatusDTO } from '../types/shop';
 
 export const fetchProducts = async (filterRequest: ProductFilterRequest): Promise<ProductListResponse> => {
   try {
@@ -37,10 +37,21 @@ export const fetchReviews = async (productId: number): Promise<Review[]> => {
 
 export const createOrder = async (cartDTO: CartDTO) => {
   try {
-    const response = await axiosInstance.post('/api/orders/checkout', cartDTO);
+    const response = await axiosInstance.post('/orders/checkout', cartDTO);
     return response.data;  
   } catch (error) {
     console.error('Error creating order:', error);
+    throw error;
+  }
+};
+export const fetchOrderStatus = async (orderId: number): Promise<OrderStatusDTO> => {
+  try {
+    const response = await axiosInstance.get<OrderStatusDTO>('/orders/status', {
+      params: { orderId }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching order status:', error);
     throw error;
   }
 };

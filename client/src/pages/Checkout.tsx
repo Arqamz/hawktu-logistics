@@ -15,6 +15,7 @@ export default function CheckoutPage() {
   const [showRechargePopup, setShowRechargePopup] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [rechargeAmount, setRechargeAmount] = useState('');
+  const [orderId, setOrderId] = useState<number | null>(null);
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -32,7 +33,7 @@ export default function CheckoutPage() {
     district: '',
     addressLineOne: '',
     addressLineTwo: '',
-    additionalInfo: ''
+    additionalInfo: '' // Added additional info
   });
 
   const [walletBalance, setWalletBalance] = useState(0);
@@ -75,6 +76,7 @@ export default function CheckoutPage() {
       const response = await placeOrder(cartDTO); // Create the order and get response
   
       if (response && response.orderItems) {
+        setOrderId(response.id); // Set orderId from the response
         localStorage.removeItem("cartItems");
         setShowSuccessPopup(true);
         setTimeout(() => {
@@ -278,6 +280,17 @@ export default function CheckoutPage() {
                   placeholder="Current country"
                 />
               </div>
+              <div>
+                <Label htmlFor="additional-info">Additional Info</Label>
+                <Input
+                  id="additional-info"
+                  name="additionalInfo"
+                  value={deliveryAddress.additionalInfo}
+                  onChange={handleAddressChange}
+                  disabled
+                  placeholder="Any additional info"
+                />
+              </div>
             </div>
           ) : ( // If using a new address
             <div className="space-y-4">
@@ -331,6 +344,16 @@ export default function CheckoutPage() {
                   placeholder="Enter country"
                 />
               </div>
+              <div>
+                <Label htmlFor="additional-info">Additional Info</Label>
+                <Input
+                  id="additional-info"
+                  name="additionalInfo"
+                  value={deliveryAddress.additionalInfo}
+                  onChange={handleAddressChange}
+                  placeholder="Any additional info"
+                />
+              </div>
             </div>
           )}
         </div>
@@ -368,6 +391,19 @@ export default function CheckoutPage() {
           <DialogHeader>
             <DialogTitle>Your order has been placed successfully!</DialogTitle>
           </DialogHeader>
+          {orderId && (
+            <div className="space-y-4">
+              <p><strong>Order ID:</strong> {orderId}</p>
+              <p><strong>Total Amount:</strong> ${totalAmount.toFixed(2)}</p>
+              <ul>
+                {cartItems.map((item) => (
+                  <li key={item.id}>
+                    {item.name} x{item.quantity} - ${(item.price * item.quantity).toFixed(2)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <Button onClick={() => navigate('/shop')} className="w-full">
             Continue Shopping
           </Button>
