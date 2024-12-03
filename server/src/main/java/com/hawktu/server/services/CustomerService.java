@@ -64,7 +64,9 @@ public class CustomerService {
                 customer.getFirstName(),
                 customer.getLastName(),
                 customer.getPhoneNumber(),
-                customer.getAddress()
+                customer.getAddress(),
+                customer.getWallet()
+                
         );
     }    
 
@@ -92,8 +94,8 @@ public class CustomerService {
     }
 
     //placing order functions
-    public Customer getCustomerById(Long customerId) {
-        return customerRepository.findById(customerId)
+    public Customer getCustomerByEmail(String customerEmail) {
+        return customerRepository.findByEmail(customerEmail)
             .orElseThrow(() -> new RuntimeException("Customer not found"));
     }
 

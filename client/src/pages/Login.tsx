@@ -44,6 +44,7 @@ export default function LoginPreview() {
       const response=await login({ ...values, accountType });
       if (response) {
         toast.success('Login successful!');
+        localStorage.removeItem("cartItems")
         window.location.href = accountType === 'seller' ? '/seller-dashboard' : '/shop';
       }
     } catch (err) {

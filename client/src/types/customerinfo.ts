@@ -12,6 +12,7 @@ export interface CustomerInfoResponse {
     lastName: string;
     phoneNumber: string;
     address: Address;
+    wallet: Number;
   }
   
   export interface UpdateCustomerInfoRequest {

@@ -151,7 +151,7 @@ public class ShopService {
     
      @Transactional
      public Order placeOrder(CartDTO cartDTO) {
-         Customer customer = customerService.getCustomerById(cartDTO.getUserId());
+         Customer customer = customerService.getCustomerByEmail(cartDTO.getEmail());
  
          double total = 0.0;
          List<OrderItemDTO> orderItemDTOs = new ArrayList<>();

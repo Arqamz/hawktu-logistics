@@ -44,7 +44,18 @@ export default function Shop() {
   }
 
   const { products, categories, loading, error, setFilter, totalPages, totalProducts, getReviews } = useProducts(initialFilter)
+  useEffect(() => {
+    const savedCartItems = localStorage.getItem("cartItems")
+    if (savedCartItems) {
+      setCartItems(JSON.parse(savedCartItems)) 
+    }
+  }, [])
 
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      localStorage.setItem("cartItems", JSON.stringify(cartItems)) 
+    }
+  }, [cartItems])
   useEffect(() => {
     setFilter({
       page: currentPage - 1,
@@ -344,27 +355,6 @@ export default function Shop() {
                       <hr className="pb-6 mt-6" />
                       <div className="my-4 mt-6 -mx-2 lg:flex">
                         <div className="lg:px-2 lg:w-1/2">
-                          <div className="p-4 bg-gray-100 rounded-full">
-                            <h1 className="ml-2 font-bold uppercase">Coupon Code</h1>
-                          </div>
-                          <div className="p-4">
-                            <p className="mb-4 italic">If you have a coupon code, please enter it in the box below</p>
-                            <div className="justify-center md:flex">
-                              <form action="" method="POST">
-                                <div className="flex items-center w-full h-13 pl-3 bg-white bg-gray-100 border rounded-full">
-                                  <input
-                                    type="coupon"
-                                    name="code"
-                                    id="coupon"
-                                    placeholder="Apply coupon"
-                                    value="90off"
-                                    className="w-full bg-gray-100 outline-none appearance-none focus:outline-none active:outline-none"
-                                  />
-                                  <Button className="text-sm">Apply</Button>
-                                </div>
-                              </form>
-                            </div>
-                          </div>
                           <div className="p-4 mt-6 bg-gray-100 rounded-full">
                             <h1 className="ml-2 font-bold uppercase">Loyalty Points Earned</h1>
                           </div>
@@ -375,33 +365,13 @@ export default function Shop() {
                           </div>
                         </div>
                         <div className="lg:px-2 lg:w-1/2">
-                          <div className="p-4 bg-gray-100 rounded-full">
-                            <h1 className="ml-2 font-bold uppercase">Order Details</h1>
-                          </div>
                           <div className="p-4">
-                            <p className="mb-6 italic">Shipping and additional costs are calculated based on values you have entered</p>
-                            <div className="flex justify-between border-b">
-                              <div className="lg:px-4 lg:py-2 m-2 text-lg lg:text-xl font-bold text-center text-gray-800">
-                                Subtotal
-                              </div>
-                              <div className="lg:px-4 lg:py-2 m-2 lg:text-lg font-bold text-center text-gray-900">
-                                ${cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)}
-                              </div>
-                            </div>
-                            <div className="flex justify-between pt-4 border-b">
-                              <div className="lg:px-4 lg:py-2 m-2 text-lg lg:text-xl font-bold text-center text-gray-800">
-                                Tax
-                              </div>
-                              <div className="lg:px-4 lg:py-2 m-2 lg:text-lg font-bold text-center text-gray-900">
-                                ${(cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0) * 0.1).toFixed(2)}
-                              </div>
-                            </div>
                             <div className="flex justify-between pt-4 border-b">
                               <div className="lg:px-4 lg:py-2 m-2 text-lg lg:text-xl font-bold text-center text-gray-800">
                                 Total
                               </div>
                               <div className="lg:px-4 lg:py-2 m-2 lg:text-lg font-bold text-center text-gray-900">
-                                ${(cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0) * 1.1).toFixed(2)}
+                                ${(cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)).toFixed(2)}
                               </div>
                             </div>
                             <Button className="w-full mt-4" onClick={handleCheckout}>

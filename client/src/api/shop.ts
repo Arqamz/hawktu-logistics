@@ -1,5 +1,5 @@
 import axiosInstance from '../config/axios';
-import { ProductFilterRequest, ProductListResponse, Category, Review } from '../types/shop';
+import { ProductFilterRequest, ProductListResponse, Category, Review, CartDTO } from '../types/shop';
 
 export const fetchProducts = async (filterRequest: ProductFilterRequest): Promise<ProductListResponse> => {
   try {
@@ -35,3 +35,12 @@ export const fetchReviews = async (productId: number): Promise<Review[]> => {
   }
 };
 
+export const createOrder = async (cartDTO: CartDTO) => {
+  try {
+    const response = await axiosInstance.post('/api/orders/checkout', cartDTO);
+    return response.data;  
+  } catch (error) {
+    console.error('Error creating order:', error);
+    throw error;
+  }
+};

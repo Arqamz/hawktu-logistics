@@ -7,6 +7,7 @@ public class CustomerInfoResponse {
     private String lastName;
     private String phoneNumber;
     private Address address;
+    private double wallet;
 
     public String getFirstName() {
         return firstName;
@@ -36,14 +37,22 @@ public class CustomerInfoResponse {
         return address;
     }
 
+    public void setWallet(double wallet) {
+        this.wallet = wallet;
+    }
+    public double getWallet() {
+        return wallet;
+    }
+
     public void setAddress(Address address) {
         this.address = address;
     }
 
-    public CustomerInfoResponse(String firstName, String lastName, String phoneNumber, Address address) {
+    public CustomerInfoResponse(String firstName, String lastName, String phoneNumber, Address address,double wallet) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.address = address;
+        this.wallet=wallet;
     }
 }

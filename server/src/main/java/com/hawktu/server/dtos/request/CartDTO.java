@@ -7,24 +7,24 @@ import java.util.List;
 
 
 public class CartDTO {
-    private Long userId;
+    private String email;
     private List<CartProductDTO> cartProducts;
     private Address deliveryAddress; // Added this field
 
     public CartDTO() {}
 
-    public CartDTO(Long userId, List<CartProductDTO> cartProducts, Address deliveryAddress) {
-        this.userId = userId;
+    public CartDTO(String email, List<CartProductDTO> cartProducts, Address deliveryAddress) {
+        this.email = email;
         this.cartProducts = cartProducts;
         this.deliveryAddress = deliveryAddress;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public List<CartProductDTO> getCartProducts() {

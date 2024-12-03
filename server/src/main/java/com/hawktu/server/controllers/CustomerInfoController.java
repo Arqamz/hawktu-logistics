@@ -45,7 +45,7 @@ public class CustomerInfoController extends BaseController {
             return internalServerError("Invalid or expired token.");
         }
     }
-
+    
 
     @PutMapping("/update-info")
     public ResponseEntity<?> updateCustomerInfo(
