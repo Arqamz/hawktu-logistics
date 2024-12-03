@@ -132,7 +132,7 @@ export default function CustomerDashboard() {
                   <CardTitle>Wallet Balance</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-3xl font-bold">${walletBalance.toFixed(2) || '0.00'}</p>
+                  <p className="text-3xl font-bold">${walletBalance || '0.00'}</p>
                   <Button
                     className="mt-4"
                     onClick={() => setCurrentPage("wallet-recharge")}
