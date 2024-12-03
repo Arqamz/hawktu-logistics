@@ -3,6 +3,7 @@ package com.hawktu.server.services;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +15,7 @@ import com.hawktu.server.dtos.request.ChangePasswordRequest;
 import com.hawktu.server.dtos.request.SellerRegisterRequest;
 import com.hawktu.server.dtos.request.UpdateSellerInfoRequest;
 import com.hawktu.server.dtos.response.OrderCountResponse;
+import com.hawktu.server.dtos.response.OrderItemPayload;
 import com.hawktu.server.dtos.response.OrdersResponse;
 import com.hawktu.server.dtos.response.ProductCountResponse;
 import com.hawktu.server.dtos.response.RevenueSummaryResponse;
@@ -141,7 +143,25 @@ public class SellerService {
 
     public OrdersResponse getAllOrders(String email) {
         List<OrderItem> orders = orderItemRepository.findOrdersBySellerAndDateRange(email, null, null);
-        return new OrdersResponse(orders);
+
+        List<OrderItemPayload> orderItemPayloads = new ArrayList<>();
+
+        for (OrderItem orderItem : orders) {
+            OrderItemPayload payload = new OrderItemPayload(
+                orderItem.getId(),
+                "John Doe",
+                orderItem.getOrderId(),
+                orderItem.getProductId(),
+                orderItem.getQuantity(),
+                orderItem.getTotalPrice(),
+                orderItem.getDeliveryAddress(),
+                orderItem.getState(),
+                orderItem.getRefundMessage(),
+                orderItem.getRefundResponse()
+            );
+            orderItemPayloads.add(payload);
+        }
+        return new OrdersResponse(orderItemPayloads);
     }
     
     public OrdersResponse getRecentOrders(String email) {
@@ -150,7 +170,26 @@ public class SellerService {
         LocalDateTime endOfThisMonth = now.with(TemporalAdjusters.lastDayOfMonth()).withHour(23).withMinute(59).withSecond(59);
 
         List<OrderItem> recentOrders = orderItemRepository.findOrdersBySellerAndDateRange(email, startOfThisMonth, endOfThisMonth);
-        return new OrdersResponse(recentOrders);
+
+        List<OrderItemPayload> orderItemPayloads = new ArrayList<>();
+
+        for (OrderItem orderItem : recentOrders) {
+            OrderItemPayload payload = new OrderItemPayload(
+                orderItem.getId(),
+                "John Doe",
+                orderItem.getOrderId(),
+                orderItem.getProductId(),
+                orderItem.getQuantity(),
+                orderItem.getTotalPrice(),
+                orderItem.getDeliveryAddress(),
+                orderItem.getState(),
+                orderItem.getRefundMessage(),
+                orderItem.getRefundResponse()
+            );
+            orderItemPayloads.add(payload);
+        }
+
+        return new OrdersResponse(orderItemPayloads);
     }
 
     public OrderCountResponse getOrderCounts(String email) {

@@ -2,20 +2,18 @@ package com.hawktu.server.dtos.response;
 
 import java.util.List;
 
-import com.hawktu.server.models.OrderItem;
-
 public class OrdersResponse {
-    private List<OrderItem> orders;
+    private List<OrderItemPayload> orders;
 
-    public OrdersResponse(List<OrderItem> orders) {
+    public OrdersResponse(List<OrderItemPayload> orders) {
         this.orders = orders;
     }
 
-    public List<OrderItem> getOrders() {
+    public List<OrderItemPayload> getOrders() {
         return orders;
     }
 
-    public void setOrders(List<OrderItem> orders) {
+    public void setOrders(List<OrderItemPayload> orders) {
         this.orders = orders;
     }
 }
