@@ -1,5 +1,9 @@
 package com.hawktu.server.services;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +13,14 @@ import org.springframework.stereotype.Service;
 import com.hawktu.server.dtos.request.ChangePasswordRequest;
 import com.hawktu.server.dtos.request.SellerRegisterRequest;
 import com.hawktu.server.dtos.request.UpdateSellerInfoRequest;
+import com.hawktu.server.dtos.response.OrderCountResponse;
+import com.hawktu.server.dtos.response.OrdersResponse;
+import com.hawktu.server.dtos.response.ProductCountResponse;
+import com.hawktu.server.dtos.response.RevenueSummaryResponse;
 import com.hawktu.server.dtos.response.SellerInfoResponse;
+import com.hawktu.server.dtos.response.WalletBalanceResponse;
 import com.hawktu.server.factories.SellerFactory;
+import com.hawktu.server.models.OrderItem;
 import com.hawktu.server.models.Seller;
 import com.hawktu.server.repositories.OrderItemRepository;
 import com.hawktu.server.repositories.ProductRepository;
@@ -110,40 +120,63 @@ public class SellerService {
         return true;
     }
 
-    // public WalletBalanceResponse getWalletBalance(String email) {
-    //     BigDecimal walletBalance = orderItemRepository.calculateWalletBalanceBySeller(email);
-    //     return new WalletBalanceResponse(walletBalance);
-    // }
+    public WalletBalanceResponse getWalletBalance(String email) {
+        // TODO: Check for email existence in DB, then fetch wallet balance, else throw error
+        BigDecimal walletBalance = sellerRepository.findWalletBalanceByEmail(email);
+        return new WalletBalanceResponse(walletBalance);
+    }
+    
+    public RevenueSummaryResponse getRevenueSummary(String email) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfThisMonth = now.with(TemporalAdjusters.firstDayOfMonth()).withHour(0).withMinute(0).withSecond(0);
+        LocalDateTime startOfLastMonth = startOfThisMonth.minusMonths(1);
+        LocalDateTime endOfLastMonth = startOfThisMonth.minusSeconds(1);
 
-    // public RevenueSummaryResponse getRevenueSummary(String email) {
-    //     BigDecimal thisMonthRevenue = orderItemRepository.calculateMonthlyRevenueBySeller(email, "current");
-    //     BigDecimal lastMonthRevenue = orderItemRepository.calculateMonthlyRevenueBySeller(email, "last");
-    //     return new RevenueSummaryResponse(thisMonthRevenue, lastMonthRevenue);
-    // }
+        BigDecimal totalRevenue = orderItemRepository.calculateRevenueBySellerAndDateRange(email, null, null);
+        BigDecimal thisMonthRevenue = orderItemRepository.calculateRevenueBySellerAndDateRange(email, startOfThisMonth, now);
+        BigDecimal lastMonthRevenue = orderItemRepository.calculateRevenueBySellerAndDateRange(email, startOfLastMonth, endOfLastMonth);
 
-    // public OrderCountResponse getOrderCounts(String email) {
-    //     int thisMonthOrders = orderItemRepository.countOrdersBySeller(email, "current");
-    //     int lastMonthOrders = orderItemRepository.countOrdersBySeller(email, "last");
-    //     return new OrderCountResponse(thisMonthOrders, lastMonthOrders);
-    // }
+        return new RevenueSummaryResponse(totalRevenue, thisMonthRevenue, lastMonthRevenue);
+    }
 
-    // public ActiveProductsResponse getActiveProducts(String email) {
-    //     List<Product> activeProducts = productRepository.findActiveProductsBySeller(email);
-    //     return new ActiveProductsResponse(activeProducts);
-    // }
+    public OrdersResponse getAllOrders(String email) {
+        List<OrderItem> orders = orderItemRepository.findOrdersBySellerAndDateRange(email, null, null);
+        return new OrdersResponse(orders);
+    }
+    
+    public OrdersResponse getRecentOrders(String email) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfThisMonth = now.with(TemporalAdjusters.firstDayOfMonth()).withHour(0).withMinute(0).withSecond(0);
+        LocalDateTime endOfThisMonth = now.with(TemporalAdjusters.lastDayOfMonth()).withHour(23).withMinute(59).withSecond(59);
 
-    // public AllOrdersResponse getAllOrders(String email) {
-    //     List<OrderItem> orders = orderItemRepository.findAllBySeller(email);
-    //     return new AllOrdersResponse(orders);
-    // }
+        List<OrderItem> recentOrders = orderItemRepository.findOrdersBySellerAndDateRange(email, startOfThisMonth, endOfThisMonth);
+        return new OrdersResponse(recentOrders);
+    }
 
-    // public RecentOrdersResponse getRecentOrders(String email) {
-    //     List<OrderItem> recentOrders = orderItemRepository.findRecentOrdersBySeller(email, 5);
-    //     return new RecentOrdersResponse(recentOrders);
-    // }
+    public OrderCountResponse getOrderCounts(String email) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfThisMonth = now.with(TemporalAdjusters.firstDayOfMonth()).withHour(0).withMinute(0).withSecond(0);
+        LocalDateTime startOfLastMonth = startOfThisMonth.minusMonths(1);
+        LocalDateTime endOfLastMonth = startOfThisMonth.minusSeconds(1);
 
-    // public ProductReviewsResponse getProductReviews(String email) {
-    //     List<Review> reviews = reviewRepository.findReviewsForSellerProducts(email);
-    //     return new ProductReviewsResponse(reviews);
-    // }
+        Long totalOrders = orderItemRepository.countOrdersBySellerAndDateRange(email, null, null);
+        Long thisMonthOrders = orderItemRepository.countOrdersBySellerAndDateRange(email, startOfThisMonth, now);
+        Long lastMonthOrders = orderItemRepository.countOrdersBySellerAndDateRange(email, startOfLastMonth, endOfLastMonth);
+
+        return new OrderCountResponse(totalOrders, thisMonthOrders, lastMonthOrders);
+    }
+
+    public ProductCountResponse getActiveProducts(String email) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfThisMonth = now.with(TemporalAdjusters.firstDayOfMonth()).withHour(0).withMinute(0).withSecond(0);
+        LocalDateTime startOfLastMonth = startOfThisMonth.minusMonths(1);
+        LocalDateTime endOfLastMonth = startOfThisMonth.minusSeconds(1);
+
+        Long totalProducts = productRepository.countActiveProductsBySellerEmailAndDateRange(email, null, null);
+        Long thisMonthProducts = productRepository.countActiveProductsBySellerEmailAndDateRange(email, startOfThisMonth, now);
+        Long lastMonthProducts = productRepository.countActiveProductsBySellerEmailAndDateRange(email, startOfLastMonth, endOfLastMonth);
+        return new ProductCountResponse(totalProducts, thisMonthProducts, lastMonthProducts);
+    }
+
+    // TO DO: FETCH ALL REVIEWS FOR PRODUCTS FOR SELLER
 }

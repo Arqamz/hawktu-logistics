@@ -28,7 +28,6 @@ public class CustomerInfoController extends BaseController {
         this.jwtUtil = jwtUtil;
     }
 
-    
     @GetMapping("/info")
     public ResponseEntity<?> getCustomerInfo(@RequestHeader("Authorization") String authHeader) {
         try {
@@ -46,7 +45,6 @@ public class CustomerInfoController extends BaseController {
         }
     }
     
-
     @PutMapping("/update-info")
     public ResponseEntity<?> updateCustomerInfo(
             @RequestHeader("Authorization") String authHeader,
