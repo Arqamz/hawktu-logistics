@@ -1,21 +1,25 @@
 import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
-import { Truck, Box, ShoppingBag,Locate } from "lucide-react"
+import { Truck, Box, ShoppingBag, Locate } from "lucide-react"
+import { ModeToggle } from "../components/mode-toggle";
 
 export default function Component() {
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <header className="w-full px-4 lg:px-6 h-20 flex items-center border-b border-border">
         <div className="container mx-auto flex  items-center">
-          <Link to="/landing" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2">
             <span className="text-2xl font-bold">HawkTU</span>
           </Link>
         </div>
-        <Link to="/order-tracking">
-        <button>
-          <Locate/>
-        </button>
-        </Link>
+          <Link to="/order-tracking">
+            <button>
+              <Locate />
+            </button>
+          </Link>
+          <button className="pb-1 ml-3">
+            <ModeToggle />
+          </button>
       </header>
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">

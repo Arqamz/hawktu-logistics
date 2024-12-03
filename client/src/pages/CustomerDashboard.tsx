@@ -5,7 +5,6 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { User, Store, Bell, LogOut } from 'lucide-react'
-import { NotificationButton, useNotifications } from '@/components/notification-system'
 import { Link } from 'react-router-dom'
 
 export default function CustomerDashboard() {
@@ -13,7 +12,7 @@ export default function CustomerDashboard() {
   const [walletBalance, setWalletBalance] = useState(250)
   const [loyaltyPoints, setLoyaltyPoints] = useState(1250)
   const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false)
-  const { addNotification } = useNotifications();
+
   const renderPage = () => {
     switch (currentPage) {
       case 'dashboard':
@@ -50,7 +49,6 @@ export default function CustomerDashboard() {
               >
                 <User className="h-5 w-5" />
               </Button></Link>
-            <NotificationButton />
             <Button
               variant="outline"
               onClick={() => setIsLogoutPopupOpen(true)}
@@ -58,11 +56,6 @@ export default function CustomerDashboard() {
             >
               <LogOut className="h-5 w-5" />
             </Button>
-            <Button onClick={() => addNotification({
-              title: 'Action Completed',
-              description: 'Your action has been successfully completed.',
-              time: new Date().toLocaleTimeString(),
-            })}>Noti</Button>
           </div>
         </div>
       </header>
@@ -93,7 +86,7 @@ export default function CustomerDashboard() {
                 >
                   Cancel
                 </Button>
-                <Link to="/landing">
+                <Link to="/">
                   <Button
                     variant="outline"
                     onClick={() => localStorage.clear()}

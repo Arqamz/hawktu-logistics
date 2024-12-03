@@ -53,7 +53,6 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination'
 import { Toaster, toast } from 'sonner'
-import { NotificationButton, useNotifications } from '@/components/notification-system'
 // Mock data (unchanged)
 const recentOrders = [
   { id: '001', amount: 120.50, customerName: 'John Doe' },
@@ -139,7 +138,6 @@ export default function SellerDashboard() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [selectedRequest, setSelectedRequest] = useState<typeof mockRequests[0] | null>(null)
   const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false);
-  const { addNotification } = useNotifications();
 
   const reviewsPerPage = 10
 
@@ -701,7 +699,6 @@ export default function SellerDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold">HawkTU</h1>
           <div className="flex items-center space-x-4">
-            <NotificationButton />
             {/* Logout Button */}
             <Button
               variant="outline"
@@ -710,11 +707,6 @@ export default function SellerDashboard() {
             >
               <LogOut className="h-5 w-5" />
             </Button>
-            <Button onClick={() => addNotification({
-              title: 'Action Completed',
-              description: 'Your action has been successfully completed.',
-              time: new Date().toLocaleTimeString(),
-            })}>Noti</Button>
           </div>
         </div>
       </header>
@@ -766,7 +758,7 @@ export default function SellerDashboard() {
               >
                 Cancel
               </Button>
-              <Link to="/landing">
+              <Link to="/">
                 <Button
                   variant="outline"
                   onClick={() => localStorage.clear()}

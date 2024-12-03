@@ -10,7 +10,6 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Star, ShoppingCart, ChevronLeft, ChevronRight, Plus, Minus, MessageSquare } from 'lucide-react'
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { NotificationButton, useNotifications } from '@/components/notification-system'
 import { LayoutDashboard, Bell, User, LogOut } from 'lucide-react'
 import { Link } from "react-router-dom"
 import { Toaster, toast } from 'sonner'
@@ -31,7 +30,6 @@ export default function Shop() {
   const [reviews, setReviews] = useState<Review[]>([])
   const [isLoadingReviews, setIsLoadingReviews] = useState(false)
   const [isReviewSheetOpen, setIsReviewSheetOpen] = useState(false)
-  const { addNotification } = useNotifications();
   const navigate = useNavigate()
 
   const initialFilter: ProductFilterRequest = {
@@ -182,7 +180,6 @@ export default function Shop() {
                 <User className="h-5 w-5" />
               </Button>
             </Link>
-            <NotificationButton />
             <Button
               variant="outline"
               onClick={() => setIsLogoutPopupOpen(true)}
@@ -541,7 +538,7 @@ export default function Shop() {
               >
                 Cancel
               </Button>
-              <Link to="/landing">
+              <Link to="/">
                 <Button
                   variant="outline"
                   onClick={() => localStorage.clear()}

@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { NotificationButton, useNotifications } from '@/components/notification-system';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useCustomerInfo, useUpdateCustomerInfo, useChangePassword } from '@/hooks/useCustomerInfo';  // Ensure to import hooks correctly
@@ -43,7 +42,6 @@ const navItems = [
 export default function UserDashboard() {
   const [activePage, setActivePage] = useState("Edit Profile");
   const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false);
-  const { addNotification } = useNotifications();
   const navigate = useNavigate();
 
   const renderPageContent = () => {
@@ -81,7 +79,6 @@ export default function UserDashboard() {
                   <LayoutDashboard className="h-5 w-5" />
                 </Button>
               </Link>
-              <NotificationButton />
               <Button variant="outline" onClick={() => setIsLogoutPopupOpen(true)} className="border-gray-500">
                 <LogOut className="h-5 w-5" />
               </Button>
@@ -130,7 +127,7 @@ export default function UserDashboard() {
                 <Button variant="outline" onClick={() => setIsLogoutPopupOpen(false)} className="border-gray-400 text-gray-600">
                   Cancel
                 </Button>
-                <Link to="/landing">
+                <Link to="/">
                   <Button
                     variant="outline"
                     onClick={() => localStorage.clear()}
