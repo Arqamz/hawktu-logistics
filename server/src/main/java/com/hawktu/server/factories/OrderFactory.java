@@ -11,7 +11,6 @@ import com.hawktu.server.models.OrderItem;
 import com.hawktu.server.repositories.OrderItemRepository;
 import com.hawktu.server.repositories.OrderRepository;
 
-
 @Component
 public class OrderFactory {
     
@@ -24,8 +23,8 @@ public class OrderFactory {
     @Autowired
     private OrderItemFactory orderItemFactory;
 
-    public Order createOrder(List<OrderItemDTO> orderItemDataList) {
-        Order order = new Order();
+    public Order createOrder(Long customerId, List<OrderItemDTO> orderItemDataList) {
+        Order order = new Order(customerId);
         orderRepository.save(order);
 
         for (OrderItemDTO orderItemData : orderItemDataList) {

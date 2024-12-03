@@ -27,16 +27,25 @@ public class Order implements IOrder {
     @JoinColumn(name = "order_id") 
     private final List<OrderItem> items = new ArrayList<>();
 
+    @Column(nullable = false)
+    private final Long customerId;
+
     @Column(nullable = false, updatable = false)
     private final LocalDateTime createdAt;
 
-    public Order() {
+    public Order(Long customerId) {
+        this.customerId = customerId;
         this.createdAt = LocalDateTime.now();
     }
 
     @Override
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public Long getCustomerId() {
+        return customerId;
     }
 
     @Override

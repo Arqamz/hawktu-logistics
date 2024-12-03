@@ -58,4 +58,6 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     "AND (:endDate IS NULL OR oi.orderDate <= :endDate)")
     Long countOrdersBySellerAndDateRange(@Param("email") String email,@Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate);
 
+    
+
 }
