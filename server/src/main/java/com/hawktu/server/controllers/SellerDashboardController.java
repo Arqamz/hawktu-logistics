@@ -5,12 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hawktu.server.dtos.response.OrderCountResponse;
 import com.hawktu.server.dtos.response.OrdersResponse;
 import com.hawktu.server.dtos.response.ProductCountResponse;
 import com.hawktu.server.dtos.response.RevenueSummaryResponse;
+import com.hawktu.server.dtos.response.ReviewsResponse;
 import com.hawktu.server.dtos.response.WalletBalanceResponse;
 import com.hawktu.server.services.SellerService;
 import com.hawktu.server.utils.JwtUtil;
@@ -111,4 +113,19 @@ public class SellerDashboardController extends BaseController {
             return internalServerError("Couldn't get active products");
         }
     }
+
+    @GetMapping("/products/reviews")
+    public ResponseEntity<?> getProductReviews(@RequestHeader("Authorization") String authHeader, @RequestParam Long productId) {
+        try {
+            String email = jwtUtil.extractUsername(authHeader.replace("Bearer ", ""));
+            if (!jwtUtil.validateToken(authHeader, email)) {
+                return unauthorizedError("Invalid or expired token.");
+            }
+            ReviewsResponse response = sellerService.getProductReviews(email, productId);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return internalServerError("Couldn't get product reviews");
+        }
+    }
+
 }

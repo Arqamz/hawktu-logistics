@@ -19,10 +19,13 @@ import com.hawktu.server.dtos.response.OrderItemPayload;
 import com.hawktu.server.dtos.response.OrdersResponse;
 import com.hawktu.server.dtos.response.ProductCountResponse;
 import com.hawktu.server.dtos.response.RevenueSummaryResponse;
+import com.hawktu.server.dtos.response.ReviewsResponse;
 import com.hawktu.server.dtos.response.SellerInfoResponse;
 import com.hawktu.server.dtos.response.WalletBalanceResponse;
 import com.hawktu.server.factories.SellerFactory;
 import com.hawktu.server.models.OrderItem;
+import com.hawktu.server.models.Product;
+import com.hawktu.server.models.Review;
 import com.hawktu.server.models.Seller;
 import com.hawktu.server.repositories.OrderItemRepository;
 import com.hawktu.server.repositories.ProductRepository;
@@ -52,12 +55,16 @@ public class SellerService {
     private final ReviewRepository reviewRepository;
 
     @Autowired
-    public SellerService(PasswordEncoder passwordEncoder, SellerRepository sellerRepository, ProductRepository productRepository, OrderItemRepository orderItemRepository, ReviewRepository reviewRepository) {
+    private ProductService productService;
+
+    @Autowired
+    public SellerService(PasswordEncoder passwordEncoder, SellerRepository sellerRepository, ProductRepository productRepository, OrderItemRepository orderItemRepository, ReviewRepository reviewRepository, ProductService productService) {
         this.passwordEncoder = passwordEncoder;
         this.sellerRepository = sellerRepository;
         this.productRepository = productRepository;
         this.orderItemRepository = orderItemRepository;
         this.reviewRepository = reviewRepository;
+        this.productService = productService;
     }
 
     public boolean authenticate(String email, String password) {
@@ -217,5 +224,22 @@ public class SellerService {
         return new ProductCountResponse(totalProducts, thisMonthProducts, lastMonthProducts);
     }
 
-    // TO DO: FETCH ALL REVIEWS FOR PRODUCTS FOR SELLER
+
+    public ReviewsResponse getProductReviews(String email, Long productId) {
+        Seller seller = sellerRepository.findByEmail(email)
+            .orElseThrow(() -> new IllegalArgumentException("Seller not found"));
+
+        Long sellerId = seller.getId();
+        Product product = productService.getProductById(productId);
+
+        if (!product.getSellerId().equals(sellerId)) {
+            throw new IllegalArgumentException("Product does not belong to the seller");
+        }
+
+        List<Review> reviews = reviewRepository.findAllByProductId(productId);
+        ReviewsResponse response = new ReviewsResponse(reviews);
+
+        return response;
+    }
+
 }
