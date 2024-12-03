@@ -1,7 +1,7 @@
 package com.hawktu.server.repositories;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,10 +23,6 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     @Query("SELECT oi FROM OrderItem oi WHERE oi.state = :state")
     List<OrderItem> findAllByState(@Param("state") OrderItemStateEnum state);
 
-    // Fetch total revenue generated (sum of totalPrice)
-    @Query("SELECT SUM(oi.totalPrice) FROM OrderItem oi")
-    BigDecimal calculateTotalRevenue();
-
     // Fetch order items by product ID
     @Query("SELECT oi FROM OrderItem oi WHERE oi.productId = :productId")
     List<OrderItem> findAllByProductId(Long productId);
@@ -35,25 +31,31 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     @Query("SELECT oi FROM OrderItem oi WHERE oi.quantity > :quantity")
     List<OrderItem> findItemsWithQuantityGreaterThan(int quantity);
 
-/*     // Calculate wallet balance by seller
-    @Query("SELECT SUM(oi.totalPrice) FROM OrderItem oi WHERE oi.sellerId = :sellerId")
-    BigDecimal calculateWalletBalanceBySeller(@Param("sellerId") String sellerId); 
-
-    // Calculate monthly revenue by seller
-    @Query("SELECT SUM(oi.totalPrice) FROM OrderItem oi WHERE oi.sellerId = :sellerId AND oi.state = 'completed' AND FUNCTION('YEAR', oi.createdAt) = FUNCTION('YEAR', :date) AND FUNCTION('MONTH', oi.createdAt) = FUNCTION('MONTH', :date)")
-    BigDecimal calculateMonthlyRevenueBySeller(@Param("sellerId") String sellerId, @Param("date") LocalDate date);
-
-    // Count orders by seller
-    @Query("SELECT COUNT(oi) FROM OrderItem oi WHERE oi.sellerId = :sellerId")
-    List<OrderItem> countOrdersBySeller(@Param("sellerId") Long sellerId);
-
-    // Fetch all orders by seller
-    @Query("SELECT oi FROM OrderItem oi WHERE oi.sellerId = :sellerId")
-    List<OrderItem> findAllBySeller(@Param("sellerId") String sellerId);
-
+    @Query("SELECT SUM(oi.totalPrice) FROM OrderItem oi " +
+    "JOIN Product p ON oi.productId = p.id " +
+    "JOIN Seller s ON p.sellerId = s.id " +
+    "WHERE s.email = :email " +
+    "AND oi.state = 'DELIVERED' " +
+    "AND (:startDate IS NULL OR oi.orderDate >= :startDate) " +
+    "AND (:endDate IS NULL OR oi.orderDate <= :endDate)")
+    BigDecimal calculateRevenueBySellerAndDateRange(@Param("email") String email,@Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate);
     
-    // // Fetch recent orders by seller
-    // @Query("SELECT oi FROM OrderItem oi WHERE oi.sellerId = :sellerId ORDER BY oi.createdAt DESC")
-    // List<OrderItem> findRecentOrdersBySeller(@Param("sellerId") String sellerId, Pageable pageable);
-*/
+    @Query("SELECT oi FROM OrderItem oi " +
+    "JOIN Product p ON oi.productId = p.id " +
+    "JOIN Seller s ON p.sellerId = s.id " +
+    "WHERE s.email = :email " +
+    "AND oi.state = 'DELIVERED' " +
+    "AND (:startDate IS NULL OR oi.orderDate >= :startDate) " +
+    "AND (:endDate IS NULL OR oi.orderDate <= :endDate)")
+    List<OrderItem> findOrdersBySellerAndDateRange(@Param("email") String email,@Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate);
+
+    @Query("SELECT COUNT(oi) FROM OrderItem oi " +
+    "JOIN Product p ON oi.productId = p.id " +
+    "JOIN Seller s ON p.sellerId = s.id " +
+    "WHERE s.email = :email " +
+    "AND oi.state = 'DELIVERED' " +
+    "AND (:startDate IS NULL OR oi.orderDate >= :startDate) " +
+    "AND (:endDate IS NULL OR oi.orderDate <= :endDate)")
+    Long countOrdersBySellerAndDateRange(@Param("email") String email,@Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate);
+
 }

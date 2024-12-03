@@ -1,5 +1,6 @@
 package com.hawktu.server.repositories;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,10 @@ public interface SellerRepository extends JpaRepository<Seller, Long> {
 
     // Find by email
     Optional<Seller> findByEmail(String email);
+
+    // Find wallet balance by email
+    @Query("SELECT s.walletBalance FROM Seller s WHERE s.email = :email")
+    BigDecimal findWalletBalanceByEmail(@Param("email") String email);
 
     // Find sellers registered in the current month
     @Query("SELECT s FROM Seller s WHERE YEAR(s.registeredAt) = :year AND MONTH(s.registeredAt) = :month")

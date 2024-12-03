@@ -1,6 +1,7 @@
 package com.hawktu.server.repositories;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -57,7 +58,13 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                  @Param("categoryId") Long categoryId,
                                  Pageable pageable);
 
-    // Find active products (listed and in-stock) by seller ID
-    @Query("SELECT p FROM Product p WHERE p.sellerId = :sellerId AND p.unlisted = false AND p.stock > 0")
-    List<Product> findActiveProductsBySeller(@Param("sellerId") String sellerId);
+    // Find active products (listed and in-stock) by seller email
+    @Query("SELECT COUNT(p) FROM Product p " +
+       "JOIN Seller s ON p.sellerId = s.id " +
+       "WHERE s.email = :email " +
+       "AND p.unlisted = false " +
+       "AND p.stock > 0 " +
+       "AND (:startDate IS NULL OR p.createdDate >= :startDate) " +
+       "AND (:endDate IS NULL OR p.createdDate <= :endDate)")
+    Long countActiveProductsBySellerEmailAndDateRange(@Param("email") String email,@Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate);
 }
