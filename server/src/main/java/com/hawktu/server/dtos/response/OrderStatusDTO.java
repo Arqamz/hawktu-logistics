@@ -1,8 +1,6 @@
 package com.hawktu.server.dtos.response;
 
-import com.hawktu.server.dtos.response.OrderItemStatusDTO;
 import java.util.List;
-
 
 public class OrderStatusDTO {
     private List<OrderItemStatusDTO> orderItems;
@@ -13,7 +11,6 @@ public class OrderStatusDTO {
         this.orderItems = orderItems;
     }
 
-    // Getters and setters
     public List<OrderItemStatusDTO> getOrderItems() {
         return orderItems;
     }

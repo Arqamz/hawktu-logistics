@@ -11,7 +11,7 @@ public class ProductDTO {
     private String image;
     private double rating;
 
-    public ProductDTO(long id,String name, String description, BigDecimal price, String category, String image, double rating) {
+    public ProductDTO(long id, String name, String description, BigDecimal price, String category, String image, double rating) {
         this.id=id;
         this.name = name;
         this.description = description;
