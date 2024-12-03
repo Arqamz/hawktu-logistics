@@ -47,13 +47,13 @@ export default function Shop() {
   useEffect(() => {
     const savedCartItems = localStorage.getItem("cartItems")
     if (savedCartItems) {
-      setCartItems(JSON.parse(savedCartItems)) 
+      setCartItems(JSON.parse(savedCartItems))
     }
   }, [])
 
   useEffect(() => {
     if (cartItems.length > 0) {
-      localStorage.setItem("cartItems", JSON.stringify(cartItems)) 
+      localStorage.setItem("cartItems", JSON.stringify(cartItems))
     }
   }, [cartItems])
   useEffect(() => {
@@ -544,10 +544,12 @@ export default function Shop() {
               <Link to="/landing">
                 <Button
                   variant="outline"
+                  onClick={() => localStorage.clear()}
                   className="bg-red-500 text-white border-red-500"
                 >
                   Logout
                 </Button>
+
               </Link>
             </div>
           </div>

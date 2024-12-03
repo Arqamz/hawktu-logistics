@@ -13,10 +13,6 @@ import { useOrder } from "@/hooks/useOrder"; // Import the useOrder hook
 export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState('wallet');
   const [showRechargePopup, setShowRechargePopup] = useState(false);
-  const [cardNumber, setCardNumber] = useState('');
-  const [cardName, setCardName] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
-  const [cvv, setCvv] = useState('');
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [rechargeAmount, setRechargeAmount] = useState('');
   const navigate = useNavigate();

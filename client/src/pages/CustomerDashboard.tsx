@@ -96,10 +96,12 @@ export default function CustomerDashboard() {
                 <Link to="/landing">
                   <Button
                     variant="outline"
+                    onClick={() => localStorage.clear()}
                     className="bg-red-500 text-white border-red-500"
                   >
                     Logout
                   </Button>
+
                 </Link>
               </div>
             </div>
