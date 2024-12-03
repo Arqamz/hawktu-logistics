@@ -35,9 +35,9 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     @Query("SELECT oi FROM OrderItem oi WHERE oi.quantity > :quantity")
     List<OrderItem> findItemsWithQuantityGreaterThan(int quantity);
 
-    // Calculate wallet balance by seller
+/*     // Calculate wallet balance by seller
     @Query("SELECT SUM(oi.totalPrice) FROM OrderItem oi WHERE oi.sellerId = :sellerId")
-    BigDecimal calculateWalletBalanceBySeller(@Param("sellerId") String sellerId);
+    BigDecimal calculateWalletBalanceBySeller(@Param("sellerId") String sellerId); 
 
     // Calculate monthly revenue by seller
     @Query("SELECT SUM(oi.totalPrice) FROM OrderItem oi WHERE oi.sellerId = :sellerId AND oi.state = 'completed' AND FUNCTION('YEAR', oi.createdAt) = FUNCTION('YEAR', :date) AND FUNCTION('MONTH', oi.createdAt) = FUNCTION('MONTH', :date)")
@@ -51,7 +51,9 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     @Query("SELECT oi FROM OrderItem oi WHERE oi.sellerId = :sellerId")
     List<OrderItem> findAllBySeller(@Param("sellerId") String sellerId);
 
+    
     // // Fetch recent orders by seller
     // @Query("SELECT oi FROM OrderItem oi WHERE oi.sellerId = :sellerId ORDER BY oi.createdAt DESC")
     // List<OrderItem> findRecentOrdersBySeller(@Param("sellerId") String sellerId, Pageable pageable);
+*/
 }

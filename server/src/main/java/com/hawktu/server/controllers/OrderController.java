@@ -2,16 +2,31 @@ package com.hawktu.server.controllers;
 
 import com.hawktu.server.dtos.request.CartDTO;
 import com.hawktu.server.models.Order;
+import com.hawktu.server.models.OrderItem;
 import com.hawktu.server.services.ShopService;
+import com.hawktu.server.dtos.response.OrderStatusDTO;
+import com.hawktu.server.repositories.OrderItemRepository;
+import com.hawktu.server.dtos.response.OrderItemStatusDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+
+import java.util.stream.Collectors;
+import java.util.List;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/orders")
 public class OrderController {
     
     private final ShopService shopService;
+
+
 
     @Autowired
     public OrderController(ShopService shopService) {
@@ -27,4 +42,16 @@ public class OrderController {
             return ResponseEntity.internalServerError().body("An error occurred while processing the order");
         }
     }
+
+    @GetMapping("/status")
+    public ResponseEntity<?> getOrderStatus(@RequestParam Long orderId) {
+        try {
+            OrderStatusDTO orderStatus = shopService.findOrderStatus(orderId);
+            return ResponseEntity.ok(orderStatus);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
 }

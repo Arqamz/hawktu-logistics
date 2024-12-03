@@ -4,17 +4,22 @@ import com.hawktu.server.dtos.request.CartDTO;
 import com.hawktu.server.dtos.request.CartProductDTO;
 import com.hawktu.server.dtos.request.OrderItemDTO;
 import com.hawktu.server.dtos.request.ProductFilterRequest;
+import com.hawktu.server.dtos.response.OrderItemStatusDTO;
+import com.hawktu.server.dtos.response.OrderStatusDTO;
 import com.hawktu.server.dtos.response.ProductDTO;
 import com.hawktu.server.dtos.response.ProductListResponse;
 import com.hawktu.server.factories.OrderFactory;
 import com.hawktu.server.repositories.ReviewRepository;
 import com.hawktu.server.repositories.ProductRepository;
 import com.hawktu.server.repositories.CategoryRepository;
+import com.hawktu.server.repositories.OrderItemRepository;
 import com.hawktu.server.models.Category;
 import com.hawktu.server.models.Customer;
 import com.hawktu.server.models.Product;
 import com.hawktu.server.models.Review;
 import com.hawktu.server.models.Order;
+import com.hawktu.server.models.OrderItem;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -51,15 +56,19 @@ public class ShopService {
     @Autowired
     private final OrderFactory orderFactory;
 
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+
 
     @Autowired
-    public ShopService(ProductRepository productRepository, ReviewRepository reviewRepository, CategoryRepository categoryRepository, ProductService productService, CustomerService customerService, OrderFactory orderFactory) {
+    public ShopService(ProductRepository productRepository, ReviewRepository reviewRepository, CategoryRepository categoryRepository, ProductService productService, CustomerService customerService, OrderFactory orderFactory, OrderItemRepository orderItemRepository) {
         this.productRepository = productRepository;
         this.reviewRepository = reviewRepository;
         this.categoryRepository = categoryRepository;
         this.productService = productService;
         this.customerService = customerService;
         this.orderFactory = orderFactory;
+        this.orderItemRepository = orderItemRepository;
     }
 
     public ProductListResponse getProductsByPage(int page) {
@@ -183,6 +192,26 @@ public class ShopService {
  
          return orderFactory.createOrder(orderItemDTOs);
      }
+
+
+     public OrderStatusDTO findOrderStatus(Long orderId) {
+        List<OrderItem> orderItems = orderItemRepository.findAllByOrderId(orderId);
+        
+        if (orderItems.isEmpty()) {
+            throw new RuntimeException("No order items found for order ID: " + orderId);
+        }
+
+        List<OrderItemStatusDTO> orderItemStatusDTOs = orderItems.stream()
+            .map(orderItem -> {
+                Product product = productRepository.findById(orderItem.getProductId())
+                    .orElseThrow(() -> new RuntimeException("Product not found for ID: " + orderItem.getProductId()));
+                
+                return new OrderItemStatusDTO(orderItem, product.getName());
+            })
+            .collect(Collectors.toList());
+
+        return new OrderStatusDTO(orderItemStatusDTOs);
+    }
 
 
 
