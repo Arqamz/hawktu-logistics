@@ -1,5 +1,6 @@
 package com.hawktu.server.controllers;
 
+import com.fasterxml.jackson.databind.JsonSerializable.Base;
 import com.hawktu.server.dtos.request.CartDTO;
 import com.hawktu.server.models.Order;
 import com.hawktu.server.models.OrderItem;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/orders")
-public class OrderController {
+public class OrderController extends BaseController {
     
     private final ShopService shopService;
 
