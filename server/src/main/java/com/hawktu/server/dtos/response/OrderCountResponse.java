@@ -1,37 +1,37 @@
 package com.hawktu.server.dtos.response;
 
 public class OrderCountResponse {
-    private int totalOrders;
-    private int thisMonthOrders;
-    private int lastMonthOrders;
+    private Long totalOrders;
+    private Long thisMonthOrders;
+    private Long lastMonthOrders;
 
-    public OrderCountResponse(int totalOrders, int thisMonthOrders, int lastMonthOrders) {
+    public OrderCountResponse(Long totalOrders, Long thisMonthOrders, Long lastMonthOrders) {
         this.totalOrders = totalOrders;
         this.thisMonthOrders = thisMonthOrders;
         this.lastMonthOrders = lastMonthOrders;
     }
 
-    public int getTotalOrders() {
+    public Long getTotalOrders() {
         return totalOrders;
     }
 
-    public void setTotalOrders(int totalOrders) {
+    public void setTotalOrders(Long totalOrders) {
         this.totalOrders = totalOrders;
     }
 
-    public int getThisMonthOrders() {
+    public Long getThisMonthOrders() {
         return thisMonthOrders;
     }
 
-    public void setThisMonthOrders(int thisMonthOrders) {
+    public void setThisMonthOrders(Long thisMonthOrders) {
         this.thisMonthOrders = thisMonthOrders;
     }
 
-    public int getLastMonthOrders() {
+    public Long getLastMonthOrders() {
         return lastMonthOrders;
     }
 
-    public void setLastMonthOrders(int lastMonthOrders) {
+    public void setLastMonthOrders(Long lastMonthOrders) {
         this.lastMonthOrders = lastMonthOrders;
     }
 }
