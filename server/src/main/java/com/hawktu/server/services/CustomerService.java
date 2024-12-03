@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hawktu.server.dtos.request.ChangePasswordRequest;
 import com.hawktu.server.dtos.request.CustomerRegisterRequest;
@@ -13,6 +14,7 @@ import com.hawktu.server.dtos.request.UpdateCustomerInfoRequest;
 import com.hawktu.server.dtos.response.CustomerInfoResponse;
 import com.hawktu.server.factories.CustomerFactory;
 import com.hawktu.server.models.Customer;
+import com.hawktu.server.models.User;
 import com.hawktu.server.repositories.CustomerRepository;
 
 @Service
@@ -112,6 +114,24 @@ public class CustomerService {
         customerRepository.save(customer);
     }
 
+    //customer dashboard functions
+    public Optional<Integer> getCustomerLoyaltyPoints(String email) {
+        return customerRepository.findByEmail(email)
+            .map(Customer::getLoyaltyPoints);
+    }
 
+    public Optional<Double> getCustomerWalletBalance(String email) {
+        return customerRepository.findByEmail(email)
+            .map(User::getWallet);
+    }
+
+    @Transactional
+    public Optional<Double> addFundsToWallet(String email, Double amount) {
+        return customerRepository.findByEmail(email)
+            .map(customer -> {
+                customer.setWallet(customer.getWallet() + amount);
+                return customerRepository.save(customer).getWallet();
+            });
+    }
 
 }
