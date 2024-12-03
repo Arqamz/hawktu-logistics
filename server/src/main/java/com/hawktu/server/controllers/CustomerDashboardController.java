@@ -5,12 +5,14 @@ import com.hawktu.server.services.CustomerService;
 import com.hawktu.server.services.ShopService;
 import com.hawktu.server.utils.JwtUtil;
 
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 
 @RestController
@@ -108,5 +110,32 @@ public class CustomerDashboardController extends BaseController {
         } catch (Exception e) {
             return internalServerError("Couldn't add funds to wallet");
         }
+    }
+
+    @PostMapping("/redeem-loyalty-points") 
+    public ResponseEntity<?> redeemLoyaltyPoints( 
+        @RequestHeader("Authorization") String authHeader, 
+        @RequestParam Integer points 
+    ) { 
+        try { 
+            String token = authHeader.replace("Bearer ", ""); 
+            String email = jwtUtil.extractUsername(token); 
+             
+            if (!jwtUtil.validateToken(token, email)) { 
+                return unauthorizedError("Invalid or expired token."); 
+            } 
+    
+            Optional<Double> redemptionResult = customerService.redeemLoyaltyPoints(email, points);
+            
+            if (redemptionResult.isPresent()) {
+                return ResponseEntity.ok("Loyalty points redeemed successfully");
+            } else {
+                return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Unable to redeem loyalty points. Check your balance or point value.");
+            }
+        } catch (Exception e) { 
+            return internalServerError("Couldn't redeem loyalty points"); 
+        } 
     }
 }

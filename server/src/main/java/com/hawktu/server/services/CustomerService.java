@@ -134,4 +134,39 @@ public class CustomerService {
             });
     }
 
+    @Transactional
+    public Optional<Double> redeemLoyaltyPoints(String email, Integer points) {
+        return customerRepository.findByEmail(email)
+            .map(customer -> {
+                if (customer.getLoyaltyPoints() < points) {
+                    return Optional.<Double>empty();
+                }
+                Double walletAddition = calculateWalletAddition(points);
+                customer.setLoyaltyPoints(customer.getLoyaltyPoints() - points);
+                customer.setWallet(customer.getWallet() + walletAddition);
+                customerRepository.save(customer);
+
+                return Optional.of(walletAddition);
+            })
+            .orElse(Optional.empty());
+    }
+    
+
+    private Double calculateWalletAddition(Integer points) {
+        switch (points) {
+            case 100:
+                return 1.0;
+            case 200:
+                return 5.0;
+            case 500:
+                return 10.0;
+            case 1000:
+                return 30.0;
+            case 5000:
+                return 200.0;
+            default:
+                return 0.0;
+        }
+    }
+
 }
