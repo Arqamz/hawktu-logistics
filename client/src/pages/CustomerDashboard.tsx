@@ -15,7 +15,6 @@ export default function CustomerDashboard() {
   const [cardNumber, setCardNumber] = useState('')
   const [expiryDate, setExpiryDate] = useState('')
   const [cvv, setCvv] = useState('')
-  const [redeemCode, setRedeemCode] = useState('')
 
   const {
     loyaltyPoints,
@@ -25,6 +24,7 @@ export default function CustomerDashboard() {
     fetchLoyaltyPoints,
     fetchWalletBalance,
     addWalletFunds,
+    redeemLoyaltyPoints,
   } = useCustomerDashboard()
 
   useEffect(() => {
@@ -53,29 +53,35 @@ export default function CustomerDashboard() {
   }
 
   const coupons = [
-    { id: 1, name: '10% Off', points: 500 },
-    { id: 2, name: '20% Off', points: 1000 },
-    { id: 3, name: 'Free Shipping', points: 750 },
-    { id: 4, name: '$5 Off', points: 250 },
-    { id: 5, name: '$10 Off', points: 500 },
+    { id: 1, name: '1$ for', points: 100 },
+    { id: 2, name: '5$ for', points: 200 },
+    { id: 3, name: '10$ for', points: 500 },
+    { id: 4, name: '30$ for', points: 1000 },
+    { id: 5, name: '200$ for', points: 5000 },
   ]
 
-  const generateCode = () => {
-    return Math.random().toString(36).substring(2, 8).toUpperCase()
-  }
+ 
 
-  const handleRedeem = async (couponPoints) => {
-    if (loyaltyPoints?.points >= couponPoints) {
-      try {
-        await fetchLoyaltyPoints()
-        setRedeemCode(generateCode())
-      } catch (error) {
-        alert('Failed to redeem points. Please try again.')
+  const handleRedeemPoints = async (points) => {
+      if (loyaltyPoints >= points) {
+        try {
+          // Call the redeemLoyaltyPoints function from the hook and pass the points
+          const walletAddition = await redeemLoyaltyPoints(points);
+          if (walletAddition) {
+            alert(`Successfully redeemed ${points} points!`);
+            fetchLoyaltyPoints();
+            fetchWalletBalance();
+          } else {
+            alert(`Failed to redeem points. Try again.`);
+          }
+        } catch (err) {
+          alert('An error occurred while redeeming points. Please try again.');
+        }
+      } else {
+        alert('Insufficient loyalty points or invalid points entered.');
       }
-    } else {
-      alert('Not enough loyalty points')
-    }
-  }
+    };
+  
 
   const recentOrders = [
     {
@@ -132,7 +138,7 @@ export default function CustomerDashboard() {
                   <CardTitle>Wallet Balance</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-3xl font-bold">${walletBalance || '0.00'}</p>
+                  <p className="text-3xl font-bold">${walletBalance.toFixed(2) || '0.00'}</p>
                   <Button
                     className="mt-4"
                     onClick={() => setCurrentPage("wallet-recharge")}
@@ -184,16 +190,10 @@ export default function CustomerDashboard() {
                   {coupons.map((coupon) => (
                     <div key={coupon.id} className="flex justify-between items-center">
                       <span>{coupon.name} ({coupon.points} pts)</span>
-                      <Button onClick={() => handleRedeem(coupon.points)}>Redeem</Button>
+                      <Button onClick={() => handleRedeemPoints(coupon.points)}>Redeem</Button>
                     </div>
                   ))}
                 </div>
-                {redeemCode && (
-                  <div className="mt-6 p-4 bg-gray-100 rounded border-2">
-                    <p className="font-bold">Your coupon code:</p>
-                    <p className="text-2xl font-mono">{redeemCode}</p>
-                  </div>
-                )}
               </CardContent>
             </Card>
           </div>

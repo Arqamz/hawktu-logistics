@@ -47,6 +47,27 @@ const useCustomerDashboard = () => {
     }
   };
 
+  const redeemLoyaltyPoints = async (points: number): Promise<number | null> => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await customerDashboardApi.redeemLoyaltyPoints(points);
+  
+      // Assuming the response contains the amount added to the wallet, return it
+      if (response !== undefined) {
+        return response;  // Return the amount added to the wallet
+      } else {
+        return null;  // If there's no wallet addition in the response, return null
+      }
+    } catch (err: any) {
+      setError(err as ApiError);
+      return null;  // In case of an error, return null
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+
   return {
     loyaltyPoints,
     walletBalance,
@@ -55,6 +76,7 @@ const useCustomerDashboard = () => {
     fetchLoyaltyPoints,
     fetchWalletBalance,
     addWalletFunds,
+    redeemLoyaltyPoints, // Expose this function for use in the component
   };
 };
 

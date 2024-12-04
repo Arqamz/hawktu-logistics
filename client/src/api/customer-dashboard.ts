@@ -37,6 +37,19 @@ const customerDashboardApi = {
       throw error as ApiError;
     }
   },
+
+  redeemLoyaltyPoints: async (points: number): Promise<string> => {
+    try {
+      const response = await axiosInstance.post<string>(
+        '/customer/dashboard/redeem-loyalty-points',
+        null,
+        { params: { points } }
+      );
+      return response.data;
+    } catch (error: any) {
+      throw error as ApiError;
+    }
+  },
 };
 
 export default customerDashboardApi;

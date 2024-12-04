@@ -251,6 +251,8 @@ export default function SellerDashboard() {
 
   const renderContent = () => {
     switch (activeTab) {
+      case 'Overview':
+      return <OverviewSection/>
       case 'Personal Information':
         return <PersonalInformationSection />
       case 'Product Reviews & Ratings':
