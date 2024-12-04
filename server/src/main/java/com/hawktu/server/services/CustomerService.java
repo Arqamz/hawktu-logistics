@@ -1,6 +1,5 @@
 package com.hawktu.server.services;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,10 +107,13 @@ public class CustomerService {
         return true;
     }
 
-    //placing order functions
     public Customer getCustomerByEmail(String customerEmail) {
         return customerRepository.findByEmail(customerEmail)
             .orElseThrow(() -> new RuntimeException("Customer not found"));
+    }
+
+    public String findFullNameById(Long id) {
+        return customerRepository.findFullNameById(id);
     }
 
     public void updateCustomerWallet(Customer customer, double amountToDeduct) {

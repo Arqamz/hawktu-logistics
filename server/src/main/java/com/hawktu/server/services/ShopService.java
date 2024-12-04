@@ -21,6 +21,8 @@ import com.hawktu.server.dtos.response.OrderItemStatusDTO;
 import com.hawktu.server.dtos.response.OrderStatusDTO;
 import com.hawktu.server.dtos.response.ProductDTO;
 import com.hawktu.server.dtos.response.ProductListResponse;
+import com.hawktu.server.dtos.response.ReviewResponsePayload;
+import com.hawktu.server.dtos.response.ReviewsResponse;
 import com.hawktu.server.factories.OrderFactory;
 import com.hawktu.server.models.Category;
 import com.hawktu.server.models.Customer;
@@ -57,7 +59,6 @@ public class ShopService {
 
     @Autowired
     private final OrderItemRepository orderItemRepository;
-
 
     @Autowired
     public ShopService(ProductRepository productRepository, ReviewRepository reviewRepository, CategoryRepository categoryRepository, ProductService productService, CustomerService customerService, OrderFactory orderFactory, OrderItemRepository orderItemRepository) {
@@ -141,14 +142,33 @@ public class ShopService {
         );
     }
 
-    public List<Review> getReviewsByProductId(Long productId) {
-        return reviewRepository.findAllByProductId(productId);
+    public ReviewsResponse getReviewsByProductId(Long productId) {
+
+        List<Review> reviews = reviewRepository.findAllByProductId(productId);
+
+        List<ReviewResponsePayload> reviewResponsePayloads = new ArrayList<>();
+
+        for (Review review : reviews) {
+            String customerName = customerService.findFullNameById(review.getCustomerId());
+
+            ReviewResponsePayload payload = new ReviewResponsePayload(
+                review.getId(),
+                review.getProductId(),
+                review.getRating(),
+                review.getComment(),
+                review.getCreatedAt(),
+                customerName
+            );
+            reviewResponsePayloads.add(payload);
+        }
+
+        return new ReviewsResponse(reviewResponsePayloads);
+
     }
 
     public List<Category> getAllCategories() {
         return categoryRepository.findAllCategories();
     }
-
     
     @Transactional
     public Order placeOrder(CartDTO cartDTO) {

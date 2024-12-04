@@ -1,23 +1,23 @@
 package com.hawktu.server.controllers;
 
-import com.hawktu.server.dtos.response.ProductListResponse;
-import com.hawktu.server.models.Category;
-import com.hawktu.server.models.Review;
-import com.hawktu.server.dtos.request.ProductFilterRequest;
-import com.hawktu.server.services.ShopService;
-
 import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-
+import com.hawktu.server.dtos.request.ProductFilterRequest;
+import com.hawktu.server.dtos.response.ProductListResponse;
+import com.hawktu.server.dtos.response.ReviewsResponse;
+import com.hawktu.server.models.Category;
+import com.hawktu.server.services.ShopService;
 
 @RestController
 @RequestMapping("/shop")
-@CrossOrigin(origins = "http://localhost:5173") // Adjust frontend URL as needed
 public class ShopController extends BaseController {
 
     private final ShopService shopService;
@@ -28,15 +28,7 @@ public class ShopController extends BaseController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<?> getProducts(
-        @RequestParam(value = "page", defaultValue = "0") int page,
-        @RequestParam(value = "minPrice", required = false) BigDecimal minPrice,
-        @RequestParam(value = "maxPrice", required = false) BigDecimal maxPrice,
-        @RequestParam(value = "minRating", required = false) Double minRating,
-        @RequestParam(value = "maxRating", required = false) Double maxRating,
-        @RequestParam(value = "categoryId", required = false) Long categoryId,
-        @RequestParam(value = "sortBy", defaultValue = "DEFAULT") ProductFilterRequest.SortOption sortBy
-    ) {
+    public ResponseEntity<?> getProducts(@RequestParam(value = "page", defaultValue = "0") int page,@RequestParam(value = "minPrice", required = false) BigDecimal minPrice,@RequestParam(value = "maxPrice", required = false) BigDecimal maxPrice,@RequestParam(value = "minRating", required = false) Double minRating,@RequestParam(value = "maxRating", required = false) Double maxRating,@RequestParam(value = "categoryId", required = false) Long categoryId,@RequestParam(value = "sortBy", defaultValue = "DEFAULT") ProductFilterRequest.SortOption sortBy) {
         try {
             if (page < 0) {
                 logger.warn("Attempted to access negative page number: {}", page);
@@ -74,11 +66,7 @@ public class ShopController extends BaseController {
                 return badRequestError("Invalid product ID");
             }
 
-            List<Review> reviews = shopService.getReviewsByProductId(productId);
-            
-            if (reviews.isEmpty()) {
-                return notFoundError("No reviews found for the specified product");
-            }
+            ReviewsResponse reviews = shopService.getReviewsByProductId(productId);
 
             return ResponseEntity.ok(reviews);
         } catch (Exception e) {
@@ -90,17 +78,16 @@ public class ShopController extends BaseController {
     @GetMapping("/categories")
     public ResponseEntity<?> getAllCategories() {
         try {
-        List<Category> categories = shopService.getAllCategories();
-       
-       if (categories.isEmpty()) {
-           return notFoundError("No categories found");
-       }
+            List<Category> categories = shopService.getAllCategories();
 
-       return ResponseEntity.ok(categories);
-   } catch (Exception e) {
-       logger.error("Error fetching categories", e);
-       return internalServerError("An error occurred while fetching categories");
-   }
-}
-
+            if (categories.isEmpty()) {
+                return notFoundError("No categories found");
+            }
+            
+            return ResponseEntity.ok(categories);
+        } catch (Exception e) {
+            logger.error("Error fetching categories", e);
+            return internalServerError("An error occurred while fetching categories");
+        }
+    }
 }
