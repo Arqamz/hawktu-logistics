@@ -16,16 +16,13 @@ import com.hawktu.server.services.CustomerService;
 import com.hawktu.server.utils.JwtUtil;
 
 @RestController
-@RequestMapping("/customer/dashboard")
+@RequestMapping("/customer")
 public class CustomerDashboardController extends BaseController {
     
     @Autowired
     private final CustomerService customerService;
 
     private final JwtUtil jwtUtil;
-    
-
-    
         
     @Autowired
     public CustomerDashboardController(CustomerService customerService, JwtUtil jwtUtil) {
@@ -48,9 +45,7 @@ public class CustomerDashboardController extends BaseController {
             if (loyaltyPoints.isPresent()) {
                 return ResponseEntity.ok(loyaltyPoints.get());
             } else {
-                return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body("Customer not found with email: " + email);
+                return notFoundError("Customer not found with email: " + email);
             }
         } catch (Exception e) {
             return internalServerError("Couldn't retrieve loyalty points");
@@ -95,9 +90,7 @@ public class CustomerDashboardController extends BaseController {
             }
 
             if (amount <= 0) {
-                return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("Amount must be greater than zero");
+                return badRequestError("Amount must be greater than zero");
             }
 
             Optional<Double> updatedBalance = customerService.addFundsToWallet(email, amount);
@@ -105,9 +98,7 @@ public class CustomerDashboardController extends BaseController {
             if (updatedBalance.isPresent()) {
                 return ResponseEntity.ok(updatedBalance.get());
             } else {
-                return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body("Customer not found with email: " + email);
+                return notFoundError("Not found");
             }
         } catch (Exception e) {
             return internalServerError("Couldn't add funds to wallet");
@@ -132,9 +123,7 @@ public class CustomerDashboardController extends BaseController {
             if (redemptionResult.isPresent()) {
                 return ResponseEntity.ok("Loyalty points redeemed successfully");
             } else {
-                return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("Unable to redeem loyalty points. Check your balance or point value.");
+                return badRequestError("Unable to redeem loyalty points. Check your balance or point value.");
             }
         } catch (Exception e) { 
             return internalServerError("Couldn't redeem loyalty points"); 
@@ -151,6 +140,9 @@ public class CustomerDashboardController extends BaseController {
             String email = jwtUtil.extractUsername(token);
             
             boolean result = customerService.cancelOrder(email, productId);
+            if (!result) {
+                return notFoundError("No order found of that id");
+            }
             return ResponseEntity.ok("Order cancelled successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
