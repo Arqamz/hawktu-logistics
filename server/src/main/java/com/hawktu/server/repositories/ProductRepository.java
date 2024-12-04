@@ -1,7 +1,10 @@
 package com.hawktu.server.repositories;
 
+import java.math.BigDecimal;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,7 +15,7 @@ import com.hawktu.server.models.Product;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    // Fetch all products by a specific seller
+    // Find all products by seller ID
     @Query("SELECT p FROM Product p WHERE p.sellerId = :sellerId")
     List<Product> findAllBySellerId(@Param("sellerId") Long sellerId);
 
@@ -20,23 +23,51 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT AVG(p.averageRating) FROM Product p")
     Double calculateAverageRating();
 
-    // Fetch all products by category ID
+    // Find all products by category ID
     @Query("SELECT p FROM Product p WHERE p.categoryId = :categoryId")
     List<Product> findAllByCategoryId(@Param("categoryId") Long categoryId);
 
-    // Fetch only listed products
+    // Find all listed products
     @Query("SELECT p FROM Product p WHERE p.unlisted = false")
     List<Product> findListedProducts();
 
-    // Fetch only unlisted products
+    // Find all unlisted products
     @Query("SELECT p FROM Product p WHERE p.unlisted = true")
     List<Product> findUnlistedProducts();
 
-    // Fetch products based on stock availability (e.g., in stock only)
+    // Find all products in stock
     @Query("SELECT p FROM Product p WHERE p.stock > 0")
     List<Product> findProductsInStock();
 
-    // Fetch products based on stock level threshold
+    // Find products below a given stock threshold
     @Query("SELECT p FROM Product p WHERE p.stock <= :stockThreshold")
     List<Product> findProductsBelowStockThreshold(@Param("stockThreshold") int stockThreshold);
+
+    // Find products based on dynamic filters
+    @Query("SELECT p FROM Product p WHERE "
+    + "(:minPrice IS NULL OR p.price >= :minPrice) AND "
+    + "(:maxPrice IS NULL OR p.price <= :maxPrice) AND "
+    + "(:minRating IS NULL OR p.averageRating >= :minRating) AND "
+    + "(:maxRating IS NULL OR p.averageRating <= :maxRating) AND "
+    + "(:categoryId IS NULL OR p.categoryId = :categoryId) AND p.stock >= 1 and p.unlisted = false")
+    Page<Product> findByDynamicFilter(@Param("minPrice") BigDecimal minPrice,
+                                 @Param("maxPrice") BigDecimal maxPrice,
+                                 @Param("minRating") Double minRating,
+                                 @Param("maxRating") Double maxRating,
+                                 @Param("categoryId") Long categoryId,
+                                 Pageable pageable);
+
+    // Find active products (listed and in-stock) by seller email
+    @Query("SELECT COUNT(p) FROM Product p " +
+       "JOIN Seller s ON p.sellerId = s.id " +
+       "WHERE s.email = :email " +
+       "AND p.unlisted = false " +
+       "AND p.stock > 0 ")
+    Long countActiveProductsBySellerEmail(@Param("email") String email);
+    // Long countActiveProductsBySellerEmailAndDateRange(@Param("email") String email,@Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate);
 }
+
+// No date logic for now
+// +
+// "AND (:startDate IS NULL OR p.createdDate >= :startDate) " +
+// "AND (:endDate IS NULL OR p.createdDate <= :endDate)")

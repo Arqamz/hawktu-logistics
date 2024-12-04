@@ -1,7 +1,8 @@
 package com.hawktu.server.states.orderitem;
 
 import com.hawktu.server.states.OrderItemState;
-
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+@JsonSerialize
 public class RefundRequestedState implements OrderItemState {
 
     @Override

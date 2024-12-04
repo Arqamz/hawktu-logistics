@@ -3,11 +3,33 @@
 import React, { useState, useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { Label } from "@/components/ui/label";
 import * as z from 'zod'
 import { BarChart, Users, Package, DollarSign, ImageIcon, Bell, LogOut, Car } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
+import { 
+  useSellerInfo, 
+  useUpdateSellerInfo, 
+  useChangePassword, 
+  useWalletBalance, 
+  useRevenueSummary, 
+  useOrders, 
+  useOrderCounts, 
+  useActiveProductCount,
+  useProductReviews,
+  useRecentOrders
+} from '@/hooks/useSellerDashboard'
+import { 
+  OrderItemPayload, 
+  OrderItemStateEnum, 
+  Review,
+  WalletBalanceResponse,
+  RevenueSummaryResponse,
+  OrderCountResponse,
+  ProductCountResponse
+} from '@/types/sellerdashboard'
 import {
   Table,
   TableBody,
@@ -50,7 +72,6 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination'
 import { Toaster, toast } from 'sonner'
-import { NotificationButton ,useNotifications} from '@/components/notification-system'
 // Mock data (unchanged)
 const recentOrders = [
   { id: '001', amount: 120.50, customerName: 'John Doe' },
@@ -106,25 +127,7 @@ const mockProducts = Array.from({ length: 20 }, (_, i) => ({
 // Mock notifications
 
 
-// Schemas (unchanged)
-const userInfoSchema = z.object({
-  username: z.string().min(3, { message: 'Username must be at least 3 characters' }),
-  email: z.string().email({ message: 'Invalid email address' }),
-  phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, { message: 'Invalid phone number' }),
-  address: z.string().min(5, { message: 'Address must be at least 5 characters' }),
-})
 
-const passwordSchema = z.object({
-  currentPassword: z.string().min(8, { message: 'Password must be at least 8 characters' }),
-  newPassword: z.string().min(8, { message: 'Password must be at least 8 characters' })
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, {
-      message: 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
-    }),
-  confirmPassword: z.string(),
-}).refine((data) => data.newPassword === data.confirmPassword, {
-  message: 'Passwords do not match',
-  path: ['confirmPassword'],
-})
 
 const productSchema = z.object({
   name: z.string().min(3, { message: 'Product name must be at least 3 characters' }),
@@ -154,28 +157,11 @@ export default function SellerDashboard() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [selectedRequest, setSelectedRequest] = useState<typeof mockRequests[0] | null>(null)
   const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false);
-  const { addNotification } = useNotifications();
 
   const reviewsPerPage = 10
 
-  const userInfoForm = useForm<z.infer<typeof userInfoSchema>>({
-    resolver: zodResolver(userInfoSchema),
-    defaultValues: {
-      username: 'johndoe',
-      email: 'john@example.com',
-      phone: '+1234567890',
-      address: '123 Main St, City, Country',
-    },
-  })
 
-  const passwordForm = useForm<z.infer<typeof passwordSchema>>({
-    resolver: zodResolver(passwordSchema),
-    defaultValues: {
-      currentPassword: '',
-      newPassword: '',
-      confirmPassword: '',
-    },
-  })
+
 
   const productForm = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
@@ -188,19 +174,6 @@ export default function SellerDashboard() {
     },
   })
 
-
-
-  function onUserInfoSubmit(values: z.infer<typeof userInfoSchema>) {
-    console.log(values)
-    setIsEditing(false)
-    toast.success('User information updated successfully')
-  }
-
-  function onPasswordSubmit(values: z.infer<typeof passwordSchema>) {
-    console.log(values)
-    passwordForm.reset()
-    toast.success('Password updated successfully')
-  }
 
   const filteredRequests = refundFilter === 'All' ? requests : requests.filter(req => req.status === refundFilter)
 
@@ -279,143 +252,7 @@ export default function SellerDashboard() {
   const renderContent = () => {
     switch (activeTab) {
       case 'Personal Information':
-        return (
-          <div className="space-y-8 max-w-2xl mx-auto">
-            <Card className="shadow-md rounded-lg p-6">
-              <h2 className="text-2xl font-bold mb-4">Personal Information</h2>
-              <Form {...userInfoForm}>
-                <form onSubmit={userInfoForm.handleSubmit(onUserInfoSubmit)} className="space-y-4">
-                  <FormField
-                    control={userInfoForm.control}
-                    name="username"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Username</FormLabel>
-                        <FormControl>
-                          <Input {...field} disabled={!isEditing} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={userInfoForm.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="email" disabled={!isEditing} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={userInfoForm.control}
-                    name="phone"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Phone</FormLabel>
-                        <FormControl>
-                          <Input {...field} disabled={!isEditing} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={userInfoForm.control}
-                    name="address"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Address</FormLabel>
-                        <FormControl>
-                          <Input {...field} disabled={!isEditing} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  {isEditing ? (
-                    <div className="flex space-x-4">
-                      <Button type="submit" className="w-full">
-                        Save Changes
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => setIsEditing(false)}
-                        className="w-full"
-                      >
-                        Cancel
-                      </Button>
-                    </div>
-                  ) : (
-                    <Button
-                      type="button"
-                      className="w-full"
-                      onClick={() => setIsEditing(true)}
-                    >
-                      Edit
-                    </Button>
-                  )}
-                </form>
-              </Form>
-            </Card>
-
-            <Card className="shadow-md rounded-lg p-6">
-              <h2 className="text-2xl font-bold mb-4">Change Password</h2>
-              <Form {...passwordForm}>
-                <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-4">
-                  <FormField
-                    control={passwordForm.control}
-                    name="currentPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Current Password</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="password" className="" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={passwordForm.control}
-                    name="newPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>New Password</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="password" className="" />
-                        </FormControl>
-                        <FormDescription>
-                          Password must be at least 8 characters and include uppercase, lowercase, number, and special character.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={passwordForm.control}
-                    name="confirmPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Confirm New Password</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="password" className="" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Button type="submit" className="w-full">Update Password</Button>
-                </form>
-              </Form>
-            </Card>
-          </div>
-        )
+        return <PersonalInformationSection />
       case 'Product Reviews & Ratings':
         return (
           <Card className="shadow-md rounded-lg p-6">
@@ -872,8 +709,7 @@ export default function SellerDashboard() {
               </CardContent>
             </Card>
           </>
-        )
-    }
+        )    }
   }
   return (
     <div className="flex flex-col min-h-screen">
@@ -881,7 +717,6 @@ export default function SellerDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold">HawkTU</h1>
           <div className="flex items-center space-x-4">
-           <NotificationButton />
             {/* Logout Button */}
             <Button
               variant="outline"
@@ -890,11 +725,6 @@ export default function SellerDashboard() {
             >
               <LogOut className="h-5 w-5" />
             </Button>
-            <Button onClick={() => addNotification({
-                title: 'Action Completed',
-                description: 'Your action has been successfully completed.',
-                time: new Date().toLocaleTimeString(),
-              })}>Noti</Button>
           </div>
         </div>
       </header>
@@ -946,13 +776,15 @@ export default function SellerDashboard() {
               >
                 Cancel
               </Button>
-              <Link to="/landing">
-                  <Button
-                    variant="outline"
-                    className="bg-red-500 text-white border-red-500"
-                  >
-                    Logout
-                  </Button>
+              <Link to="/">
+                <Button
+                  variant="outline"
+                  onClick={() => localStorage.clear()}
+                  className="bg-red-500 text-white border-red-500"
+                >
+                  Logout
+                </Button>
+
               </Link>
             </div>
           </div>
@@ -963,4 +795,377 @@ export default function SellerDashboard() {
       <Toaster />
     </div>
   );
+}
+// function OverviewSection  ()  {
+  
+//   const { recentOrders, loading, error} = useRecentOrders();
+
+//   if (loading) {
+//     return <p>Loading overview data...</p>;
+//   }
+
+//   if (error) {
+//     return <p>Error loading overview data. Please try again later.</p>;
+//   }
+
+//   return (
+//     <>
+    
+//     <h1 className="text-3xl font-bold mb-6">Overview</h1>
+//             <div className="mb-5 text-5xl font-bold">
+//               <label>Welcome back HawkTU</label>
+//             </div>
+//             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+//               <Card>
+//                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+//                   <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+//                   <DollarSign className="h-4 w-4 text-muted-foreground" />
+//                 </CardHeader>
+//                 <CardContent>
+//                   <div className="text-2xl font-bold">$45,231.89</div>
+//                   <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+//                 </CardContent>
+//               </Card>
+//               <Card>
+//                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+//                   <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
+//                   <Package className="h-4 w-4 text-muted-foreground" />
+//                 </CardHeader>
+//                 <CardContent>
+//                   <div className="text-2xl font-bold">+2350</div>
+//                   <p className="text-xs text-muted-foreground">+180.1% from last month</p>
+//                 </CardContent>
+//               </Card>
+//               <Card>
+//                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+//                   <CardTitle className="text-sm font-medium">New Customers</CardTitle>
+//                   <Users className="h-4 w-4 text-muted-foreground" />
+//                 </CardHeader>
+//                 <CardContent>
+//                   <div className="text-2xl font-bold">+12,234</div>
+//                   <p className="text-xs text-muted-foreground">+19% from last month</p>
+//                 </CardContent>
+//               </Card>
+//               <Card>
+//                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+//                   <CardTitle className="text-sm font-medium">Active Products</CardTitle>
+//                   <BarChart className="h-4 w-4 text-muted-foreground" />
+//                 </CardHeader>
+//                 <CardContent>
+//                   <div className="text-2xl font-bold">573</div>
+//                   <p className="text-xs text-muted-foreground">+201 since last week</p>
+//                 </CardContent>
+//               </Card>
+//       </div>
+
+//       <Card className="mt-8">
+//         <CardHeader>
+//           <CardTitle>Recent Orders</CardTitle>
+//         </CardHeader>
+//         <CardContent>
+//           <div className="overflow-hidden rounded-lg shadow-md">
+//             <Table>
+//               <TableHeader>
+//                 <TableRow>
+//                   <TableHead>Order ID</TableHead>
+//                   <TableHead>Amount</TableHead>
+//                   <TableHead>Customer Name</TableHead>
+//                   <TableHead>Status</TableHead>
+//                 </TableRow>
+//               </TableHeader>
+//               <TableBody>
+//                 {recentOrders?.orders.slice(0, 5).map((order) => (
+//                   <TableRow key={order.id}>
+//                     <TableCell>{order.orderId}</TableCell>
+//                     <TableCell>${order.totalPrice.toFixed(2)}</TableCell>
+//                     <TableCell>{order.customerName}</TableCell>
+//                     <TableCell>{order.state}</TableCell>
+//                   </TableRow>
+//                 ))}
+//               </TableBody>
+//             </Table>
+//           </div>
+//         </CardContent>
+//       </Card>
+//     </>
+//   );
+// };
+
+function PersonalInformationSection() {
+  const { sellerInfo, loading, error } = useSellerInfo()
+  const { updateInfo, loading: updateLoading, error: updateError } = useUpdateSellerInfo()
+  const [isEditing, setIsEditing] = useState(false)
+  const [isAddressEditing, setIsAddressEditing] = useState(false)
+  const [user, setUser] = useState({
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    businessName: "",
+    address: {
+      country: "",
+      city: "",
+      district: "",
+      addressLineOne: "",
+      addressLineTwo: "",
+      additionalInfo: "",
+    },
+  })
+
+  const email = localStorage.getItem('email')
+
+  useEffect(() => {
+    if (sellerInfo) {
+      setUser({
+        firstName: sellerInfo.firstName,
+        lastName: sellerInfo.lastName,
+        phoneNumber: sellerInfo.phoneNumber,
+        businessName: sellerInfo.businessName,
+        address: sellerInfo.address,
+      })
+    }
+  }, [sellerInfo])
+
+  const handleEditPersonalInfo = () => setIsEditing(true)
+  const handleEditAddress = () => setIsAddressEditing(true)
+
+  const handleSavePersonalInfo = async (e) => {
+    e.preventDefault()
+    try {
+      await updateInfo({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phoneNumber: user.phoneNumber,
+        businessName: user.businessName,
+        address: user.address,
+      })
+      setIsEditing(false)
+      toast.success("Personal information updated successfully")
+    } catch (error) {
+      toast.error("Failed to update personal information")
+    }
+  }
+
+  const handleSaveAddressInfo = async (e) => {
+    e.preventDefault()
+    try {
+      await updateInfo({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phoneNumber: user.phoneNumber,
+        businessName: user.businessName,
+        address: user.address,
+      })
+      setIsAddressEditing(false)
+      toast.success("Address information updated successfully")
+    } catch (error) {
+      toast.error("Failed to update address information")
+    }
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    if (name.startsWith("address.")) {
+      const addressField = name.split(".")[1]
+      setUser((prevUser) => ({
+        ...prevUser,
+        address: {
+          ...prevUser.address,
+          [addressField]: value,
+        },
+      }))
+    } else {
+      setUser((prevUser) => ({
+        ...prevUser,
+        [name]: value,
+      }))
+    }
+  }
+
+  if (loading) return <p>Loading...</p>
+  if (error) return <p>Error: {error}</p>
+
+  return (
+    <div className="space-y-8 max-w-2xl mx-auto">
+      <Card className="shadow-md rounded-lg p-6">
+        <CardHeader>
+          <CardTitle>Personal Information</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {!isEditing ? (
+            <div className="space-y-2">
+              <p><strong>First Name:</strong> {user.firstName}</p>
+              <p><strong>Last Name:</strong> {user.lastName}</p>
+              <p><strong>Email:</strong> {email}</p>
+              <p><strong>Phone:</strong> {user.phoneNumber}</p>
+              <p><strong>Business Name:</strong> {user.businessName}</p>
+              <Button onClick={handleEditPersonalInfo} className="mt-4">Edit Profile</Button>
+            </div>
+          ) : (
+            <form onSubmit={handleSavePersonalInfo} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="firstName">First Name</Label>
+                <Input id="firstName" name="firstName" value={user.firstName} onChange={handleChange} className="w-full" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lastName">Last Name</Label>
+                <Input id="lastName" name="lastName" value={user.lastName} onChange={handleChange} className="w-full" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" name="email" value={email} disabled className="w-full" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="phoneNumber">Phone</Label>
+                <Input id="phoneNumber" name="phoneNumber" value={user.phoneNumber} onChange={handleChange} className="w-full" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="businessName">Business Name</Label>
+                <Input id="businessName" name="businessName" value={user.businessName} onChange={handleChange} className="w-full" />
+              </div>
+              <Button type="submit" className="mt-4" disabled={updateLoading}>
+                {updateLoading ? "Saving..." : "Save Changes"}
+              </Button>
+              {updateError && <p className="text-red-500">{updateError}</p>}
+            </form>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card className="shadow-md rounded-lg p-6">
+        <CardHeader>
+          <CardTitle>Address Information</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {!isAddressEditing ? (
+            <div className="space-y-2">
+              <p><strong>Address Line 1:</strong> {user.address.addressLineOne}</p>
+              <p><strong>Address Line 2:</strong> {user.address.addressLineTwo}</p>
+              <p><strong>City:</strong> {user.address.city}</p>
+              <p><strong>District:</strong> {user.address.district}</p>
+              <p><strong>Country:</strong> {user.address.country}</p>
+              <p><strong>Additional Info:</strong> {user.address.additionalInfo}</p>
+              <Button onClick={handleEditAddress} className="mt-4">Edit Address</Button>
+            </div>
+          ) : (
+            <form onSubmit={handleSaveAddressInfo} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="address.addressLineOne">Address Line 1</Label>
+                <Input id="address.addressLineOne" name="address.addressLineOne" value={user.address.addressLineOne} onChange={handleChange} className="w-full" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="address.addressLineTwo">Address Line 2 (Optional)</Label>
+                <Input id="address.addressLineTwo" name="address.addressLineTwo" value={user.address.addressLineTwo} onChange={handleChange} className="w-full" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="address.city">City</Label>
+                <Input id="address.city" name="address.city" value={user.address.city} onChange={handleChange} className="w-full" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="address.district">District</Label>
+                <Input id="address.district" name="address.district" value={user.address.district} onChange={handleChange} className="w-full" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="address.country">Country</Label>
+                <Input id="address.country" name="address.country" value={user.address.country} onChange={handleChange} className="w-full" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="address.additionalInfo">Additional Info (Optional)</Label>
+                <Input id="address.additionalInfo" name="address.additionalInfo" value={user.address.additionalInfo} onChange={handleChange} className="w-full" />
+              </div>
+              <Button type="submit" className="mt-4" disabled={updateLoading}>
+                {updateLoading ? "Saving..." : "Save Address Changes"}
+              </Button>
+              {updateError && <p className="text-red-500">{updateError}</p>}
+            </form>
+          )}
+        </CardContent>
+      </Card>
+
+      <ChangePasswordSection />
+    </div>
+  )
+}
+
+function ChangePasswordSection() {
+  const { changePwd, loading, error } = useChangePassword()
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
+  })
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    if (passwordData.newPassword !== passwordData.confirmNewPassword) {
+      toast.error("New passwords do not match.")
+      return
+    }
+
+    const changePasswordPayload = {
+      currentPassword: passwordData.currentPassword,
+      newPassword: passwordData.newPassword,
+    }
+
+    try {
+      await changePwd(changePasswordPayload)
+      toast.success("Password changed successfully")
+      setPasswordData({ currentPassword: "", newPassword: "", confirmNewPassword: "" })
+    } catch (error) {
+      toast.error(error || "Failed to change password.")
+    }
+  }
+
+  const handleChange = (e) => {
+    setPasswordData({ ...passwordData, [e.target.name]: e.target.value })
+  }
+
+  return (
+    <Card className="shadow-md rounded-lg p-6">
+      <CardHeader>
+        <CardTitle>Change Password</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="currentPassword">Current Password</Label>
+            <Input
+              type="password"
+              id="currentPassword"
+              name="currentPassword"
+              value={passwordData.currentPassword}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="newPassword">New Password</Label>
+            <Input
+              type="password"
+              id="newPassword"
+              name="newPassword"
+              value={passwordData.newPassword}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="confirmNewPassword">Re-enter New Password</Label>
+            <Input
+              type="password"
+              id="confirmNewPassword"
+              name="confirmNewPassword"
+              value={passwordData.confirmNewPassword}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <Button type="submit" disabled={loading}>
+            {loading ? "Changing..." : "Change Password"}
+          </Button>
+          {error && <p className="text-red-500">{error}</p>}
+        </form>
+      </CardContent>
+    </Card>
+  )
 }

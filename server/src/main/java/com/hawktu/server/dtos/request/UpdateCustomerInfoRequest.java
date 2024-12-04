@@ -8,9 +8,6 @@ public class UpdateCustomerInfoRequest {
     private String phoneNumber;
     private Address address;
 
-    public UpdateCustomerInfoRequest() {
-    }
-
     public UpdateCustomerInfoRequest(String firstName, String lastName, String phoneNumber, Address address) {
         this.firstName = firstName;
         this.lastName = lastName;

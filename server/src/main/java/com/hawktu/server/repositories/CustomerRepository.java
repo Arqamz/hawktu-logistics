@@ -16,6 +16,10 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     // Find by email
     Optional<Customer> findByEmail(String email);
 
+    // Concatenate first name and last name for a customer based on id
+    @Query("SELECT CONCAT(c.firstName, ' ', c.lastName) FROM Customer c WHERE c.id = :id")
+    String findFullNameById(@Param("id") Long id);
+
     // Find customers registered in the current month
     @Query("SELECT c FROM Customer c WHERE YEAR(c.registeredAt) = :year AND MONTH(c.registeredAt) = :month")
     List<Customer> findCustomersRegisteredInCurrentMonth(@Param("year") int year, @Param("month") int month);

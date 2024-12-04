@@ -2,6 +2,7 @@ package com.hawktu.server.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hawktu.server.dtos.request.ChangePasswordRequest;
 import com.hawktu.server.dtos.request.UpdateCustomerInfoRequest;
+import com.hawktu.server.dtos.response.CustomerInfoResponse;
 import com.hawktu.server.services.CustomerService;
 import com.hawktu.server.utils.JwtUtil;
 
@@ -26,6 +28,23 @@ public class CustomerInfoController extends BaseController {
         this.jwtUtil = jwtUtil;
     }
 
+    @GetMapping("/info")
+    public ResponseEntity<?> getCustomerInfo(@RequestHeader("Authorization") String authHeader) {
+        try {
+            String token = authHeader.replace("Bearer ", "");
+            String email = jwtUtil.extractUsername(token);
+
+            if (!jwtUtil.validateToken(token, email)) {
+                return unauthorizedError("Invalid or expired token.");
+            }
+
+            CustomerInfoResponse response = customerService.getCustomerInfo(email);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return internalServerError("Couldn't get customer info");
+        }
+    }
+    
     @PutMapping("/update-info")
     public ResponseEntity<?> updateCustomerInfo(
             @RequestHeader("Authorization") String authHeader,

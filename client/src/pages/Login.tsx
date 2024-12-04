@@ -44,6 +44,7 @@ export default function LoginPreview() {
       const response=await login({ ...values, accountType });
       if (response) {
         toast.success('Login successful!');
+        localStorage.removeItem("cartItems")
         window.location.href = accountType === 'seller' ? '/seller-dashboard' : '/shop';
       }
     } catch (err) {
@@ -55,7 +56,7 @@ export default function LoginPreview() {
     <div className="flex flex-col min-h-screen bg-background">
       <header className="w-full px-4 lg:px-6 h-20 flex items-center justify-between border-b border-border bg-background">
         <div className="container mx-auto flex items-center space-x-4">
-          <Link to="/landing" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2">
             <span className="text-3xl font-extrabold text-primary dark:text-primary-dark">
               HawkTU
             </span>
@@ -158,4 +159,3 @@ function LoginForm({ accountType, form, onSubmit, isLoading, error }: LoginFormP
     </>
   );
 }
-
