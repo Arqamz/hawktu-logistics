@@ -251,8 +251,6 @@ export default function SellerDashboard() {
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'Overview':
-      return <OverviewSection/>
       case 'Personal Information':
         return <PersonalInformationSection />
       case 'Product Reviews & Ratings':
@@ -615,8 +613,103 @@ export default function SellerDashboard() {
           </Card>
         )
       default:
-       <OverviewSection/>
-    }
+        return (
+          <>
+            <h1 className="text-3xl font-bold mb-6">Overview</h1>
+            <div className="mb-5 text-5xl font-bold">
+              <label>Welcome back HawkTU</label>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+                  <DollarSign className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">$45,231.89</div>
+                  <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
+                  <Package className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">+2350</div>
+                  <p className="text-xs text-muted-foreground">+180.1% from last month</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">New Customers</CardTitle>
+                  <Users className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">+12,234</div>
+                  <p className="text-xs text-muted-foreground">+19% from last month</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Active Products</CardTitle>
+                  <BarChart className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">573</div>
+                  <p className="text-xs text-muted-foreground">+201 since last week</p>
+                </CardContent>
+              </Card>
+            </div>
+            <Card className='mt-8'>
+              <CardHeader>
+                <CardTitle>Recent Orders</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="shadow-md rounded-lg overflow-hidden">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Order ID</TableHead>
+                        <TableHead>Amount</TableHead>
+                        <TableHead>Customer Name</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {recentOrders.map((order) => (
+                        <TableRow key={order.id}>
+                          <TableCell>{order.id}</TableCell>
+                          <TableCell>${order.amount.toFixed(2)}</TableCell>
+                          <TableCell>{order.customerName}</TableCell>
+                          <TableCell>
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <Button variant="outline">Details</Button>
+                              </DialogTrigger>
+                              <DialogContent>
+                                <DialogHeader>
+                                  <DialogTitle>Order Details</DialogTitle>
+                                </DialogHeader>
+                                <div className="mt-4">
+                                  <p><strong>Products:</strong> {orderDetails.products.join(', ')}</p>
+                                  <p><strong>Order Value:</strong> ${orderDetails.orderValue.toFixed(2)}</p>
+                                  <p><strong>Status:</strong> {orderDetails.status}</p>
+                                  <p><strong>Address:</strong> {orderDetails.address}</p>
+                                  <p><strong>Customer Name:</strong> {orderDetails.customerName}</p>
+                                </div>
+                              </DialogContent>
+                            </Dialog>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        )    }
   }
   return (
     <div className="flex flex-col min-h-screen">
@@ -703,106 +796,101 @@ export default function SellerDashboard() {
     </div>
   );
 }
-const OverviewSection = () => {
-  const { walletBalance, loading: walletLoading, error: walletError } = useWalletBalance()
-  const { revenueSummary, loading: revenueLoading, error: revenueError } = useRevenueSummary()
-  const { orderCounts, loading: orderCountsLoading, error: orderCountsError } = useOrderCounts()
-  const { productCount, loading: productCountLoading, error: productCountError } = useActiveProductCount()
-  const { recentOrders, loading: recentOrdersLoading, error: recentOrdersError } = useRecentOrders()
+// function OverviewSection  ()  {
+  
+//   const { recentOrders, loading, error} = useRecentOrders();
 
-  if (walletLoading || revenueLoading || orderCountsLoading || productCountLoading || recentOrdersLoading) {
-    return <p>Loading overview data...</p>
-  }
+//   if (loading) {
+//     return <p>Loading overview data...</p>;
+//   }
 
-  if (walletError || revenueError || orderCountsError || productCountError || recentOrdersError) {
-    return <p>Error loading overview data. Please try again later.</p>
-  }
+//   if (error) {
+//     return <p>Error loading overview data. Please try again later.</p>;
+//   }
 
-  return (
-    <>
-      <h1 className="text-3xl font-bold mb-6">Overview</h1>
-      <div className="mb-5 text-5xl font-bold">
-        <label>Welcome back, Seller</label>
-      </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${revenueSummary?.totalRevenue.toFixed(2)}</div>
-            <p className="text-xs text-muted-foreground">
-              +{((revenueSummary?.thisMonthRevenue || 0) / (revenueSummary?.lastMonthRevenue || 1) * 100 - 100).toFixed(1)}% from last month
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
-            <Package className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{orderCounts?.totalOrders}</div>
-            <p className="text-xs text-muted-foreground">
-              +{((orderCounts?.thisMonthOrders || 0) / (orderCounts?.lastMonthOrders || 1) * 100 - 100).toFixed(1)}% from last month
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Wallet Balance</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${walletBalance?.walletBalance.toFixed(2)}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Products</CardTitle>
-            <BarChart className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{productCount?.totalProductCount}</div>
-            <p className="text-xs text-muted-foreground">
-              +{((productCount?.thisMonthProductCount || 0) / (productCount?.lastMonthProductCount || 1) * 100 - 100).toFixed(1)}% from last month
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-      <Card className='mt-8'>
-        <CardHeader>
-          <CardTitle>Recent Orders</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="shadow-md rounded-lg overflow-hidden">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Order ID</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Customer Name</TableHead>
-                  <TableHead>Status</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {recentOrders?.orders.slice(0, 5).map((order) => (
-                  <TableRow key={order.id}>
-                    <TableCell>{order.orderId}</TableCell>
-                    <TableCell>${order.totalPrice.toFixed(2)}</TableCell>
-                    <TableCell>{order.customerName}</TableCell>
-                    <TableCell>{order.state}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
-      </Card>
-    </>
-  )
-}
+//   return (
+//     <>
+    
+//     <h1 className="text-3xl font-bold mb-6">Overview</h1>
+//             <div className="mb-5 text-5xl font-bold">
+//               <label>Welcome back HawkTU</label>
+//             </div>
+//             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+//               <Card>
+//                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+//                   <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+//                   <DollarSign className="h-4 w-4 text-muted-foreground" />
+//                 </CardHeader>
+//                 <CardContent>
+//                   <div className="text-2xl font-bold">$45,231.89</div>
+//                   <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+//                 </CardContent>
+//               </Card>
+//               <Card>
+//                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+//                   <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
+//                   <Package className="h-4 w-4 text-muted-foreground" />
+//                 </CardHeader>
+//                 <CardContent>
+//                   <div className="text-2xl font-bold">+2350</div>
+//                   <p className="text-xs text-muted-foreground">+180.1% from last month</p>
+//                 </CardContent>
+//               </Card>
+//               <Card>
+//                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+//                   <CardTitle className="text-sm font-medium">New Customers</CardTitle>
+//                   <Users className="h-4 w-4 text-muted-foreground" />
+//                 </CardHeader>
+//                 <CardContent>
+//                   <div className="text-2xl font-bold">+12,234</div>
+//                   <p className="text-xs text-muted-foreground">+19% from last month</p>
+//                 </CardContent>
+//               </Card>
+//               <Card>
+//                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+//                   <CardTitle className="text-sm font-medium">Active Products</CardTitle>
+//                   <BarChart className="h-4 w-4 text-muted-foreground" />
+//                 </CardHeader>
+//                 <CardContent>
+//                   <div className="text-2xl font-bold">573</div>
+//                   <p className="text-xs text-muted-foreground">+201 since last week</p>
+//                 </CardContent>
+//               </Card>
+//       </div>
+
+//       <Card className="mt-8">
+//         <CardHeader>
+//           <CardTitle>Recent Orders</CardTitle>
+//         </CardHeader>
+//         <CardContent>
+//           <div className="overflow-hidden rounded-lg shadow-md">
+//             <Table>
+//               <TableHeader>
+//                 <TableRow>
+//                   <TableHead>Order ID</TableHead>
+//                   <TableHead>Amount</TableHead>
+//                   <TableHead>Customer Name</TableHead>
+//                   <TableHead>Status</TableHead>
+//                 </TableRow>
+//               </TableHeader>
+//               <TableBody>
+//                 {recentOrders?.orders.slice(0, 5).map((order) => (
+//                   <TableRow key={order.id}>
+//                     <TableCell>{order.orderId}</TableCell>
+//                     <TableCell>${order.totalPrice.toFixed(2)}</TableCell>
+//                     <TableCell>{order.customerName}</TableCell>
+//                     <TableCell>{order.state}</TableCell>
+//                   </TableRow>
+//                 ))}
+//               </TableBody>
+//             </Table>
+//           </div>
+//         </CardContent>
+//       </Card>
+//     </>
+//   );
+// };
+
 function PersonalInformationSection() {
   const { sellerInfo, loading, error } = useSellerInfo()
   const { updateInfo, loading: updateLoading, error: updateError } = useUpdateSellerInfo()

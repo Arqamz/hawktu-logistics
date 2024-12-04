@@ -32,8 +32,10 @@ public class SellerDashboardController extends BaseController {
     @GetMapping("/wallet-balance")
     public ResponseEntity<?> getWalletBalance(@RequestHeader("Authorization") String authHeader) {
         try {
-            String email = jwtUtil.extractUsername(authHeader.replace("Bearer ", ""));
-            if (!jwtUtil.validateToken(authHeader, email)) {
+             String token = authHeader.replace("Bearer ", "");
+            String email = jwtUtil.extractUsername(token);
+
+            if (!jwtUtil.validateToken(token, email)) {
                 return unauthorizedError("Invalid or expired token.");
             }
             WalletBalanceResponse response = sellerService.getWalletBalance(email);
@@ -46,8 +48,10 @@ public class SellerDashboardController extends BaseController {
     @GetMapping("/revenue")
     public ResponseEntity<?> getRevenueSummary(@RequestHeader("Authorization") String authHeader) {
         try {
-            String email = jwtUtil.extractUsername(authHeader.replace("Bearer ", ""));
-            if (!jwtUtil.validateToken(authHeader, email)) {
+             String token = authHeader.replace("Bearer ", "");
+            String email = jwtUtil.extractUsername(token);
+
+            if (!jwtUtil.validateToken(token, email)) {
                 return unauthorizedError("Invalid or expired token.");
             }
             RevenueSummaryResponse response = sellerService.getRevenueSummary(email);
@@ -60,8 +64,10 @@ public class SellerDashboardController extends BaseController {
     @GetMapping("/orders")
     public ResponseEntity<?> getAllOrders(@RequestHeader("Authorization") String authHeader) {
         try {
-            String email = jwtUtil.extractUsername(authHeader.replace("Bearer ", ""));
-            if (!jwtUtil.validateToken(authHeader, email)) {
+             String token = authHeader.replace("Bearer ", "");
+            String email = jwtUtil.extractUsername(token);
+
+            if (!jwtUtil.validateToken(token, email)) {
                 return unauthorizedError("Invalid or expired token.");
             }
             OrdersResponse response = sellerService.getAllOrders(email);
@@ -74,8 +80,10 @@ public class SellerDashboardController extends BaseController {
     @GetMapping("/orders/count")
     public ResponseEntity<?> getOrderCounts(@RequestHeader("Authorization") String authHeader) {
         try {
-            String email = jwtUtil.extractUsername(authHeader.replace("Bearer ", ""));
-            if (!jwtUtil.validateToken(authHeader, email)) {
+             String token = authHeader.replace("Bearer ", "");
+            String email = jwtUtil.extractUsername(token);
+
+            if (!jwtUtil.validateToken(token, email)) {
                 return unauthorizedError("Invalid or expired token.");
             }
             OrderCountResponse response = sellerService.getOrderCounts(email);
@@ -88,8 +96,10 @@ public class SellerDashboardController extends BaseController {
     @GetMapping("/orders/recent")
     public ResponseEntity<?> getRecentOrders(@RequestHeader("Authorization") String authHeader) {
         try {
-            String email = jwtUtil.extractUsername(authHeader.replace("Bearer ", ""));
-            if (!jwtUtil.validateToken(authHeader, email)) {
+            String token = authHeader.replace("Bearer ", "");
+            String email = jwtUtil.extractUsername(token);
+
+            if (!jwtUtil.validateToken(token, email)) {
                 return unauthorizedError("Invalid or expired token.");
             }
             OrdersResponse response = sellerService.getRecentOrders(email);
@@ -102,8 +112,10 @@ public class SellerDashboardController extends BaseController {
     @GetMapping("/products/count")
     public ResponseEntity<?> getActiveProducts(@RequestHeader("Authorization") String authHeader) {
         try {
-            String email = jwtUtil.extractUsername(authHeader.replace("Bearer ", ""));
-            if (!jwtUtil.validateToken(authHeader, email)) {
+             String token = authHeader.replace("Bearer ", "");
+            String email = jwtUtil.extractUsername(token);
+
+            if (!jwtUtil.validateToken(token, email)) {
                 return unauthorizedError("Invalid or expired token.");
             }
             ProductCountResponse response = sellerService.getActiveProducts(email);
@@ -116,9 +128,11 @@ public class SellerDashboardController extends BaseController {
     @GetMapping("/reviews")
     public ResponseEntity<?> getSellerProductReviews(@RequestHeader("Authorization") String authHeader) {
         try {
-            String email = jwtUtil.extractUsername(authHeader.replace("Bearer ", ""));
-            if (!jwtUtil.validateToken(authHeader, email)) {
-                return ResponseEntity.status(401).body("Invalid or expired token.");
+             String token = authHeader.replace("Bearer ", "");
+            String email = jwtUtil.extractUsername(token);
+
+            if (!jwtUtil.validateToken(token, email)) {
+                return unauthorizedError("Invalid or expired token.");
             }
             ReviewsResponse reviewResponse = sellerService.getReviewsForSellerProducts(email);
             return ResponseEntity.ok(reviewResponse);
