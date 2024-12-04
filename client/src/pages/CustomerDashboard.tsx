@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { User, Store, Bell, LogOut, Home, Star, Wallet, ClipboardList, Check } from 'lucide-react'
+import { User, Store, LogOut, Home, Star, Wallet, ClipboardList, Check } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import useCustomerDashboard from '@/hooks/useCustomerDashboard'
 
@@ -15,6 +15,12 @@ export default function CustomerDashboard() {
   const [cardNumber, setCardNumber] = useState('')
   const [expiryDate, setExpiryDate] = useState('')
   const [cvv, setCvv] = useState('')
+  const [selectedOrder, setSelectedOrder] = useState(null)
+  const [refundMessage, setRefundMessage] = useState('')
+  const [reviewMessage, setReviewMessage] = useState('')
+  const [rating, setRating] = useState(5)
+  const [isRefundPopupOpen, setIsRefundPopupOpen] = useState(false)
+  const [isReviewPopupOpen, setIsReviewPopupOpen] = useState(false)
 
   const {
     loyaltyPoints,
@@ -60,8 +66,6 @@ export default function CustomerDashboard() {
     { id: 5, name: '200$ for', points: 5000 },
   ]
 
- 
-
   const handleRedeemPoints = async (points) => {
       if (loyaltyPoints >= points) {
         try {
@@ -81,7 +85,6 @@ export default function CustomerDashboard() {
         alert('Insufficient loyalty points or invalid points entered.');
       }
     };
-  
 
   const recentOrders = [
     {
@@ -127,6 +130,28 @@ export default function CustomerDashboard() {
     },
   ]
 
+  const handleCancelOrder = (orderId) => {
+    // Update the order status to "Cancelled"
+    setSelectedOrder(orderId)
+    const updatedOrders = allOrders.map(order => 
+      order.orderId === orderId ? 
+        { ...order, products: order.products.map(product => ({ ...product, status: "Cancelled" })) } : 
+        order
+    )
+    // Optionally, update state or backend with the new order status
+    alert('Order has been cancelled')
+  }
+
+  const handleRefund = (orderId) => {
+    setSelectedOrder(orderId)
+    setIsRefundPopupOpen(true)
+  }
+
+  const handleReview = (orderId) => {
+    setSelectedOrder(orderId)
+    setIsReviewPopupOpen(true)
+  }
+
   const renderContent = () => {
     switch (currentPage) {
       case 'dashboard':
@@ -138,7 +163,7 @@ export default function CustomerDashboard() {
                   <CardTitle>Wallet Balance</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-3xl font-bold">${walletBalance.toFixed(2) || '0.00'}</p>
+                  <p className="text-3xl font-bold">${walletBalance || '0.00'}</p>
                   <Button
                     className="mt-4"
                     onClick={() => setCurrentPage("wallet-recharge")}
@@ -163,7 +188,13 @@ export default function CustomerDashboard() {
               <CardContent>
                 <div className="space-y-6">
                   {recentOrders.map((order) => (
-                    <OrderItem key={order.orderId} order={order} />
+                    <OrderItem 
+                      key={order.orderId} 
+                      order={order} 
+                      onCancel={handleCancelOrder} 
+                      onRefund={handleRefund} 
+                      onReview={handleReview} 
+                    />
                   ))}
                 </div>
               </CardContent>
@@ -265,7 +296,13 @@ export default function CustomerDashboard() {
               <CardContent>
                 <div className="space-y-6">
                   {allOrders.map((order) => (
-                    <OrderItem key={order.orderId} order={order} />
+                    <OrderItem 
+                      key={order.orderId} 
+                      order={order} 
+                      onCancel={handleCancelOrder} 
+                      onRefund={handleRefund} 
+                      onReview={handleReview} 
+                    />
                   ))}
                 </div>
               </CardContent>
@@ -347,6 +384,85 @@ export default function CustomerDashboard() {
           </div>
         </div>
       )}
+
+      {/* Refund Popup */}
+      {isRefundPopupOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-lg font-semibold mb-4">Refund Request</h2>
+            <textarea
+              className="w-full text-black p-2 border rounded"
+              placeholder="Enter refund message"
+              value={refundMessage}
+              onChange={(e) => setRefundMessage(e.target.value)}
+            />
+            <div className="mt-4 flex justify-end space-x-4">
+              <Button
+                variant="outline"
+                onClick={() => setIsRefundPopupOpen(false)}
+                className="border-gray-400 text-gray-600"
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  alert('Refund request sent successfully!')
+                  setIsRefundPopupOpen(false)
+                }}
+                className="bg-green-500 text-white border-green-500"
+              >
+                Send
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Review Popup */}
+      {isReviewPopupOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-lg font-semibold mb-4">Submit Your Review</h2>
+            <textarea
+              className="w-full text-black p-2 border rounded"
+              placeholder="Enter your review"
+              value={reviewMessage}
+              onChange={(e) => setReviewMessage(e.target.value)}
+            />
+            <div className="mt-4">
+              <Label htmlFor="rating">Rating</Label>
+              <Input
+                id="rating"
+                type="number"
+                min="1"
+                max="5"
+                value={rating}
+                onChange={(e) => setRating(Number(e.target.value))}
+              />
+            </div>
+            <div className="mt-4 flex justify-end space-x-4">
+              <Button
+                variant="outline"
+                onClick={() => setIsReviewPopupOpen(false)}
+                className="border-gray-400 text-gray-600"
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  alert('Review submitted successfully!')
+                  setIsReviewPopupOpen(false)
+                }}
+                className="bg-blue-500 text-white border-blue-500"
+              >
+                Submit
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -363,7 +479,7 @@ function NavItem({ icon, label, onClick, active }) {
   )
 }
 
-function OrderItem({ order }) {
+function OrderItem({ order, onCancel, onRefund, onReview }) {
   const isCompleted = order.products.every(product => product.status === 'Delivered')
 
   return (
@@ -385,10 +501,9 @@ function OrderItem({ order }) {
           <span>{product.name}</span>
           <div className="space-x-2 flex items-center">
             <Badge>{product.status}</Badge>
-            <Button variant="outline" size="sm" disabled={['Delivered', 'Cancelled'].includes(product.status)}>Cancel</Button>
-            <Button variant="outline" size="sm" disabled={['Processing', 'Shipping', 'Cancelled'].includes(product.status)}>Refund</Button>
-            <Button variant="outline" size="sm" disabled={['Delivered', 'Cancelled'].includes(product.status)}>Track</Button>
-            <Button variant="outline" size="sm" disabled={['Processing', 'Shipping', 'Cancelled'].includes(product.status)}>Review</Button>
+            <Button variant="outline" size="sm" onClick={() => onCancel(order.orderId)} disabled={product.status === 'Cancelled'}>Cancel</Button>
+            <Button variant="outline" size="sm" onClick={() => onRefund(order.orderId)} disabled={product.status !== 'Delivered'}>Refund</Button>
+            <Button variant="outline" size="sm" onClick={() => onReview(order.orderId)} disabled={product.status !== 'Delivered'}>Review</Button>
           </div>
         </div>
       ))}

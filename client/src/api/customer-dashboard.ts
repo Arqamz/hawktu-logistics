@@ -9,7 +9,7 @@ import {
 const customerDashboardApi = {
   getLoyaltyPoints: async (): Promise<LoyaltyPointsResponse> => {
     try {
-      const response = await axiosInstance.get<LoyaltyPointsResponse>('/customer/dashboard/loyalty-points');
+      const response = await axiosInstance.get<LoyaltyPointsResponse>('/customer/loyalty-points');
       return response.data;
     } catch (error: any) {
       throw error as ApiError;
@@ -18,7 +18,7 @@ const customerDashboardApi = {
 
   getWalletBalance: async (): Promise<WalletBalanceResponse> => {
     try {
-      const response = await axiosInstance.get<WalletBalanceResponse>('/customer/dashboard/wallet-balance');
+      const response = await axiosInstance.get<WalletBalanceResponse>('/customer/wallet-balance');
       return response.data;
     } catch (error: any) {
       throw error as ApiError;
@@ -28,7 +28,7 @@ const customerDashboardApi = {
   addWalletFunds: async (amount: number): Promise<AddWalletFundsResponse> => {
     try {
       const response = await axiosInstance.post<AddWalletFundsResponse>(
-        '/customer/dashboard/add-wallet-funds',
+        '/customer/add-wallet-funds',
         null,
         { params: { amount } }
       );
@@ -41,7 +41,7 @@ const customerDashboardApi = {
   redeemLoyaltyPoints: async (points: number): Promise<string> => {
     try {
       const response = await axiosInstance.post<string>(
-        '/customer/dashboard/redeem-loyalty-points',
+        '/customer/redeem-loyalty-points',
         null,
         { params: { points } }
       );
