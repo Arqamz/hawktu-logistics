@@ -1,5 +1,6 @@
 package com.hawktu.server.services;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,9 @@ import com.hawktu.server.models.OrderItem;
 import com.hawktu.server.models.Product;
 import com.hawktu.server.models.User;
 import com.hawktu.server.repositories.CustomerRepository;
-import com.hawktu.server.states.orderitem.OrderItemStateEnum;
 import com.hawktu.server.repositories.OrderItemRepository;
 import com.hawktu.server.repositories.ProductRepository;
+import com.hawktu.server.states.orderitem.OrderItemStateEnum;
 
 @Service
 public class CustomerService {
@@ -29,12 +30,15 @@ public class CustomerService {
 
     @Autowired
     private CustomerFactory customerFactory;
+        
+    @Autowired
+    private final CustomerRepository customerRepository;
 
     @Autowired
-    private OrderItemRepository orderItemRepository;
+    private final OrderItemRepository orderItemRepository;
 
     @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     @Autowired
     public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder,OrderItemRepository orderItemRepository, ProductRepository productRepository) {
@@ -43,8 +47,6 @@ public class CustomerService {
         this.orderItemRepository = orderItemRepository;
         this.productRepository = productRepository;
     }
-
-    private final CustomerRepository customerRepository;
 
     public boolean authenticate(String email, String password) {
         Optional<Customer> customerOptional = customerRepository.findByEmail(email);
@@ -71,22 +73,13 @@ public class CustomerService {
     }
 
     public CustomerInfoResponse getCustomerInfo(String email) {
-        Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Customer not found."));
+        Customer customer = customerRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Customer not found."));
     
-        return new CustomerInfoResponse(
-                customer.getFirstName(),
-                customer.getLastName(),
-                customer.getPhoneNumber(),
-                customer.getAddress(),
-                customer.getWallet()
-                
-        );
+        return new CustomerInfoResponse(customer.getFirstName(),customer.getLastName(),customer.getPhoneNumber(),customer.getAddress(),customer.getWallet());
     }    
 
     public void updateCustomerInfo(String email, UpdateCustomerInfoRequest request) {
-        Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Customer not found."));
+        Customer customer = customerRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Customer not found."));
         customer.setFirstName(request.getFirstName());
         customer.setLastName(request.getLastName());
         customer.setPhoneNumber(request.getPhoneNumber());
@@ -129,7 +122,6 @@ public class CustomerService {
         customerRepository.save(customer);
     }
 
-    //customer dashboard functions
     public Optional<Integer> getCustomerLoyaltyPoints(String email) {
         return customerRepository.findByEmail(email)
             .map(Customer::getLoyaltyPoints);
@@ -166,22 +158,15 @@ public class CustomerService {
             .orElse(Optional.empty());
     }
     
-
     private Double calculateWalletAddition(Integer points) {
-        switch (points) {
-            case 100:
-                return 1.0;
-            case 200:
-                return 5.0;
-            case 500:
-                return 10.0;
-            case 1000:
-                return 30.0;
-            case 5000:
-                return 200.0;
-            default:
-                return 0.0;
-        }
+        return switch (points) {
+            case 100 -> 1.0;
+            case 200 -> 5.0;
+            case 500 -> 10.0;
+            case 1000 -> 30.0;
+            case 5000 -> 200.0;
+            default -> 0.0;
+        };
     }
 
     @Transactional
