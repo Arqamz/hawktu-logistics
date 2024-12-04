@@ -2,20 +2,18 @@ package com.hawktu.server.dtos.response;
 
 import java.util.List;
 
-import com.hawktu.server.models.Review;
-
 public class ReviewsResponse {
-    private List<Review> reviews;
+    private List<ReviewResponsePayload> reviews;
 
-    public ReviewsResponse(List<Review> reviews) {
+    public ReviewsResponse(List<ReviewResponsePayload> reviews) {
         this.reviews = reviews;
     }
 
-    public List<Review> getReviews() {
+    public List<ReviewResponsePayload> getReviews() {
         return reviews;
     }
 
-    public void setReviews(List<Review> reviews) {
+    public void setReviews(List<ReviewResponsePayload> reviews) {
         this.reviews = reviews;
     }
 }

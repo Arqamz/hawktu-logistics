@@ -1,5 +1,6 @@
 package com.hawktu.server.repositories;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,7 +34,16 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findAllByProductId(@Param("productId") Long productId);
 
     // Find all reviews for products sold by a specific seller, sorted by creation date in descending order
-    @Query("SELECT r FROM Review r WHERE r.productId IN (SELECT p.id FROM Product p WHERE p.sellerId = :sellerId) ORDER BY r.createdAt DESC")
-    List<Review> findReviewsForSellerProducts(@Param("sellerId") String sellerId);
+    @Query("SELECT r FROM Review r JOIN Product p ON r.productId = p.id JOIN Seller s ON p.sellerId = s.id WHERE s.email = :sellerEmail ORDER BY r.createdAt DESC")
+    List<Review> findReviewsForSellerProducts(@Param("sellerEmail") String sellerEmail);
 
+    // Find all reviews for products sold by a specific seller within a given date range, sorted by creation date in descending order
+    @Query("SELECT r FROM Review r " +
+    "JOIN Product p ON r.productId = p.id " +
+    "JOIN Seller s ON p.sellerId = s.id " +
+    "WHERE s.email = :sellerEmail " +
+    "AND (:startDate IS NULL OR r.createdAt >= :startDate) " +
+    "AND (:endDate IS NULL OR r.createdAt <= :endDate) " +
+    "ORDER BY r.createdAt DESC")
+    List<Review> findReviewsForSellerProducts(@Param("sellerEmail") String sellerEmail,@Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate);
 }

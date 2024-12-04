@@ -3,6 +3,7 @@ package com.hawktu.server.builders;
 import com.hawktu.server.models.Review;
 
 public class ReviewBuilder {
+    private Long customerId;
     private Long productId;
     private int rating;
     private String comment;
@@ -24,11 +25,17 @@ public class ReviewBuilder {
         return this;
     }
 
+    public ReviewBuilder withCustomerId(Long customerId) {
+        this.customerId = customerId;
+        return this;
+    }
+
     public Review build() {
         
         validateReview();
 
         Review review = new Review();
+        review.setCustomerId(customerId);
         review.setProductId(productId);
         review.setRating(rating);
         review.setComment(comment);

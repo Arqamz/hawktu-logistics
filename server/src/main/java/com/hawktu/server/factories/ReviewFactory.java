@@ -11,8 +11,9 @@ public class ReviewFactory {
     
     private ReviewRepository reviewRepository;
     
-    public Review createReview(Long productId, int rating, String comment) {
+    public Review createReview(Long customerId,Long productId, int rating, String comment) {
         Review review =  new ReviewBuilder()
+            .withCustomerId(customerId)
             .withProductId(productId)
             .withRating(rating)
             .withComment(comment)

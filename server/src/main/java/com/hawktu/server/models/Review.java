@@ -19,6 +19,9 @@ public class Review {
 
     @Column(name = "product_id", nullable = false)
     private Long productId;
+    
+    @Column(name = "customer_id", nullable = false)
+    private Long customerId;
 
     @Column(nullable = false)
     private int rating;
@@ -31,6 +34,14 @@ public class Review {
 
     public Review() {
         this.createdAt = LocalDateTime.now();
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public Long getId() {
@@ -72,7 +83,6 @@ public class Review {
 
     @Override
     public String toString() {
-        return String.format("Review[id=%s, rating=%s, comment=%s, createdAt=%s]",
-                id, rating, comment, createdAt);
+        return String.format("Review[id=%s, rating=%s, comment=%s, createdAt=%s]", id, rating, comment, createdAt);
     }
 }

@@ -19,14 +19,15 @@ import com.hawktu.server.dtos.response.OrderItemPayload;
 import com.hawktu.server.dtos.response.OrdersResponse;
 import com.hawktu.server.dtos.response.ProductCountResponse;
 import com.hawktu.server.dtos.response.RevenueSummaryResponse;
+import com.hawktu.server.dtos.response.ReviewResponsePayload;
 import com.hawktu.server.dtos.response.ReviewsResponse;
 import com.hawktu.server.dtos.response.SellerInfoResponse;
 import com.hawktu.server.dtos.response.WalletBalanceResponse;
 import com.hawktu.server.factories.SellerFactory;
 import com.hawktu.server.models.OrderItem;
-import com.hawktu.server.models.Product;
 import com.hawktu.server.models.Review;
 import com.hawktu.server.models.Seller;
+import com.hawktu.server.repositories.CustomerRepository;
 import com.hawktu.server.repositories.OrderItemRepository;
 import com.hawktu.server.repositories.ProductRepository;
 import com.hawktu.server.repositories.ReviewRepository;
@@ -55,16 +56,16 @@ public class SellerService {
     private final ReviewRepository reviewRepository;
 
     @Autowired
-    private ProductService productService;
+    private final CustomerRepository customerRepository;
 
     @Autowired
-    public SellerService(PasswordEncoder passwordEncoder, SellerRepository sellerRepository, ProductRepository productRepository, OrderItemRepository orderItemRepository, ReviewRepository reviewRepository, ProductService productService) {
+    public SellerService(PasswordEncoder passwordEncoder, SellerRepository sellerRepository, ProductRepository productRepository, OrderItemRepository orderItemRepository, ReviewRepository reviewRepository, CustomerRepository customerRepository) {
         this.passwordEncoder = passwordEncoder;
         this.sellerRepository = sellerRepository;
         this.productRepository = productRepository;
         this.orderItemRepository = orderItemRepository;
         this.reviewRepository = reviewRepository;
-        this.productService = productService;
+        this.customerRepository = customerRepository;
     }
 
     public boolean authenticate(String email, String password) {
@@ -218,7 +219,6 @@ public class SellerService {
         // LocalDateTime startOfLastMonth = startOfThisMonth.minusMonths(1);
         // LocalDateTime endOfLastMonth = startOfThisMonth.minusSeconds(1);
 
-
         Long totalProducts = productRepository.countActiveProductsBySellerEmail(email);
         Long thisMonthProducts = productRepository.countActiveProductsBySellerEmail(email);
         Long lastMonthProducts = productRepository.countActiveProductsBySellerEmail(email);
@@ -229,22 +229,27 @@ public class SellerService {
         return new ProductCountResponse(totalProducts, thisMonthProducts, lastMonthProducts);
     }
 
+    public ReviewsResponse getReviewsForSellerProducts(String sellerEmail) {
 
-    public ReviewsResponse getProductReviews(String email, Long productId) {
-        Seller seller = sellerRepository.findByEmail(email)
-            .orElseThrow(() -> new IllegalArgumentException("Seller not found"));
+        List<Review> recentReviews = reviewRepository.findReviewsForSellerProducts(sellerEmail, null, null);
 
-        Long sellerId = seller.getId();
-        Product product = productService.getProductById(productId);
+        List<ReviewResponsePayload> reviewResponsePayloads = new ArrayList<>();
 
-        if (!product.getSellerId().equals(sellerId)) {
-            throw new IllegalArgumentException("Product does not belong to the seller");
+        for (Review review : recentReviews) {
+            String customerName = customerRepository.findFullNameById(review.getCustomerId());
+
+            ReviewResponsePayload payload = new ReviewResponsePayload(
+                review.getId(),
+                review.getProductId(),
+                review.getRating(),
+                review.getComment(),
+                review.getCreatedAt(),
+                customerName
+            );
+            reviewResponsePayloads.add(payload);
         }
 
-        List<Review> reviews = reviewRepository.findAllByProductId(productId);
-        ReviewsResponse response = new ReviewsResponse(reviews);
-
-        return response;
+        return new ReviewsResponse(reviewResponsePayloads);
     }
 
 }

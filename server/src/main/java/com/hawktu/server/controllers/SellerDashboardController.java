@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hawktu.server.dtos.response.OrderCountResponse;
@@ -114,18 +113,17 @@ public class SellerDashboardController extends BaseController {
         }
     }
 
-    @GetMapping("/products/reviews")
-    public ResponseEntity<?> getProductReviews(@RequestHeader("Authorization") String authHeader, @RequestParam Long productId) {
+    @GetMapping("/reviews")
+    public ResponseEntity<?> getSellerProductReviews(@RequestHeader("Authorization") String authHeader) {
         try {
             String email = jwtUtil.extractUsername(authHeader.replace("Bearer ", ""));
             if (!jwtUtil.validateToken(authHeader, email)) {
-                return unauthorizedError("Invalid or expired token.");
+                return ResponseEntity.status(401).body("Invalid or expired token.");
             }
-            ReviewsResponse response = sellerService.getProductReviews(email, productId);
-            return ResponseEntity.ok(response);
+            ReviewsResponse reviewResponse = sellerService.getReviewsForSellerProducts(email);
+            return ResponseEntity.ok(reviewResponse);
         } catch (Exception e) {
-            return internalServerError("Couldn't get product reviews");
+            return ResponseEntity.status(500).body("Couldn't fetch reviews.");
         }
     }
-
 }
