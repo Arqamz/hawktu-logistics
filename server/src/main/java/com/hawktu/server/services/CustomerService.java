@@ -14,8 +14,13 @@ import com.hawktu.server.dtos.request.UpdateCustomerInfoRequest;
 import com.hawktu.server.dtos.response.CustomerInfoResponse;
 import com.hawktu.server.factories.CustomerFactory;
 import com.hawktu.server.models.Customer;
+import com.hawktu.server.models.OrderItem;
+import com.hawktu.server.models.Product;
 import com.hawktu.server.models.User;
 import com.hawktu.server.repositories.CustomerRepository;
+import com.hawktu.server.states.orderitem.OrderItemStateEnum;
+import com.hawktu.server.repositories.OrderItemRepository;
+import com.hawktu.server.repositories.ProductRepository;
 
 @Service
 public class CustomerService {
@@ -27,9 +32,17 @@ public class CustomerService {
     private CustomerFactory customerFactory;
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
+    private OrderItemRepository orderItemRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder,OrderItemRepository orderItemRepository, ProductRepository productRepository) {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
+        this.orderItemRepository = orderItemRepository;
+        this.productRepository = productRepository;
     }
 
     private final CustomerRepository customerRepository;
@@ -167,6 +180,35 @@ public class CustomerService {
             default:
                 return 0.0;
         }
+    }
+
+    @Transactional
+    public boolean cancelOrder(String email, Long productId) {
+        Customer customer = customerRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Customer not found"));
+
+        OrderItem orderItem = orderItemRepository.findByProductIdAndCustomerEmail(productId, email)
+            .orElseThrow(() -> new RuntimeException("Order item not found"));
+
+        if (orderItem.getState() != OrderItemStateEnum.PROCESSING) {
+            throw new RuntimeException("Order cannot be cancelled in current state");
+        }
+
+        orderItem.setState(OrderItemStateEnum.CANCELLED);
+
+        BigDecimal refundAmount = orderItem.getTotalPrice();
+        BigDecimal currentWallet = BigDecimal.valueOf(customer.getWallet());
+        customer.setWallet(currentWallet.add(refundAmount).doubleValue());
+
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new RuntimeException("Product not found"));
+        product.setStock(product.getStock() + orderItem.getQuantity());
+
+        orderItemRepository.save(orderItem);
+        customerRepository.save(customer);
+        productRepository.save(product);
+
+        return true;
     }
 
 }

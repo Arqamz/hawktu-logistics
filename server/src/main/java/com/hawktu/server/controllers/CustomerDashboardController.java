@@ -23,8 +23,10 @@ public class CustomerDashboardController extends BaseController {
     private final CustomerService customerService;
 
     private final JwtUtil jwtUtil;
+    
 
     
+        
     @Autowired
     public CustomerDashboardController(CustomerService customerService, JwtUtil jwtUtil) {
         this.customerService = customerService;
@@ -120,7 +122,7 @@ public class CustomerDashboardController extends BaseController {
         try { 
             String token = authHeader.replace("Bearer ", ""); 
             String email = jwtUtil.extractUsername(token); 
-             
+                
             if (!jwtUtil.validateToken(token, email)) { 
                 return unauthorizedError("Invalid or expired token."); 
             } 
@@ -137,5 +139,21 @@ public class CustomerDashboardController extends BaseController {
         } catch (Exception e) { 
             return internalServerError("Couldn't redeem loyalty points"); 
         } 
+    }
+
+    @PostMapping("/cancel-order")
+    public ResponseEntity<?> cancelOrder(
+        @RequestHeader("Authorization") String authHeader,
+        @RequestParam Long productId
+    ) {
+        try {
+            String token = authHeader.replace("Bearer ", "");
+            String email = jwtUtil.extractUsername(token);
+            
+            boolean result = customerService.cancelOrder(email, productId);
+            return ResponseEntity.ok("Order cancelled successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+        }
     }
 }

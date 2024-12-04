@@ -3,6 +3,7 @@ package com.hawktu.server.repositories;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -30,6 +31,15 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     // Fetch order items with quantities greater than a threshold
     @Query("SELECT oi FROM OrderItem oi WHERE oi.quantity > :quantity")
     List<OrderItem> findItemsWithQuantityGreaterThan(int quantity);
+
+    @Query("SELECT oi FROM OrderItem oi " +
+           "JOIN Order o ON oi.orderId = o.id " +
+           "JOIN Customer c ON o.customerId = c.id " +
+           "WHERE oi.productId = :productId AND c.email = :email")
+    Optional<OrderItem> findByProductIdAndCustomerEmail(
+        @Param("productId") Long productId, 
+        @Param("email") String email
+    );
 
     @Query("SELECT SUM(oi.totalPrice) FROM OrderItem oi " +
     "JOIN Product p ON oi.productId = p.id " +
